@@ -1,0 +1,92 @@
+.projects-section-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.projects-section-title {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  gap: 1em;
+  margin: 2em 0em;
+}
+
+.projects-section-title i {
+  font-size: 1.74em;
+}
+
+.projects-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+}
+
+.project-box {
+  display: flex;
+  flex-direction: row;
+  gap: 1.5em;
+}
+
+.project-image-container {
+  display: flex;
+  cursor: pointer;
+}
+
+.project-image-container img {
+  width: 394px;
+}
+
+.project-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.4em;
+}
+
+.project-info p {
+  font-size: 1.15em;
+}
+
+.icons-buttons-container {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  gap: 0.6em;
+}
+
+.project-techno-icons {
+  font-size: 2em;
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  margin: 0.2em 0em;
+}
+
+.project-techno-icons img {
+  width: 0.84em;
+}
+
+.project-buttons {
+  display: flex;
+  gap: 1em;
+}
+
+.button-live {
+  font-weight: 600;
+  padding: 0.7em 1.4em;
+  background-color: white;
+  color: var(--dark1);
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  gap: 0.4em;
+  font-size: 1.1em;
+  padding: 0.4em 1em;
+  cursor: pointer;
+  border-style: none;
+  border-radius: 0.8em;
+}
+
+.button-live i {
+  font-size: 1.4em;
+}
