@@ -10,17 +10,18 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
   --dark1: #171717;
-  --dark2: #323232;
+  --dark2: #343434;
   --primary: #ffe095;
   --transition: all 0.2s cubic-bezier(0.39, 0.575, 0.565, 1);
   --transition2: all 0.4s cubic-bezier(0.39, 0.575, 0.565, 1);
   --icon-drop: drop-shadow(2px 2px 1px rgba(100, 100, 100, 0.64));
-
-  --gradient: linear-gradient(to right, var(--dark1) -60%, #fff5e0 100%);
-  --gradient1: linear-gradient(220.55deg, #ffc23d 0%, #eed59f 100%);
-  --gradient2: linear-gradient(220.55deg, #ffd439 0%, #ff7a00 100%);
-  --gradient3: linear-gradient(220.55deg, #e0ff87 0.01%, #8fb85b 100%);
-  --gradient4: linear-gradient(220.55deg, #ff896d 0%, #d02020 100%);
+  --gradient1: linear-gradient(to right, var(--dark1) -60%, #fff5e0 100%);
+  --gradient2: linear-gradient(220.55deg, #ffc23d 0%, #eed59f 100%);
+  --gradient3: linear-gradient(220.55deg, #ffd439 0%, #ff7a00 100%);
+  --gradient4: linear-gradient(220.55deg, #e0ff87 0.01%, #8fb85b 100%);
+  --gradient5: linear-gradient(220.55deg, #ff896d 0%, #d02020 100%);
+  --gradient6: linear-gradient(to right, #f7797d, #fbd786, #c6ffdd);
+  --gradient7: linear-gradient(to right, #2c5364, #203a43, #0f2027);
 }
 
 * {
@@ -31,10 +32,12 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 *::selection {
   background-color: #343434;
+  color: #fff5e0;
 }
 
 a {
@@ -52,6 +55,7 @@ body {
   font-family: "Plus Jakarta Sans", sans-serif;
   transition: var(--transition);
   background-color: var(--dark1);
+  min-height: 100vh;
   overflow-x: hidden;
 }
 
@@ -190,9 +194,6 @@ hr {
 .lightmode {
   background-color: #fff5e0;
   color: #171717;
-}
-.lightmode ::selection {
-  color: white;
 }
 
 .lightmode p {

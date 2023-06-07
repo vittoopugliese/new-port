@@ -25,8 +25,8 @@ function App() {
         <OnPageLoad />
       ) : (
         <BrowserRouter>
-          <Header data-aos="fade-down" />
           <div className="appContainer" data-aos="fade-up">
+            <Header data-aos="fade-down" />
             <Routes>
               <Route path="/" element={<MainPage />} />
               <Route path="/about" element={<AboutPage />} />

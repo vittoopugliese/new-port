@@ -4,7 +4,6 @@ import "./shared.css";
 
 export const Button = ({text, path, iconClass}) => {
   const navigate = useNavigate();
-  const {isLightCondition} = useLightTheme();
 
   return (
     <button className="button" onClick={() => navigate(path)}>

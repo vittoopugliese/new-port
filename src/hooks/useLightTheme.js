@@ -2,22 +2,25 @@ import {useEffect, useState} from "react";
 
 export function useLightTheme() {
   const body = document.getElementsByTagName("body")[0];
-  const [isLightMode, setisLightMode] = useState(body.classList.contains("lightmode"))
+  const [isLightMode, setisLightMode] = useState(false);
 
   function toggleLightmode() {
-    setisLightMode(prev => !prev)
-    body.classList.toggle("lightmode");
+    setisLightMode((prev) => !prev);
     localStorage.setItem("lightmode", JSON.stringify(isLightMode));
+    body.classList.toggle("lightmode");
   }
 
-  const isLightSaved = JSON.parse(localStorage.getItem("lightmode"));
-
   useEffect(() => {
+    const isLightSaved = JSON.parse(localStorage.getItem("lightmode"));
     if (isLightSaved) {
       body.classList.add("lightmode");
+      setisLightMode(isLightSaved);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem("lightmode", JSON.stringify(isLightMode));
+  }, [isLightMode]);
 
   return {body, toggleLightmode, isLightMode};
 }

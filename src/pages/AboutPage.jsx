@@ -42,7 +42,6 @@ const experience = [
 
 export const AboutPage = () => {
   const navigate = useNavigate();
-  const {body} = useLightTheme();
 
   useEffect(() => {
     window.scroll(0, 0);
@@ -59,7 +58,7 @@ export const AboutPage = () => {
         2021 I started learning Web Development by my own.
         <br></br>I&apos;m currently working at{" "}
         <b onClick={openLink} className="b" style={{cursor: "pointer"}}>
-          Kubrik Digital
+          Kubrik Digital{" "}
         </b>
         with <b style={{color: "#ec4242"}}> Angular </b> but also learning{" "}
         <b style={{color: "#448de7"}}> React</b>.

@@ -66,7 +66,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  background-image: var(--gradient);
+  background-image: var(--gradient1);
   transition: 0.5s ease;
   display: block;
   z-index: -1;
@@ -92,19 +92,16 @@
   height: 125px;
   font-size: 1.8em;
   color: var(--dark1);
-  transition: var(--transition);
   border: none;
   border-radius: 0.6em;
   cursor: pointer;
   position: relative;
-  background: var(--gradient);
+  transition: var(--transition) !important;
 }
 .email-button p {
-  color: var(--dark1);
   color: white;
 }
 .lightmode .email-button p {
-  color: var(--dark1);
   color: white;
 }
 .email-button i {
@@ -120,6 +117,7 @@
   flex-direction: row;
   gap: 1.6em;
   margin-left: 0.2em;
+  margin: 1em 0em;
 }
 .social {
   display: flex;
@@ -132,7 +130,7 @@
   cursor: pointer;
 }
 .social:hover{
-  scale: 1.05;
+  scale: 1.04;
 }
 .social p {
   font-size: 1.1em;

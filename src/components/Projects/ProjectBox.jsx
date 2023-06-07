@@ -7,7 +7,7 @@ export const ProjectBox = ({project}) => {
   const {isMobile} = useMedia();
 
   return (
-    <div className="project-box" 
+    <div className="project-box" data-aos='fade-up'
     onClick={() => {
       window.open(project.link);
     }}>

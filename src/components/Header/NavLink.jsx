@@ -9,7 +9,7 @@ export const NavLink = ({text, path, iconClass, setNavOpen}) => {
     <div
       onClick={() => {
         navigate(path)
-        setNavOpen(false)
+        if(setNavOpen) setNavOpen(false)
       }}
       className={location == path ? 'nav-item nav-item-br' : 'nav-item'}
       style={{fontWeight: '600'}}
