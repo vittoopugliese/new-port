@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 
-export const TechImages = ({tech}) => {
+export const TechImages = ({tech, techSelected, techHover}) => {
   const [techHovered, setTechHovered] = useState();
 
   function handleImageHover(e) {
@@ -8,10 +8,16 @@ export const TechImages = ({tech}) => {
     const techUrl = selectedElement.src.split("/")[4];
     const techName = techUrl.split(".")[0];
     setTechHovered(techName);
+    techHover(tech.desc);
+    techSelected(tech.desc);
 
     showTooltip();
   }
 
+  function handleImageUnHover() {
+    setTechHovered(null);
+    techHover(null);
+  }
   function showTooltip() {}
 
   return (
@@ -19,14 +25,12 @@ export const TechImages = ({tech}) => {
       <img
         className="carrousel-image"
         draggable="false"
-        src={`./tech-logos/${tech}.webp`}
-        onMouseEnter={(e) => handleImageHover(e)}
-        onMouseLeave={(e) => setTechHovered(null)}
-        // style={{scale: techHovered == tech ? "1.2" : "1"}}
+        src={`./tech-logos/${tech.name}.webp`}
+        onMouseOver={(e) => handleImageHover(e)}
+        onMouseLeave={(e) => handleImageUnHover(e)}
+        style={{scale: techHovered == tech.name ? "1.05" : "1"}}
       />
-      <p style={{opacity: techHovered == tech ? "1" : "-0"}}>
-        {tech}
-      </p>
+      <p style={{opacity: techHovered == tech.name ? "1" : "0"}}>{tech.name}</p>
     </div>
   );
 };

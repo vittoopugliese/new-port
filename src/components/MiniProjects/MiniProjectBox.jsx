@@ -1,9 +1,8 @@
-import React from "react";
 
+import { ProjectTechIcons } from './../Projects/ProjectTechIcons';
 export const MiniProjectBox = ({project}) => {
   return (
-    <div
-      className="project-card"
+    <div className="project-card" data-aos={project.aos}
       onClick={() => {
         window.open(project.link);
       }}>
@@ -13,15 +12,7 @@ export const MiniProjectBox = ({project}) => {
       </div>
       <p>{project.description}</p>
       <div className="card-icons">
-        {project.tech.map((t, i) => {
-          return (
-            <img src={`./vectors/${t}.svg`}
-              loading="lazy" draggable={false}
-              alt={t} key={t + i}
-              style={{fontSize: t == "angular" ? "1.3em" : "1em"}}
-            />
-          );
-        })}
+        <ProjectTechIcons project={project} miniBox={true}/>
       </div>
     </div>
   );

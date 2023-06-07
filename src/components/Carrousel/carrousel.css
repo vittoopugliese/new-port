@@ -22,7 +22,7 @@
   justify-content: center;
   align-items: center;
   background: var(--dark1);
-  height: 124px;
+  height: 140px;
   overflow: hidden;
   position: absolute;
   width: 100%;
@@ -30,6 +30,7 @@
   left: 50%;
   bottom: 50%;
   margin: -17em 0em;
+  transition: var(--transition);
 }
 
 .slider::before,
@@ -40,10 +41,11 @@
     rgba(255, 255, 255, 0) 100%
   );
   content: "";
-  height: 124px;
+  height: 140px;
   position: absolute;
   width: 250px;
   z-index: 2;
+  transition: var(--transition);
 }
 
 .slider::after {
@@ -58,7 +60,7 @@
 }
 
 .slide-track {
-  animation: scroll 34s linear infinite;
+  animation: scroll 74s linear infinite;
   display: flex;
   width: 100%;
 }
@@ -88,7 +90,65 @@
   gap: 0.2em;
 }
 
-.tech-slide-image p{
-  transition: var(--transition2);
+.tech-slide-image p {
+  transition: var(--transition);
+  font-weight: 600;
 }
 
+.tech-desc {
+  position: relative;
+  top: 9em;
+  text-align: center;
+  transition: var(--transition2);
+  font-size: 1.2em;
+  white-space: nowrap;
+}
+
+.lightmode .slider {
+  background-color: #fff5e0;
+}
+
+.lightmode .slider::before {
+  background: linear-gradient(
+    to right,
+    #fff5e0 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+}
+.lightmode .slider::after {
+  background: linear-gradient(
+    to right,
+    #fff5e0 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+}
+
+@media (max-width: 764px) {
+  .tech-desc {
+    top: 11.2em;
+    width: 80%;
+    font-size: 1em;
+    margin: 0em auto;
+  }
+
+  .slider::before,
+  .slider::after {
+    width: 150px;
+  }
+
+  .carousel {
+    margin-bottom: 0em;
+  }
+}
+@media (max-width: 1040px) {
+  .tech-desc {
+    white-space: initial;
+  }
+  .carousel {
+    margin: 1em 0em;
+  }
+
+  .more-projects-section {
+    margin-top: 11em;
+  }
+}

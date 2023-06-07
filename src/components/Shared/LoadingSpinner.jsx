@@ -5,7 +5,7 @@ export const LoadingSpinner = ({size}) => {
       draggable="false"
       className="loading-spinner"
       style={{width: `${size}em`, height: `${size}em`}}
-      src="spinner.svg"
+      src="./vectors/spinner.svg"
     />
   );
 };

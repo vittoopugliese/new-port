@@ -10,6 +10,11 @@
   width: 1.8em;
 }
 
+.about-section-container button i{
+  font-size: initial;
+
+}
+
 .about-title {
   display: flex;
   align-items: center;
@@ -58,6 +63,7 @@
   display: flex;
   align-items: center;
   background-color: var(--primary);
+  /* background: linear-gradient(220.55deg, #565656 0%, #181818 100%); */
   font-weight: 600;
   font-size: 1.2em;
   transition: var(--transition);
@@ -70,4 +76,16 @@
 
 .contact-button:hover {
   scale: 1.1;
+}
+
+
+
+.lightmode .aperture {
+  filter: invert(1);
+}
+.aperture {
+  filter: invert(0);
+}
+.lightmode .b {
+  color: #171717;
 }

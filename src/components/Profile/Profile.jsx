@@ -1,6 +1,6 @@
 import React from "react";
 import "./profile.css";
-import { Button } from './../Misc/Button';
+import { Button } from '../Shared/Button';
 
 function openLink(){
   window.open('https://www.linkedin.com/company/kubrik-digital/?trk=public_profile_experience-item_profile-section-card_subtitle-click&originalSubdomain=ar')
@@ -31,7 +31,7 @@ export const Profile = () => {
         <div className="profile-buttons">
           <a href="./Vittorio-Pugliese-Resume.pdf" download>
             <Button text='Download Resume' resume={true}
-              iconClass={'fa-sharp fa-solid fa-file'} />
+              iconClass={'fa-solid fa-paperclip'} />
           </a>
         </div>
       </div>

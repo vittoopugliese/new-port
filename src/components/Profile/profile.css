@@ -8,6 +8,7 @@
 }
 
 .profile-picture {
+  user-select: none;
   background-color: var(--dark2);
   border-radius: 100%;
   padding: 0.4em;
@@ -62,7 +63,7 @@
   padding: 0.5em;
   background-color: #343434;
   border-radius: 1em;
-  width: 20%;
+  width: 19%;
   transition: var(--transition);
 }
 
@@ -87,4 +88,9 @@
   left: 0px;
   opacity: 0;
   transition: var(--transition);
+}
+
+
+.lightmode .profile-status-p {
+  color: white;
 }

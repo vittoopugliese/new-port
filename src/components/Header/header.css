@@ -1,0 +1,135 @@
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+  width: 100%;
+  height: 90px;
+  margin-top: 4px;
+  position: sticky;
+  left: 0px;
+  top: 0px;
+  z-index: 10000;
+  transition: var(--transition);
+  background-color: var(--dark1); 
+
+}
+
+nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2.5em;
+}
+
+.nav-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  gap: 0.4em;
+  font-size: 1.4em;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.nav-item-br {
+  font-weight: 800 !important;
+  filter: drop-shadow(0px 0px 4px rgba(164, 164, 164, 0.64));
+}
+
+.theme-toggler {
+  cursor: pointer;
+}
+
+.theme-toggler img {
+  transition: var(--transition);
+  width: 1.74em;
+  position: relative;
+  top: 3px;
+  filter: contrast(0.74) drop-shadow(0px 0px 8px rgba(255, 255, 255, 0.54));
+}
+
+.theme-toggler:hover img {
+  scale: 1.14;
+  filter: contrast(0.94) drop-shadow(0px 0px 10px rgba(255, 255, 255, 0.64));
+}
+
+.navSmall-container{
+}
+
+.nav-small-image{
+  width: 2.4em;
+  cursor: pointer;
+  transition: var(--transition);
+  opacity: 0;
+}
+.nav-small-image:hover{
+scale: 1.05;
+}
+
+.navTogglerIcon {
+  font-size: 1.8em;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.closeNavIcon {
+  font-size: 1.5em;
+  rotate: 180deg;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.closeNavIcon:hover {
+  right: 36px;
+}
+
+.navTogglerIcon:hover {
+  scale: 1.1;
+}
+
+.items-container::after{
+  position:relative; /*or absolute*/
+  z-index:100000; /*a number that's more than the modal box*/
+  background-color: red;
+  left:-50px;
+  top:10px;
+}
+
+.items-container {
+  display: flex;
+  justify-content: center;
+  align-items: left;
+  flex-direction: column;
+  transition: var(--transition);
+  gap: 0.8em;
+  font-size: 1.24em;
+  width: 225px;
+  height: 100vh;
+  background-color: #212121;
+  position: absolute;
+  top: 0px;
+  left: -20px;
+}
+
+.items-container .nav-item {
+  display: flex;
+  justify-content: left;
+  margin: 0em 1em;
+}
+
+.lightmode .items-container {
+  background-color: #daceb5;
+}
+
+.lightmode .theme-toggler img {
+  filter: contrast(0.84) drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.64));
+}
+.lightmode header {
+  background-color: #fff5e0;
+}
+.lightmode .theme-toggler:hover img {
+  scale: 1.14;
+  filter: contrast(0.84) drop-shadow(0px 0px 12px rgba(0, 0, 0, 0.64));
+}

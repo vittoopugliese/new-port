@@ -12,7 +12,7 @@
 .project-card {
   padding: 1.4em;
   border-radius: 1em;
-  border: 2px solid var(--dark2);
+  border: 3px solid var(--dark2);
   display: flex;
   justify-content: space-between;
   flex-direction: column;
@@ -23,8 +23,7 @@
 }
 
 .project-card:hover {
-  /* background-color: #121212; */
-  border: 2px solid #545454;
+  border: 3px solid #545454;
   scale: 1.025;
   filter: opacity(1);
 }
@@ -49,6 +48,7 @@
   font-size: 0.6em;
   opacity: 0;
 }
+
 .project-card:hover .openlinkicon {
   opacity: 0.8;
   font-size: 1.2em;
@@ -56,4 +56,15 @@
 
 .card-icons img {
   width: 1.54em;
+  filter: var(--icon-drop);
+}
+
+
+.lightmode .project-card{
+}
+
+@media (max-width: 740px) {
+  .more-projects-section {
+    margin-top: 9em !important;
+  }
 }

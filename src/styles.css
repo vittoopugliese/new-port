@@ -4,7 +4,6 @@
   line-height: 1.5;
   font-weight: 400;
   color: rgb(228, 228, 228);
-  background-color: var(--dark1);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -15,12 +14,23 @@
   --primary: #ffe095;
   --transition: all 0.2s cubic-bezier(0.39, 0.575, 0.565, 1);
   --transition2: all 0.4s cubic-bezier(0.39, 0.575, 0.565, 1);
+  --icon-drop: drop-shadow(2px 2px 1px rgba(100, 100, 100, 0.64));
+
+  --gradient: linear-gradient(to right, var(--dark1) -60%, #fff5e0 100%);
+  --gradient1: linear-gradient(220.55deg, #ffc23d 0%, #eed59f 100%);
+  --gradient2: linear-gradient(220.55deg, #ffd439 0%, #ff7a00 100%);
+  --gradient3: linear-gradient(220.55deg, #e0ff87 0.01%, #8fb85b 100%);
+  --gradient4: linear-gradient(220.55deg, #ff896d 0%, #d02020 100%);
 }
 
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 *::selection {
@@ -40,6 +50,9 @@ body {
   display: flex;
   justify-content: center;
   font-family: "Plus Jakarta Sans", sans-serif;
+  transition: var(--transition);
+  background-color: var(--dark1);
+  overflow-x: hidden;
 }
 
 h1 {
@@ -54,14 +67,8 @@ h3 {
 h4 {
   font-size: 1.1em;
 }
-
 p {
   color: rgb(204, 204, 204);
-}
-
-.lightmode {
-  background-color: white;
-  color: #171717;
 }
 
 .appContainer {
@@ -70,43 +77,12 @@ p {
   max-width: 840px;
 }
 
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-direction: row;
+.button-container {
   width: 100%;
-  height: 90px;
-  margin-top: 14px;
-}
-
-nav {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 2.5em;
-}
-
-.nav-item {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row;
-  gap: 0.7em;
-  font-size: 1.4em;
-  cursor: pointer;
-}
-.theme-toggler {
-  font-size: 1.5em;
-  cursor: pointer;
-}
-
-.button-one {
-  cursor: pointer;
-  border-style: none;
-  padding: 0.8em;
-  font-size: 1em;
-  border-radius: 1em;
+  margin: 2em 0em 8em 0em;
 }
 
 main {
@@ -133,7 +109,7 @@ hr {
   background-color: #545454;
 }
 
-@media (max-width: 740px) {
+@media (max-width: 824px) {
   header {
     padding: 0em;
     margin: 0em;
@@ -197,22 +173,35 @@ hr {
     flex-direction: row;
   }
 
-  .carousel {
-    margin: 1em 0em;
+  .socials-container {
+    flex-direction: column;
+    display: grid;
+    align-items: center;
+    text-align: center;
   }
 
-  .slider{
-    width: 99vw;
-  }
-
-  .more-projects-section {
-    margin-top: 11em;
+  .social {
+    display: flex;
+    justify-content: center;
+    gap: 1em;
   }
 }
 
-@media (max-width: 640px) {
-  .button-live{
-    font-size: 0.9em;
-    padding: 0.1em 1em;
-  }
+.lightmode {
+  background-color: #fff5e0;
+  color: #171717;
+}
+.lightmode ::selection {
+  color: white;
+}
+
+.lightmode p {
+  color: #212121;
+}
+.lightmode li {
+  color: #424242;
+}
+
+.b {
+  color: white;
 }
