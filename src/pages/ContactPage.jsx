@@ -34,7 +34,7 @@ export const ContactPage = () => {
   }
 
   return (
-    <div data-aos='fade-up'>
+    <div data-aos='fade-up' style={{minHeight:'840px'}}>
       <SectionTitle iconClass="fa-solid fa-address-book" title="Contact Me" />
 
       <a href="mailto:vittoopugliesedev@gmail.com">

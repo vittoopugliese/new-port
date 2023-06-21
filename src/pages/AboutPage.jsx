@@ -72,16 +72,13 @@ export const AboutPage = () => {
         })}
       </div>
 
-
-        <Certificates />
-
+      <Certificates />
 
       <div className="button-container">
         <Button
           text="Contact me"
           path="/contact"
-          iconClass={"fa-solid fa-arrow-right"}
-        />
+          iconClass={"fa-solid fa-arrow-right"} />
       </div>
     </section>
   );

@@ -78,6 +78,25 @@
   scale: 1.1;
 }
 
+.certificates-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.2em;
+  flex-direction: row;
+  margin: 0em auto;
+}
+
+.certificates-container img{
+  width: 45%;
+  transition: var(--transition);
+  opacity: 0.84;
+}
+.certificates-container img:hover{
+  scale: 1.074;
+  opacity: 1;
+}
 
 
 .lightmode .aperture {
@@ -88,4 +107,13 @@
 }
 .lightmode .b {
   color: #171717;
+}
+
+@media (max-width: 654px) {
+  .certificates-container img{
+    width: 85%;
+  }
+  .certificates-container{
+    flex-direction: column;
+  }
 }

@@ -1,5 +1,3 @@
-import React from "react";
-
 export const SectionTitle = ({iconClass, title, aperture}) => {
   return (
     <div className="section-title" data-aos="fade-right">
