@@ -3,10 +3,22 @@ import {SectionTitle} from "../components/Shared/SectionTitle";
 import {SocialCard} from "./../components/Shared/SocialCard";
 
 const socials = [
-  { name: "LinkedIn", color: "#466cf4", link: "https://www.linkedin.com/in/vittoopugliese/", },
-  { name: "GitHub", color: "#d5d5d5", link: "https://github.com/vittoopugliese" },
-  { name: "Twitter", color: "#549ef9", link: "https://twitter.com/vittoopugliese", },
-  { name: "SoundCloud", color: "#f09c34", link: "https://soundcloud.com/vittoopugliese", },
+  {
+    name: "LinkedIn",
+    color: "#466cf4",
+    link: "https://www.linkedin.com/in/vittoopugliese/",
+  },
+  {name: "GitHub", color: "#d5d5d5", link: "https://github.com/vittoopugliese"},
+  {
+    name: "Twitter",
+    color: "#549ef9",
+    link: "https://twitter.com/vittoopugliese",
+  },
+  {
+    name: "SoundCloud",
+    color: "#f09c34",
+    link: "https://soundcloud.com/vittoopugliese",
+  },
 ];
 
 export const ContactPage = () => {
@@ -24,7 +36,6 @@ export const ContactPage = () => {
     };
   }, []);
 
-
   function gradientStyle(n = 1) {
     if (n > 7) setGradient(1);
 
@@ -34,7 +45,7 @@ export const ContactPage = () => {
   }
 
   return (
-    <div data-aos='fade-up' style={{minHeight:'840px'}}>
+    <div data-aos="fade-up" className="contactContainer">
       <SectionTitle iconClass="fa-solid fa-address-book" title="Contact Me" />
 
       <a href="mailto:vittoopugliesedev@gmail.com">

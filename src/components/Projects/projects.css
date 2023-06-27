@@ -14,11 +14,17 @@
   flex-direction: row;
   gap: 1.5em;
   cursor: pointer;
+  transition: var(--transition);
 }
 
 .project-image-container {
   display: flex;
   cursor: pointer;
+  transition: var(--transition);
+}
+
+.project-box:hover .project-image-container{
+  scale: 1.02;
 }
 
 .project-image-container img {

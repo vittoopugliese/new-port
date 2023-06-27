@@ -1,7 +1,6 @@
 import React from "react";
 import {ProjectTechIcons} from "./ProjectTechIcons";
 import {useMedia} from "./../../hooks/useMedia";
-import { Button } from './../Shared/Button';
 
 export const ProjectBox = ({project}) => {
   const {isMobile} = useMedia();

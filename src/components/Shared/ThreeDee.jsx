@@ -1,0 +1,91 @@
+import React, {useEffect, useRef} from "react";
+import * as THREE from "three";
+import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
+import {SectionTitle} from "./SectionTitle";
+import { gsap } from "gsap";
+
+export const ThreeDee = () => {
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    let animationFrameId;
+
+    const scene = new THREE.Scene();
+    const geometry = new THREE.SphereGeometry(2, 64, 64);
+    const material = new THREE.MeshStandardMaterial({
+      color: "#ffe095",
+    });
+    const mesh = new THREE.Mesh(geometry, material);
+    scene.add(mesh);
+
+    const sizes = {
+      width: window.innerWidth / 1.74,
+      height: 400,
+    };
+
+    const light = new THREE.PointLight(0xffffff, 1, 100);
+    light.position.set(0, 10, 10);
+    scene.add(light);
+
+    const camera = new THREE.PerspectiveCamera(
+      45,
+      sizes.width / sizes.height,
+      0.1,
+      100
+    );
+    camera.position.z = 10;
+    scene.add(camera);
+
+    const renderer = new THREE.WebGLRenderer({canvas: canvasRef.current});
+    renderer.setSize(sizes.width, sizes.height);
+    renderer.setClearColor("#171717");
+    renderer.setPixelRatio(2);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.enablePan = false;
+    controls.enableZoom = false;
+    controls.autoRotate = true;
+
+    const renderScene = () => {
+      renderer.render(scene, camera);
+    };
+
+    const animate = () => {
+      controls.update();
+      renderScene();
+      animationFrameId = window.requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    const timeline = gsap.timeline({defaults: {duration:1}})
+    timeline.fromTo(mesh.scale, {z:0, x:0, y:0}, {z:1, x:1, y:1})
+
+    const handleResize = () => {
+      sizes.width = window.innerWidth / 1.74;
+      sizes.height = 400;
+      camera.aspect = sizes.width / sizes.height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(sizes.width, sizes.height);
+      renderScene();
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      window.cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
+
+  return (
+    <>
+      {/* <SectionTitle title={"Welcome to My World"} iconClass={"fa-solid fa-earth-americas"} /> */}
+
+      <div className="three-container">
+        <canvas ref={canvasRef} className="webgl" />
+      </div>
+    </>
+  );
+};
