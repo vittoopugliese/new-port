@@ -24,6 +24,7 @@ export const Profile = () => {
         </div>
 
       </div>
+
       <div className="profile-data">
         <h1>Vittorio Pugliese</h1>
         <p>Web development and innovation passionate.</p>

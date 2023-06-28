@@ -106,6 +106,7 @@
 
 .lightmode .slider {
   background-color: #fff5e0;
+  background-color: transparent;
 }
 
 .lightmode .slider::before {
@@ -114,6 +115,7 @@
     #fff5e0 0%,
     rgba(255, 255, 255, 0) 100%
   );
+  background: transparent;
 }
 .lightmode .slider::after {
   background: linear-gradient(
@@ -121,6 +123,7 @@
     #fff5e0 0%,
     rgba(255, 255, 255, 0) 100%
   );
+  background: transparent;
 }
 
 @media (max-width: 764px) {

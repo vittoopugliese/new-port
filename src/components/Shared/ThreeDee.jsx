@@ -12,10 +12,15 @@ export const ThreeDee = () => {
     divide = window.innerWidth < 474 ? 1.14 : 1.84;
 
     const scene = new THREE.Scene();
-    const geometry = new THREE.SphereGeometry(2.54, 64, 64);
+    const geometry = new THREE.SphereGeometry(2.54, 74, 74);
+
+    const textureLoader = new THREE.TextureLoader();
+    const texture = textureLoader.load("/gas.png");
+
     const material = new THREE.MeshStandardMaterial({
-      color: "#ffe095",
+      map: texture,
     });
+
     const mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
 
@@ -40,7 +45,7 @@ export const ThreeDee = () => {
     const renderer = new THREE.WebGLRenderer({canvas: canvasRef.current});
     renderer.setSize(sizes.width, sizes.height);
     renderer.setClearColor("#171717");
-    renderer.setPixelRatio(2);
+    renderer.setPixelRatio(window.devicePixelRatio);
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;

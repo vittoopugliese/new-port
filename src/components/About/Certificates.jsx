@@ -7,7 +7,7 @@ export const Certificates = () => {
   return (
     <>
       <SectionTitle iconClass={"fa-solid fa-certificate"} title="Certificates" />
-      <p style={{margin: "0.2em 0em 1em 0em"}}> There are some of my certifications... </p>
+      <p style={{margin: "0.2em 0em 1em 0em"}}> These are some of my certifications... </p>
       <div className="certificates-container">
         <img src="./certificates\1.webp" alt="freeCodeCamp Certificate" />
         <img src="./certificates\3.webp" alt="freeCodeCamp Certificate" />
