@@ -6,7 +6,7 @@ import { SectionTitle } from './../Shared/SectionTitle';
 const projects = [
   {
     title: "GPTherapist",
-    description: "Talk about your problems with an OpenAi's GPT-based therapist trained with experienced psycologist data. App interactions costs credits, initially there're 1000 free.",
+    description: "Talk about your problems with an OpenAi's GPT-based therapist trained with experienced psycologist data. App interactions costs credits, initially there're  1000 free.",
     image: "./project-images/image1.png",
     tech: ['react', 'javascript', 'openai'],
     link: 'https://gptherapist.vittoriop.dev'

@@ -1,17 +1,18 @@
 import React, {useEffect, useRef} from "react";
 import * as THREE from "three";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
-import {SectionTitle} from "./SectionTitle";
-import { gsap } from "gsap";
+import {gsap} from "gsap";
 
 export const ThreeDee = () => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
     let animationFrameId;
+    let divide;
+    divide = window.innerWidth < 474 ? 1.14 : 1.84;
 
     const scene = new THREE.Scene();
-    const geometry = new THREE.SphereGeometry(2, 64, 64);
+    const geometry = new THREE.SphereGeometry(2.54, 64, 64);
     const material = new THREE.MeshStandardMaterial({
       color: "#ffe095",
     });
@@ -19,7 +20,7 @@ export const ThreeDee = () => {
     scene.add(mesh);
 
     const sizes = {
-      width: window.innerWidth / 1.74,
+      width: window.innerWidth / divide,
       height: 400,
     };
 
@@ -59,11 +60,12 @@ export const ThreeDee = () => {
 
     animate();
 
-    const timeline = gsap.timeline({defaults: {duration:1}})
-    timeline.fromTo(mesh.scale, {z:0, x:0, y:0}, {z:1, x:1, y:1})
+    const timeline = gsap.timeline({defaults: {duration: 1}});
+    timeline.fromTo(mesh.scale, {z: 0, x: 0, y: 0}, {z: 1, x: 1, y: 1});
 
     const handleResize = () => {
-      sizes.width = window.innerWidth / 1.74;
+      divide = window.innerWidth < 474 ? 1.14 : 1.84;
+      sizes.width = window.innerWidth / divide;
       sizes.height = 400;
       camera.aspect = sizes.width / sizes.height;
       camera.updateProjectionMatrix();
@@ -80,12 +82,8 @@ export const ThreeDee = () => {
   }, []);
 
   return (
-    <>
-      {/* <SectionTitle title={"Welcome to My World"} iconClass={"fa-solid fa-earth-americas"} /> */}
-
-      <div className="three-container">
-        <canvas ref={canvasRef} className="webgl" />
-      </div>
-    </>
+    <div className="three-container">
+      <canvas ref={canvasRef} className="webgl" />
+    </div>
   );
 };
