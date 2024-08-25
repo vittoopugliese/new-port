@@ -5,10 +5,10 @@ import { SectionTitle } from './../Shared/SectionTitle';
 
 const miniProjects = [
   {
-    title: "drumpads",
+    title: "drumPads",
     description:
       "Assign a letter and a sound to a pad, then play the drums like an expert!",
-    link: "https://drumpads.vittoriop.dev/",
+    link: "https://vittoopugliese.github.io/drumpads/",
     tech: ["html", "css", "javascript"],
     aos: 'fade-right'
   },
@@ -21,14 +21,14 @@ const miniProjects = [
     aos: 'fade-left'
   },
   {
-    title: "dsf representations",
+    title: "DSF Representations",
     description: "Presentation card to a recognized salesman.",
     link: "https://dsfrepresentaciones.com/",
     tech: ["html", "css", "javascript"],
     aos: 'fade-right'
   },
   {
-    title: "breaking bad quotes",
+    title: "Breaking Bad Quotes",
     description: "Simple page to get quotes from Breaking Bad's characters.",
     link: "https://breakingquotes.vittoriop.dev/",
     tech: ["react", "breakingbad"],

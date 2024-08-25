@@ -22,14 +22,13 @@ export const TechImages = ({tech, techSelected, techHover}) => {
 
   return (
     <div className="tech-slide-image">
-      <img
-        className="carrousel-image"
-        draggable="false"
+      <img style={{
+        // filter: techHovered != tech.name ? "grayscale(0)" : "grayscale(1)",
+        scale: techHovered == tech.name ? "1.05" : "1"
+        }} className="carrousel-image" draggable="false"
         src={`./tech-logos/${tech.name}.webp`}
         onMouseOver={(e) => handleImageHover(e)}
-        onMouseLeave={(e) => handleImageUnHover(e)}
-        style={{scale: techHovered == tech.name ? "1.05" : "1"}}
-      />
+        onMouseLeave={(e) => handleImageUnHover(e)}/>
       <p style={{opacity: techHovered == tech.name ? "1" : "0"}}>{tech.name}</p>
     </div>
   );

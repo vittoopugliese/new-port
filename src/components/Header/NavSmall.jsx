@@ -32,7 +32,7 @@ export const NavSmall = () => {
 
         <NavLink setNavOpen={setNavOpen} text="/ &nbsp;home" path="/" iconClass="fa-sharp fa-solid fa-house" />
         <NavLink setNavOpen={setNavOpen} text="/ &nbsp;about" path="/about" iconClass="fa-solid fa-address-card" />
-        <NavLink setNavOpen={setNavOpen} text="/ &nbsp;contact" path="/contact" iconClass="fa-sharp fa-solid fa-envelope" />
+        {/* <NavLink setNavOpen={setNavOpen} text="/ &nbsp;contact" path="/contact" iconClass="fa-sharp fa-solid fa-envelope" /> */}
       </div>
     </div>
     </>

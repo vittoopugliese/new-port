@@ -1,26 +1,7 @@
 import {useEffect, useState} from "react";
-import {SectionTitle} from "../components/Shared/SectionTitle";
 import {SocialCard} from "./../components/Shared/SocialCard";
 import { ThreeDee } from "../components/Shared/ThreeDee";
-
-const socials = [
-  {
-    name: "LinkedIn",
-    color: "#466cf4",
-    link: "https://www.linkedin.com/in/vittoopugliese/",
-  },
-  {name: "GitHub", color: "#d5d5d5", link: "https://github.com/vittoopugliese"},
-  {
-    name: "Twitter",
-    color: "#549ef9",
-    link: "https://twitter.com/vittoopugliese",
-  },
-  {
-    name: "SoundCloud",
-    color: "#f09c34",
-    link: "https://soundcloud.com/vittoopugliese",
-  },
-];
+import { socials } from "../utils/constants";
 
 export const ContactPage = () => {
   const [gradient, setGradient] = useState(1);

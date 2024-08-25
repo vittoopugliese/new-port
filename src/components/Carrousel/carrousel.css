@@ -83,7 +83,7 @@
 .carrousel-image {
   cursor: pointer;
   width: 90px;
-  transition: var(--transition);
+  transition: 254ms ease-in-out;
 }
 
 .tech-slide-image {
@@ -184,3 +184,10 @@
   box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.4);
   cursor: grab;
 }
+
+/* .tech-container{
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  row-gap: 2em;
+
+} */

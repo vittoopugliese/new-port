@@ -1,10 +1,9 @@
 import React, {useEffect} from "react";
-import {ExpCard} from "../components/About/ExpCard";
 import "../components/About/about.css";
-import {useNavigate} from "react-router-dom";
-import {Button} from "../components/Shared/Button";
 import {SectionTitle} from "../components/Shared/SectionTitle";
-import { Certificates } from './../components/About/Certificates';
+import {Certificates} from "./../components/About/Certificates";
+import Socials from "../components/About/Socials";
+import {Experiences} from "./../components/About/Experiences";
 
 function openLink() {
   window.open(
@@ -12,36 +11,7 @@ function openLink() {
   );
 }
 
-const experience = [
-  {
-    title: "FrontEnd development - Kubrik Digital",
-    date: "Sep 2022 - Today",
-    jobItems: [
-      "Developing an intuitive and efficient administration dashboard using Angular and RxJs for managing accounting and finance of businesses.",
-      "Designing an attractive and user-friendly interface using tools like Figma and implemented styles using Angular Material.",
-      "Creation of reusable components using good coding practices.",
-    ],
-  },
-  {
-    title: "Virtual Card - DSF Representations",
-    date: "Apr 2022",
-    jobItems: [
-      "My client, a businessman, wanted to expand his business and establish an online presence. As a result, he approached me to create a virtual card that would serve as a representation of his company. The page includes various contact details and a list of his products .",
-    ],
-  },
-  {
-    title: "Journey Begins...",
-    date: "Jan 2021",
-    jobItems: [
-      "By beeing interested in Web Development, I started to do some research and learned the basics about HTML, CSS and JavaScript.",
-      'Some of the projects I made are in the "More Projects" section.',
-    ],
-  },
-];
-
 export const AboutPage = () => {
-  const navigate = useNavigate();
-
   useEffect(() => {
     window.scroll(0, 0);
   }, []);
@@ -49,36 +19,30 @@ export const AboutPage = () => {
   return (
     <section className="about-section-container">
       <SectionTitle aperture={true} title="About me" />
-
       <p>
-        My name is <b className="b">Vittorio Pugliese</b> and I&apos;m a
-        software developer based in Buenos Aires, Argentina. Since very young I
-        was passionate about computers and music, but around the beginning of
-        2021 I started learning Web Development by my own.
-        <br></br>I&apos;m currently working at{" "}
+        <b className="b">Vittorio</b> is a software developer based in Buenos
+        Aires, Argentina. software developer based in Buenos Aires, Argentina.
+        Since very young I am passionate about computers and music, but in
+        middle of 2020 I started learning Web Development.
+        <br />
+        <br />
+        Currently working at{" "}
         <b onClick={openLink} className="b" style={{cursor: "pointer"}}>
           Kubrik Digital{" "}
-        </b>
-        with <b style={{color: "#ec4242"}}> Angular </b> but also learning{" "}
-        <b style={{color: "#448de7"}}> React</b>.
+        </b>{" "}
+        on TimelogBook© with <b style={{color: "#f84646"}}> Angular </b> and{" "}
+        successfully developing a client app with
+        <b style={{color: "#559ffa"}}> React Native </b> using the{" "}
+        <b style={{color: "#f6e9cd"}}>Expo framework</b> by my own.
+        <br />
+        In 2024 started University to get a degree in Computer Science at{" "}
+        <b>UTN</b> (Universidad Tecnológica Nacional).
       </p>
-
-      <div className="experience-container">
-        <SectionTitle iconClass={"fa-solid fa-dumbbell"} title="Experience" />
-
-        {experience.map((exp) => {
-          return <ExpCard exp={exp} key={exp.title} />;
-        })}
-      </div>
-
+      <Experiences />
       <Certificates />
-
-      <div className="button-container">
-        <Button
-          text="Contact me"
-          path="/contact"
-          iconClass={"fa-solid fa-arrow-right"} />
-      </div>
+      <div style={{height: "50px"}}></div>
+      <Socials />
+      <div style={{height: "350px"}}></div>
     </section>
   );
 };
