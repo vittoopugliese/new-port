@@ -1,10 +1,9 @@
 .profile-container {
   display: flex;
   align-items: center;
-  flex-direction: row;
+  flex-direction: column;
   width: 100%;
-  gap: 2em;
-  margin: 3em 0em;
+  margin: 1em 0em;
 }
 
 .profile-picture {
@@ -28,6 +27,7 @@
   display: flex;
   align-items: left;
   flex-direction: column;
+  text-align: center;
 }
 
 .profile-data p {
@@ -38,6 +38,7 @@
 .profile-buttons {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 1em;
   margin: 1em 0em;
 }
@@ -88,9 +89,4 @@
   left: 0px;
   opacity: 0;
   transition: var(--transition);
-}
-
-
-.lightmode .profile-status-p {
-  color: white;
 }

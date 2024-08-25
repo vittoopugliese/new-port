@@ -3,7 +3,6 @@ import {ExpCard} from "../components/About/ExpCard";
 import "../components/About/about.css";
 import {useNavigate} from "react-router-dom";
 import {Button} from "../components/Shared/Button";
-import {useLightTheme} from "../hooks/useLightTheme";
 import {SectionTitle} from "../components/Shared/SectionTitle";
 import { Certificates } from './../components/About/Certificates';
 

@@ -3,7 +3,7 @@ import {Projects} from "../components/Projects/Projects";
 import {MoreProjects} from "../components/MiniProjects/MoreProjects";
 import {Carrousel} from "../components/Carrousel/Carrousel";
 import {Button} from "../components/Shared/Button";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 
 export const MainPage = () => {
   useEffect(() => {
@@ -13,6 +13,7 @@ export const MainPage = () => {
   return (
     <main>
       <Profile />
+      <hr />
       <Projects />
       <Carrousel />
       <MoreProjects />
@@ -21,8 +22,7 @@ export const MainPage = () => {
         <Button
           text="About me"
           path="/about"
-          iconClass={"fa-solid fa-arrow-right"}
-        />
+          iconClass={"fa-solid fa-arrow-right"} />
       </div>
     </main>
   );

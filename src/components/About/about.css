@@ -98,15 +98,8 @@
   opacity: 1;
 }
 
-
-.lightmode .aperture {
-  filter: invert(1);
-}
 .aperture {
   filter: invert(0);
-}
-.lightmode .b {
-  color: #171717;
 }
 
 @media (max-width: 654px) {

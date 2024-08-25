@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import * as THREE from "three";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import {gsap} from "gsap";
@@ -15,7 +15,9 @@ export const ThreeDee = () => {
     const geometry = new THREE.SphereGeometry(2.54, 74, 74);
 
     const textureLoader = new THREE.TextureLoader();
-    const texture = textureLoader.load("/gas.png");
+    const texture = textureLoader.load("/gas.png", (e) => {
+      console.log(true)
+    });
 
     const material = new THREE.MeshStandardMaterial({
       map: texture,
@@ -39,7 +41,7 @@ export const ThreeDee = () => {
       0.1,
       100
     );
-    camera.position.z = 10;
+    camera.position.z = 8;
     scene.add(camera);
 
     const renderer = new THREE.WebGLRenderer({canvas: canvasRef.current});

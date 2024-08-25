@@ -1,4 +1,8 @@
 /* carousel */
+:root {
+  --carrousel-vel: 50s
+}
+
 @keyframes scroll {
   0% {
     transform: translateX(900px);
@@ -60,7 +64,7 @@
 }
 
 .slide-track {
-  animation: scroll 74s linear infinite;
+  animation: scroll var(--carrousel-vel) linear infinite;
   display: flex;
   width: 100%;
 }
@@ -104,28 +108,6 @@
   white-space: nowrap;
 }
 
-.lightmode .slider {
-  background-color: #fff5e0;
-  background-color: transparent;
-}
-
-.lightmode .slider::before {
-  background: linear-gradient(
-    to right,
-    #fff5e0 0%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  background: transparent;
-}
-.lightmode .slider::after {
-  background: linear-gradient(
-    to right,
-    #fff5e0 0%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  background: transparent;
-}
-
 @media (max-width: 764px) {
   .tech-desc {
     top: 11.2em;
@@ -154,4 +136,51 @@
   .more-projects-section {
     margin-top: 11em;
   }
+}
+
+.carrousel-velocity {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.range {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 200px;
+  background-color: transparent;
+}
+
+.range:focus {
+  outline-color: #f8b195;
+}
+
+.range::-webkit-slider-runnable-track {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 3px;
+  background: var(--gradient7);
+}
+
+.range::-moz-range-track {
+  -moz-appearance: none;
+  appearance: none;
+  height: 3px;
+  background: var(--gradient7);
+}
+
+.range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--gradient7);
+  border-radius: 50%;
+  height: 20px;
+  width: 20px;
+  position: relative;
+  bottom: 8px;
+  background-size: 50%;
+  box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.4);
+  cursor: grab;
 }

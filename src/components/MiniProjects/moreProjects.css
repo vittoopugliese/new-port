@@ -59,10 +59,6 @@
   filter: var(--icon-drop);
 }
 
-
-.lightmode .project-card{
-}
-
 @media (max-width: 740px) {
   .more-projects-section {
     margin-top: 9em !important;

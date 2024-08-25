@@ -1,4 +1,5 @@
 import {useEffect, useState} from "react";
+// refactor
 
 export function useLightTheme() {
   const body = document.getElementsByTagName("body")[0];

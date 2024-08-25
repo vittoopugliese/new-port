@@ -1,5 +1,4 @@
 import {useNavigate} from "react-router-dom";
-import {useLightTheme} from "../../hooks/useLightTheme";
 import "./shared.css";
 
 export const Button = ({text, path, iconClass}) => {
