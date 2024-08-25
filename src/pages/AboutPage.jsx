@@ -21,10 +21,8 @@ export const AboutPage = () => {
       <SectionTitle aperture={true} title="About me" />
       <p>
         <b className="b">Vittorio</b> is a software developer based in Buenos
-        Aires, Argentina. software developer based in Buenos Aires, Argentina.
-        Since very young I am passionate about computers and music, but in
+        Aires, Argentina. Since very young I am passionate about computers and music and in
         middle of 2020 I started learning Web Development.
-        <br />
         <br />
         Currently working at{" "}
         <b onClick={openLink} className="b" style={{cursor: "pointer"}}>
@@ -35,14 +33,14 @@ export const AboutPage = () => {
         <b style={{color: "#559ffa"}}> React Native </b> using the{" "}
         <b style={{color: "#f6e9cd"}}>Expo framework</b> by my own.
         <br />
-        In 2024 started University to get a degree in Computer Science at{" "}
-        <b>UTN</b> (Universidad Tecnológica Nacional).
+        To improve my skills and developer carreer, in 2024 I started University to get a degree in
+        Computer Science at <b>UTN (Universidad Tecnológica Nacional)</b>.
       </p>
       <Experiences />
       <Certificates />
       <div style={{height: "50px"}}></div>
       <Socials />
-      <div style={{height: "350px"}}></div>
+      <div style={{height: "500px"}}></div>
     </section>
   );
 };
