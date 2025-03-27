@@ -12,7 +12,7 @@ export const Profile = () => {
 
       <div className="profile-data">
         <h1>Vittorio Pugliese</h1>
-        <p>Web development and innovation passionate.</p>
+        <p>Web & Mobile Developer with a passion for innovation.</p>
 
         <div className="profile-buttons">
           <a href="./Vittorio-Pugliese-Resume.pdf" download>

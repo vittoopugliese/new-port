@@ -30,14 +30,14 @@ const miniProjects = [
   {
     title: "Breaking Bad Quotes",
     description: "Simple page to get quotes from Breaking Bad's characters.",
-    link: "https://breakingquotes.vittoriop.dev/",
+    link: "https://vittoopugliese.github.io/breakingBadQuotes-/",
     tech: ["react", "breakingbad"],
     aos: 'fade-left'
   },
   {
     title: "Previous Portfolio",
     description: "My own old portfolio page made with vanilla JS.",
-    link: "https://vittoriop.dev/",
+    link: "https://vittoopugliese.github.io/portfolio/",
     tech: ["html", "css", "javascript"],
     aos: 'fade-right'
   },

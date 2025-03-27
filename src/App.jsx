@@ -3,40 +3,27 @@ import {Header} from "./components/Header/Header";
 import {MainPage} from "./pages/MainPage";
 import {AboutPage} from "./pages/AboutPage";
 import {ContactPage} from "./pages/ContactPage";
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import {OnPageLoad} from "./components/Shared/OnPageLoad";
 
-function App() {
-  const [pageLoading, setpageLoading] = useState(true);
-
+export default function App() {
   useEffect(() => {
     AOS.init();
-
-    setTimeout(() => {
-      setpageLoading(false);
-    }, 1250);
   }, []);
 
   return (
     <>
-      {pageLoading ? (
-        <OnPageLoad />
-      ) : (
-        <BrowserRouter>
-          <div className="appContainer" data-aos="fade-up">
-            <Header data-aos="fade-down" />
-            <Routes>
-              <Route path="/" element={<MainPage />} />
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="/contact" element={<ContactPage />} />
-            </Routes>
-          </div>
-        </BrowserRouter>
-      )}
+      <BrowserRouter>
+        <div className="appContainer" data-aos="fade-up">
+          <Header data-aos="fade-down" />
+          <Routes>
+            <Route path="/" element={<MainPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+          </Routes>
+        </div>
+      </BrowserRouter>
     </>
   );
 }
-
-export default App;

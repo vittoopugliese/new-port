@@ -16,7 +16,7 @@ export const ThreeDee = () => {
 
     const textureLoader = new THREE.TextureLoader();
     const texture = textureLoader.load("/gas.png", (e) => {
-      console.log(true)
+      // console.log("texture event", e)
     });
 
     const material = new THREE.MeshStandardMaterial({

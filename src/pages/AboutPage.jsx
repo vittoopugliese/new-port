@@ -20,21 +20,22 @@ export const AboutPage = () => {
     <section className="about-section-container">
       <SectionTitle aperture={true} title="About me" />
       <p>
-        <b className="b">Vittorio</b> is a software developer based in Buenos
-        Aires, Argentina. Since very young I am passionate about computers and music and in
-        middle of 2020 I started learning Web Development.
-        <br />
-        Currently working at{" "}
-        <b onClick={openLink} className="b" style={{cursor: "pointer"}}>
-          Kubrik Digital{" "}
-        </b>{" "}
-        on TimelogBook© with <b style={{color: "#f84646"}}> Angular </b> and{" "}
-        successfully developing a client app with
-        <b style={{color: "#559ffa"}}> React Native </b> using the{" "}
-        <b style={{color: "#f6e9cd"}}>Expo framework</b> by my own.
-        <br />
-        To improve my skills and developer carreer, in 2024 I started University to get a degree in
-        Computer Science at <b>UTN (Universidad Tecnológica Nacional)</b>.
+        <b className="b">Vittorio</b> is a Front-end and Mobile Developer based in Buenos Aires, Argentina. <br />
+        Passionate about technology from a young age, he has been exploring the world of 
+        computers and music since childhood.<br /><br />
+        In June 2020, he began his journey into web development, 
+        focusing on <b style={{color: "#fdf251"}}>JavaScript</b>, <b style={{color: "#4797f1"}}>TypeScript</b> and general web knowledge rapidly developing his programming skills.<br /><br />
+
+        Currently, he is leading mobile application development at {" "}
+        <b onClick={openLink} className="b" style={{cursor: "pointer"}}>Kubrik Digital</b>, 
+        working on a project for a Canadian client using <b style={{color: "#525df8"}}>React Native</b> with the 
+        <b style={{color: "#f5e2ba"}}> Expo framework </b>. Simultaneously, he contributes to the development of their
+        internal ERP tool, <b>TimelogBook©</b>, 
+        using <b style={{color: "#f84646"}}>Angular</b>.<br /><br />
+
+        To further his professional growth, Vittorio enrolled at <b>UTN (Universidad Tecnológica Nacional) </b> 
+        in 2024, pursuing a degree in Computer Systems to deepen his theoretical knowledge and complement his
+        practical experience.
       </p>
       <Experiences />
       <Certificates />
