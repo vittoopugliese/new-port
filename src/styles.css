@@ -13,15 +13,8 @@
   --dark2: #343434;
   --primary: #ffe095;
   --transition: all 0.2s cubic-bezier(0.39, 0.575, 0.565, 1);
-  --transition2: all 0.4s cubic-bezier(0.39, 0.575, 0.565, 1);
   --icon-drop: drop-shadow(2px 2px 1px rgba(100, 100, 100, 0.64));
-  --gradient1: linear-gradient(to right, var(--dark1) -60%, #fff5e0 100%);
-  --gradient2: linear-gradient(220.55deg, #ffc23d 0%, #eed59f 100%);
-  --gradient3: linear-gradient(220.55deg, #ffd439 0%, #ff7a00 100%);
-  --gradient4: linear-gradient(220.55deg, #e0ff87 0.01%, #8fb85b 100%);
-  --gradient5: linear-gradient(220.55deg, #ff896d 0%, #d02020 100%);
-  --gradient6: linear-gradient(to right, #f7797d, #fbd786, #c6ffdd);
-  --gradient7: linear-gradient(to right, #386072, #2a525f, #203e49);
+  --gradient: linear-gradient(to right, var(--dark1) -60%, #fff5e0 100%);
 }
 
 * {
@@ -216,53 +209,4 @@ header {
     justify-content: space-between;
     width: 90%;
   }
-}
-
-/* Three */
-
-.three-container{
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-  width: 100vw;
-}
-
-.texture-selector {
-  display: flex;
-  gap: 10px;
-  scale: 0.8;
-}
-
-.texture-selector button {
-  background: transparent;
-  border-radius: 4px;
-  border-style: none;
-  padding: 5px;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: rgb(180, 180, 180);
-  min-width: 2em;
-}
-
-.texture-selector button span{
-  margin-top: 12px
-}
-
-.texture-selector button.active span{
-  color: white;
-}
-
-.texture-selector img {
-  filter: saturate(0.9);
-}
-
-.texture-thumb {
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
-  border-radius: 2px;
-  border-radius: 100%;
 }

@@ -66,3 +66,50 @@ export const experience = [
     ],
   },
 ];
+
+export function getMoonData(systemName) {
+  const moonData = {
+    jupiter: {
+      geometrySize: 0.3,
+      texturePath: "/europa.webp",
+      orbitRadius: 4,
+      orbitSpeed: 0.8,
+      orbitDirection: 1,
+      initialPosition: [4, 0, 0]
+    },
+    saturn: {
+      geometrySize: 0.5,
+      texturePath: "/titan.webp",
+      orbitRadius: 5,
+      orbitSpeed: 0.2,
+      orbitDirection: 1,
+      initialPosition: [5, 0, 0]
+    },
+    neptune: {
+      geometrySize: 0.3,
+      texturePath: "/triton.webp",
+      orbitRadius: 5,
+      orbitSpeed: 0.3,
+      orbitDirection: -1,
+      initialPosition: [5, 0, 0]
+    },
+    uranus: {
+      geometrySize: 0.2,
+      texturePath: "/umbriel.webp",
+      orbitRadius: 4,
+      orbitSpeed: 0.3,
+      orbitDirection: 1,
+      initialPosition: [4, 0, 0]
+    },
+    earth: {
+      geometrySize: 0.27,
+      texturePath: "/moon.webp",
+      orbitRadius: 2,
+      orbitSpeed: 0.1,
+      orbitDirection: 1,
+      initialPosition: [2, 0, 0]
+    }
+  };
+
+  return moonData[systemName] || moonData.jupiter;
+};

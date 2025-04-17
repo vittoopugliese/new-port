@@ -24,11 +24,7 @@ export const Carrousel = () => {
       <div className="slider">
         <div className="slide-track" style={{ '--carrousel-vel': carrouselVel + 's' }}>
           <div className="slide">
-            {techslogos.map((t, i) => {
-              return <TechImages tech={t} key={i * i}
-                        techHover={e => setOpacity(e)}
-                        techSelected={handleTechSelected} />;
-            })}
+            {techslogos.map((t, i) => <TechImages tech={t} key={i * i} techHover={e => setOpacity(e)} techSelected={handleTechSelected} />)}
           </div>
         </div>
       </div>

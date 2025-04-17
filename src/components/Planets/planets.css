@@ -1,0 +1,95 @@
+/* threeDee.css */
+.three-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* Para estar detrás del contenido del profile */
+  overflow: hidden;
+}
+
+.webgl {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  outline: none;
+}
+
+.texture-selector {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  z-index: 10000;
+  background-color: rgba(17, 17, 17, 0.7);
+  border-radius: 10px;
+  padding: 10px;
+  backdrop-filter: blur(6px);
+  pointer-events: all;
+}
+
+.texture-selector button {
+  background: transparent;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  padding: 5px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: rgb(180, 180, 180);
+  min-width: 2em;
+  transition: all 0.3s ease;
+}
+
+.texture-selector button:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.texture-selector button.active {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 224, 149, 0.5);
+}
+
+.texture-selector button span {
+  margin-top: 8px;
+  font-size: 0.8em;
+}
+
+.texture-selector button.active span {
+  color: white;
+}
+
+.texture-selector img {
+  filter: saturate(0.9);
+  transition: all 0.3s ease;
+}
+
+.texture-selector button:hover img {
+  filter: saturate(1.2);
+}
+
+.texture-thumb {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 100%;
+  box-shadow: 0 0 10px rgba(255, 224, 149, 0.3);
+}
+
+.texture-selector button.active .texture-thumb {
+  box-shadow: 0 0 15px rgba(255, 224, 149, 0.7);
+}
+
+@media (max-width: 768px) {
+  .texture-selector {
+    transform: translateX(-50%) scale(0.7);
+    bottom: 5px;
+  }
+}

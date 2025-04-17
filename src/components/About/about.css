@@ -52,32 +52,6 @@
   color: rgb(200, 200, 200);
 }
 
-.contact-button-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 2em 0em;
-}
-
-.contact-button {
-  display: flex;
-  align-items: center;
-  background-color: var(--primary);
-  /* background: linear-gradient(220.55deg, #565656 0%, #181818 100%); */
-  font-weight: 600;
-  font-size: 1.2em;
-  transition: var(--transition);
-  display: flex;
-  gap: 0.6em;
-}
-.contact-button i{
-  font-size: 1.4em;
-}
-
-.contact-button:hover {
-  scale: 1.1;
-}
-
 .certificates-container{
   display: flex;
   justify-content: center;

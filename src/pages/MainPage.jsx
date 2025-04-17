@@ -13,16 +13,12 @@ export const MainPage = () => {
   return (
     <main>
       <Profile />
-      <hr />
       <Projects />
       <Carrousel />
       <MoreProjects />
 
       <div className="button-container">
-        <Button
-          text="About me"
-          path="/about"
-          iconClass={"fa-solid fa-arrow-right"} />
+        <Button text="About me" path="/about" iconClass={"fa-solid fa-arrow-right"} />
       </div>
     </main>
   );
