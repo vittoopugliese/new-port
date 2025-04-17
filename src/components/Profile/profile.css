@@ -4,6 +4,8 @@
   flex-direction: column;
   width: 100%;
   margin: 1em 0em;
+  position: relative;
+  padding-bottom: 254px;
 }
 
 .profile-picture {
@@ -28,6 +30,8 @@
   align-items: left;
   flex-direction: column;
   text-align: center;
+  position: absolute;
+  bottom: 0px
 }
 
 .profile-data p {

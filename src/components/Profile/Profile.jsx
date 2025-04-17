@@ -8,6 +8,8 @@ import {ThreeDee} from "./../Shared/ThreeDee";
 export const Profile = () => {
   return (
     <div className="profile-container">
+      <div style={{paddingTop: 100}}></div>
+
       <ThreeDee />
 
       <div className="profile-data">
@@ -23,6 +25,7 @@ export const Profile = () => {
           </a>
         </div>
       </div>
+      
     </div>
   );
 };

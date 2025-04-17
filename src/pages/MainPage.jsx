@@ -3,7 +3,7 @@ import {Projects} from "../components/Projects/Projects";
 import {MoreProjects} from "../components/MiniProjects/MoreProjects";
 import {Carrousel} from "../components/Carrousel/Carrousel";
 import {Button} from "../components/Shared/Button";
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 
 export const MainPage = () => {
   useEffect(() => {

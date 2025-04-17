@@ -18,6 +18,7 @@ export const AboutPage = () => {
 
   return (
     <section className="about-section-container">
+      <div style={{paddingTop: 60}}></div>
       <SectionTitle aperture={true} title="About me" />
       <p>
         <b className="b">Vittorio</b> is a Front-end and Mobile Developer based in Buenos Aires, Argentina. <br />
