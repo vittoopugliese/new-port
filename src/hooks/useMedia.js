@@ -7,7 +7,7 @@ export function useMedia() {
     window.addEventListener("resize", handleToggle);
 
     function handleToggle() {
-      window.innerWidth < 768 ? setIsMobile(false) : setIsMobile(true);
+      window.innerWidth < 888 ? setIsMobile(false) : setIsMobile(true);
     }
 
     handleToggle()

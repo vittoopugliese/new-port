@@ -8,6 +8,8 @@
   overflow: hidden;
   z-index: 2;
   user-select: none;
+  /* god line importante tambien */
+  pointer-events: none;
 }
 
 .profile-data {
@@ -19,21 +21,22 @@
   z-index: 2;
   margin-top: 50vh; 
   transform: translateY(-50%);
-  background-color: rgba(23, 23, 23, 0.54);
-  padding: 2em;
-  border-radius: 1.74em;
-  backdrop-filter: blur(6px);
+  /* background-color: rgba(23, 23, 23, 0.54); */
+  /* padding: 2em; */
+  /* border-radius: 1.74em; */
+  /* backdrop-filter: blur(2px); */
 }
 
 .profile-data h1 {
   color: white;
-  text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 0 16px rgba(0, 0, 0, 0.9);
 }
 
 .profile-data p {
-  font-size: 1.2em;
+  font-size: 0.8em;
   margin: 0.2em 0;
   color: rgba(255, 255, 255, 0.8);
+  text-shadow: 0 0 12px rgba(0, 0, 0, 0.9);
 }
 
 .profile-buttons {
@@ -55,7 +58,12 @@
   font-weight: 600;
 }
 
-@media (max-width: 768px) {
+.profile-data, .profile-buttons {
+  /* god lines importantes, .profile buttons no haria falta porque ya esta dentro de profile-data */
+  pointer-events: auto;
+}
+
+@media (max-width: 888px) {
   .profile-data {
     padding: 1.5em;
   }

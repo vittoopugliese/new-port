@@ -110,7 +110,7 @@ header {
   background-color: #545454;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 888px) {
   header {
     padding: 0em;
     margin: 0em;
@@ -177,10 +177,6 @@ header {
   }
 }
 
-.b {
-  color: white;
-}
-
 @media (min-width: 954px) {
   .socials-container {
     display: flex;
@@ -192,4 +188,17 @@ header {
     justify-content: space-between;
     width: 90%;
   }
+}
+
+main, .appContainer {
+  /* 
+    esta god line hace que los eventos del mouse ignoren el cointainer de profile data 
+    luego olvida el de main y luego el de app container (es asi el orden en cascada invertida) 
+    y luego le pasa los eventos de arrastrar o zoom al canvas de planetas :D 
+  */
+  pointer-events: none;
+}
+
+.b {
+  color: white;
 }

@@ -108,7 +108,7 @@
   white-space: nowrap;
 }
 
-@media (max-width: 764px) {
+@media (max-width: 888px) {
   .tech-desc {
     top: 11.2em;
     width: 80%;

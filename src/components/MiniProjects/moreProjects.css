@@ -59,7 +59,7 @@
   filter: var(--icon-drop);
 }
 
-@media (max-width: 740px) {
+@media (max-width: 888px) {
   .more-projects-section {
     margin-top: 9em !important;
   }

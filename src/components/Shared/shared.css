@@ -37,9 +37,9 @@
 
 .button {
   width: 12em;
-  height: 2.8em;
+  height: 2.5em;
   border-radius: 1em;
-  font-size: 1em;
+  font-size: 0.9em;
   border: none;
   position: relative;
   overflow: hidden;

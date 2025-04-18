@@ -5,12 +5,14 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { gsap } from "gsap";
 import "./planets.css";
 import PlanetButton from './PlanetButton';
+import { useMedia } from './../../hooks/useMedia';
 
 export const Planets = () => {
   const canvasRef = useRef(null);
   const containerRef = useRef(null);
+  const { isMobile } = useMedia();
   const [currentPlanetarySystem, setCurrentPlanetarySystem] = useState({texture: "/gas.png", system: "jupiter"});
-  const [planetSelectorOpen, setPlanetSelectorOpen] = useState(false);
+  const [planetSelectorOpen, setPlanetSelectorOpen] = useState(isMobile);
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -160,9 +162,10 @@ export const Planets = () => {
       <canvas ref={canvasRef} className="webgl" />
 
       <div className={"texture-selector" + (planetSelectorOpen ? "open" : "")}>
-      <img className="planet-selector-toggler" onClick={togglePlanetSelector}
-        src="https://www.svgrepo.com/show/522044/chevron-up-circle.svg"
-        width={24} height={24} draggable={false} />
+        <img className={"planet-selector-toggler" + (planetSelectorOpen ? "" : " pst-opened")} onClick={togglePlanetSelector}
+          src="https://www.svgrepo.com/show/522044/chevron-up-circle.svg"
+          width={24} height={24} draggable={false} />
+        
         { planets.map((planet) => (
             <PlanetButton key={planet.system} texture={planet.texture} system={planet.system}
               onClick={() => handleTextureChange(planet.texture, planet.system)}
