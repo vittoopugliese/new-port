@@ -67,49 +67,132 @@ export const experience = [
   },
 ];
 
-export function getMoonData(systemName) {
+export const planets = [
+  { texture: "/gas.png", system: "jupiter", moonName: "europa" },
+  { texture: "/saturn.webp", system: "saturn", moonName: "titan" },
+  { texture: "/neptune.webp", system: "neptune", moonName: "triton" },
+  { texture: "/uranus.webp", system: "uranus", moonName: "umbriel" },
+  { texture: "/earth.webp", system: "earth", moonName: "moon" },
+  { texture: "/mars.webp", system: "mars", moonName: "deimos" },
+  { texture: "/venus.webp", system: "venus", moonName: null },
+  { texture: "/mercury.webp", system: "mercury", moonName: null },
+  { texture: "/pluto.webp", system: "pluto", moonName: "charon" },
+  { texture: "/sun.webp", system: "sun", moonName: null },
+];
+
+export function getPlanetData(systemName) {
   const moonData = {
     jupiter: {
-      geometrySize: 0.3,
-      texturePath: "/europa.webp",
-      orbitRadius: 4,
-      orbitSpeed: 0.8,
+      texturePath: "/jupiter.webp",
+      geometrySize: 2.5,        // Jupiter es el planeta más grande (diámetro ~142,984 km)
+      moonTexturePath: "/europa.webp",
+      moonGeometrySize: 0.15,   // Europa es una de las lunas más pequeñas de Júpiter
+      orbitRadius: 8,           // Órbita más grande por ser el planeta más grande
+      orbitSpeed: 0.5,
       orbitDirection: 1,
-      initialPosition: [4, 0, 0]
+      initialPosition: [8, 0, 0],
+      hasRings: false
     },
     saturn: {
-      geometrySize: 0.5,
-      texturePath: "/titan.webp",
-      orbitRadius: 5,
-      orbitSpeed: 0.2,
+      texturePath: "/saturn.webp",
+      geometrySize: 2.2,        // Saturno es el segundo más grande (diámetro ~120,536 km)
+      moonTexturePath: "/titan.webp",
+      moonGeometrySize: 0.25,   // Titán es la luna más grande de Saturno
+      orbitRadius: 7,
+      orbitSpeed: 0.3,
       orbitDirection: 1,
-      initialPosition: [5, 0, 0]
+      initialPosition: [7, 0, 0],
+      hasRings: true            // Saturno es famoso por sus anillos
     },
     neptune: {
-      geometrySize: 0.3,
-      texturePath: "/triton.webp",
+      texturePath: "/neptune.webp",
+      geometrySize: 1.7,        // Neptuno (diámetro ~49,244 km)
+      moonTexturePath: "/triton.webp",
+      moonGeometrySize: 0.15,    // Tritón es grande comparado con Neptuno
       orbitRadius: 5,
-      orbitSpeed: 0.3,
-      orbitDirection: -1,
-      initialPosition: [5, 0, 0]
+      orbitSpeed: 0.4,
+      orbitDirection: -1,       // Tritón orbita en dirección retrógrada
+      initialPosition: [5, 0, 0],
+      hasRings: false
     },
     uranus: {
-      geometrySize: 0.2,
-      texturePath: "/umbriel.webp",
+      texturePath: "/uranus.webp",
+      geometrySize: 1.8,        // Urano (diámetro ~50,724 km)
+      moonTexturePath: "/umbriel.webp",
+      moonGeometrySize: 0.1,   // Umbriel es una de las lunas medianas
       orbitRadius: 4,
-      orbitSpeed: 0.3,
+      orbitSpeed: 0.35,
       orbitDirection: 1,
-      initialPosition: [4, 0, 0]
+      initialPosition: [4, 0, 0],
+      hasRings: true            // Urano tiene anillos, aunque son menos visibles que los de Saturno
     },
     earth: {
-      geometrySize: 0.27,
-      texturePath: "/moon.webp",
-      orbitRadius: 2,
-      orbitSpeed: 0.1,
+      texturePath: "/earth.webp",
+      geometrySize: 1.5,        // Tierra (diámetro ~12,742 km)
+      moonTexturePath: "/moon.webp",
+      moonGeometrySize: 0.1,   // Luna es 1/4 del tamaño de la Tierra
+      orbitRadius: 1.5,
+      orbitSpeed: 0.2,
       orbitDirection: 1,
-      initialPosition: [2, 0, 0]
+      initialPosition: [2, 2, 0],
+      hasRings: false
+    },
+    mars: {
+      texturePath: "/mars.webp",
+      geometrySize: 0.8,        // Marte (diámetro ~6,779 km)
+      moonTexturePath: "/deimos.webp",
+      moonGeometrySize: 0.05,  // Deimos es muy pequeño
+      orbitRadius: 2,
+      orbitSpeed: 0.25,
+      orbitDirection: 1,        // Deimos orbita en la misma dirección que Marte rota
+      initialPosition: [1, 2, 0],
+      hasRings: false
+    },
+    venus: {
+      texturePath: "/venus.webp",
+      geometrySize: 1.5,        // Venus (diámetro ~12,104 km)
+      moonTexturePath: null,
+      moonGeometrySize: 0,      // Venus no tiene lunas
+      orbitRadius: 0,
+      orbitSpeed: 0,
+      orbitDirection: 1,
+      initialPosition: [10, 0, 0],
+      hasRings: false
+    },
+    mercury: {
+      texturePath: "/mercury.webp",
+      geometrySize: 1.4,        // Mercurio (diámetro ~4,880 km)
+      moonTexturePath: null,
+      moonGeometrySize: 0,      // Mercurio no tiene lunas
+      orbitRadius: 0,
+      orbitSpeed: 0,
+      orbitDirection: 1,
+      initialPosition: [0, 0, 0],
+      hasRings: false
+    },
+    pluto: {
+      texturePath: "/pluto.webp",
+      geometrySize: 1.2,        // Plutón (diámetro ~2,377 km)
+      moonTexturePath: "/charon.webp",
+      moonGeometrySize: 0.009,  // Caronte es casi la mitad del tamaño de Plutón
+      orbitRadius: 0.5,         // Órbita muy cercana
+      orbitSpeed: 0.15,
+      orbitDirection: 1,
+      initialPosition: [0.5, 0, 0],
+      hasRings: false
+    },
+    sun: {
+      texturePath: "/sun.webp",
+      geometrySize: 10.0,       // Sol (diámetro ~1,391,000 km)
+      moonTexturePath: null,
+      moonGeometrySize: 0,      // El Sol no tiene lunas (los planetas orbitan alrededor de él)
+      orbitRadius: 0,
+      orbitSpeed: 0,
+      orbitDirection: 1,
+      initialPosition: [0, 0, 0],
+      hasRings: false
     }
   };
 
-  return moonData[systemName] || moonData.jupiter;
-};
+  return moonData[systemName];
+}

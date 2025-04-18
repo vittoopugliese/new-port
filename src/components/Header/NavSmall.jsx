@@ -17,10 +17,9 @@ export const NavSmall = () => {
 
   return (
     <>
-    {navOpen && <div className="nav-small-background"
-    onClick={() => setNavOpen(false)}></div>}
+    {navOpen && <div className="nav-small-background" onClick={() => setNavOpen(false)}></div>}
     
-    <div className="navSmall-container">
+    <div>
       <i className="fa-solid fa-bars navTogglerIcon"
         onClick={() => setNavOpen(true)}></i>
 

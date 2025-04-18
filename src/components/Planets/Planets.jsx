@@ -1,19 +1,22 @@
 import { useEffect, useRef, useState } from "react";
-import { getMoonData } from "../../utils/constants";
+import { getPlanetData, planets } from "../../utils/constants";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { gsap } from "gsap";
 import "./planets.css";
+import PlanetButton from './PlanetButton';
 
 export const Planets = () => {
   const canvasRef = useRef(null);
   const containerRef = useRef(null);
   const [currentPlanetarySystem, setCurrentPlanetarySystem] = useState({texture: "/gas.png", system: "jupiter"});
+  const [planetSelectorOpen, setPlanetSelectorOpen] = useState(false);
 
   useEffect(() => {
     if (!canvasRef.current) return;
     
     let animationFrameId;
+    const planetConfig = getPlanetData(currentPlanetarySystem.system);
     const scene = new THREE.Scene();
     
     // STARS
@@ -33,7 +36,7 @@ export const Planets = () => {
     scene.add(stars);
 
     // PLANET (getting config from constant) 
-    const planetGeometry = new THREE.SphereGeometry(2.54, 74, 74);
+    const planetGeometry = new THREE.SphereGeometry(planetConfig.geometrySize, 74, 74);
     const textureLoader = new THREE.TextureLoader();
     const planetTexture = textureLoader.load(currentPlanetarySystem.texture);
     
@@ -43,17 +46,21 @@ export const Planets = () => {
     scene.add(planet);
 
     // MOON (getting config from constant)
-    let moon;
-    const moonConfig = getMoonData(currentPlanetarySystem.system);
+    let moon = null;
 
-    const moonGeometry = new THREE.SphereGeometry(moonConfig.geometrySize, 32, 32);
-    const moonTexture = textureLoader.load(moonConfig.texturePath);
-    const moonMaterial = new THREE.MeshStandardMaterial({ map: moonTexture });
+    if (planetConfig.moonTexturePath) {
+      // not every planet has a moon so we check if it exists
+      const moonGeometry = new THREE.SphereGeometry(planetConfig.moonGeometrySize, 32, 32);
+      const moonTexture = textureLoader.load(planetConfig.moonTexturePath);
+      const moonMaterial = new THREE.MeshStandardMaterial({ map: moonTexture });
+      // if it does not have moon then the moon var will be null
+      // else it will be a mesh with the moon geometry and material
+      moon = new THREE.Mesh(moonGeometry, moonMaterial);
+      moon.position.set(...planetConfig.initialPosition);
+      scene.add(moon);
+    }
 
-    moon = new THREE.Mesh(moonGeometry, moonMaterial);
-    moon.position.set(...moonConfig.initialPosition);
-
-    scene.add(moon);
+    // only uranus and saturn has rings
 
     // LIGHTS (ambient for the planet and directional for the scene)
     const ambientLight = new THREE.AmbientLight(0x404040, 0.94);
@@ -81,10 +88,10 @@ export const Planets = () => {
     // CONTROLS
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
-    controls.enablePan = false;
-    controls.enableZoom = false;
+    controls.enablePan = true;  // maybe will be into a switch state ...
+    controls.enableZoom = true; // maybe will be into a switch state ...
     controls.autoRotate = true;
-    controls.autoRotateSpeed = 0.5;
+    controls.autoRotateSpeed = 0.1;
 
     const clock = new THREE.Clock();
 
@@ -97,8 +104,10 @@ export const Planets = () => {
       stars.rotation.y = elapsedTime * 0.02;
       stars.rotation.x = elapsedTime * 0.01;
 
-      moon.position.x = Math.cos(elapsedTime * moonConfig.orbitSpeed * moonConfig.orbitDirection) * moonConfig.orbitRadius;
-      moon.position.z = Math.sin(elapsedTime * moonConfig.orbitSpeed * moonConfig.orbitDirection) * moonConfig.orbitRadius;
+      if (moon){
+        moon.position.x = Math.cos(elapsedTime * planetConfig.orbitSpeed * planetConfig.orbitDirection) * planetConfig.orbitRadius;
+        moon.position.z = Math.sin(elapsedTime * planetConfig.orbitSpeed * planetConfig.orbitDirection) * planetConfig.orbitRadius;
+      }
 
       controls.update();
       renderer.render(scene, camera);
@@ -133,39 +142,33 @@ export const Planets = () => {
     };
   }, [currentPlanetarySystem]);
 
-  const handleTextureChange = (texture, system) => setCurrentPlanetarySystem({texture, system});
+  const handleTextureChange = (texture, system) => {
+    if (currentPlanetarySystem.system === system) return;
+    setCurrentPlanetarySystem({texture, system});
+  }
+
+  const togglePlanetSelector = () => {
+    setPlanetSelectorOpen(!planetSelectorOpen);
+    // const planetSelector = document.querySelector(".texture-selector");
+    // if (planetSelector) {
+    //   gsap.to(planetSelector, { duration: 0.5, y: planetSelectorOpen ? 0 : -50 });
+    // }
+  };
 
   return (
     <div className="three-container" ref={containerRef}>
       <canvas ref={canvasRef} className="webgl" />
 
-      <div className="texture-selector">
-        <button onClick={() => handleTextureChange("/gas.png", "jupiter")} className={currentPlanetarySystem.system === "jupiter" ? "active" : ""}>
-          <img src="/gas.png" alt="Juno" className="texture-thumb" />
-          <span>Júpiter + Europa</span>
-        </button>
-
-        <button onClick={() => handleTextureChange("/saturn.webp", "saturn")} className={currentPlanetarySystem.system === "saturn" ? "active" : ""}>
-          <img src="/saturn.webp" alt="Saturn" className="texture-thumb" />
-          <span>Saturno + Titán</span>
-        </button>
-
-        <button onClick={() => handleTextureChange("/neptune.webp", "neptune")} className={currentPlanetarySystem.system === "neptune" ? "active" : ""}>
-          <img src="/neptune.webp" alt="Neptune" className="texture-thumb" />
-          <span>Neptune + Triton</span>
-        </button>
-
-        <button onClick={() => handleTextureChange("/uranus.webp", "uranus")} className={currentPlanetarySystem.system === "uranus" ? "active" : ""}>
-          <img src="/uranus.webp" alt="Uranus" className="texture-thumb" />
-          <span>Uranus + Umbriel</span>
-        </button>
-
-        <button onClick={() => handleTextureChange("/earth.webp", "earth")} className={currentPlanetarySystem.system === "earth" ? "active" : ""}>
-          <img src="/earth.webp" alt="Earth" className="texture-thumb" />
-          <span>Earth + Moon</span>
-        </button>
+      <div className={"texture-selector" + (planetSelectorOpen ? "open" : "")}>
+      <img className="planet-selector-toggler" onClick={togglePlanetSelector}
+        src="https://www.svgrepo.com/show/522044/chevron-up-circle.svg"
+        width={24} height={24} draggable={false} />
+        { planets.map((planet) => (
+            <PlanetButton key={planet.system} texture={planet.texture} system={planet.system}
+              onClick={() => handleTextureChange(planet.texture, planet.system)}
+              isActive={currentPlanetarySystem.system === planet.system} moonName={planet.moonName} />
+        ))}
       </div>
-      
     </div>
   );
 };

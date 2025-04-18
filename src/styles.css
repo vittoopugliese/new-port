@@ -110,7 +110,7 @@ header {
   background-color: #545454;
 }
 
-@media (max-width: 824px) {
+@media (max-width: 768px) {
   header {
     padding: 0em;
     margin: 0em;
@@ -135,17 +135,6 @@ header {
 
   .appContainer {
     width: 92vw;
-  }
-
-  .profile-container {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
-    width: 100%;
-    gap: 2em;
-    margin: 1em 0em;
   }
 
   .profile-buttons {
@@ -190,12 +179,6 @@ header {
 
 .b {
   color: white;
-}
-
-.contactContainer{
-  min-height: 1248px;
-  /* display: flex;
-  justify-content: center; */
 }
 
 @media (min-width: 954px) {

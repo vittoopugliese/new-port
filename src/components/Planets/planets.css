@@ -1,11 +1,9 @@
-/* threeDee.css */
 .three-container {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: -1; /* Para estar detrás del contenido del profile */
   overflow: hidden;
 }
 
@@ -44,7 +42,7 @@
   align-items: center;
   color: rgb(180, 180, 180);
   min-width: 2em;
-  transition: all 0.3s ease;
+  transition: all 254ms ease;
 }
 
 .texture-selector button:hover {
@@ -59,7 +57,7 @@
 
 .texture-selector button span {
   margin-top: 8px;
-  font-size: 0.8em;
+  font-size: 1em;
 }
 
 .texture-selector button.active span {
@@ -87,9 +85,34 @@
   box-shadow: 0 0 15px rgba(255, 224, 149, 0.7);
 }
 
+.planet-selector-toggler{
+  display: none;
+  position: absolute;
+  bottom: 0px;
+}
+
 @media (max-width: 768px) {
   .texture-selector {
     transform: translateX(-50%) scale(0.7);
-    bottom: 5px;
+  }
+}
+
+@media (max-width: 578px) {
+  .texture-selector {
+    transform: translateX(-50%) scale(0.9);
+    display: grid;
+    grid-template-columns: repeat(5, 64px);
+    bottom: 10px;
+  }
+
+  .planet-selector-toggler{
+    display: flex;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10000;
+    cursor: pointer;
+    color: white;
+    filter: invert(0.8) opacity(0.8) !important;
   }
 }

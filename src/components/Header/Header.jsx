@@ -5,7 +5,7 @@ import {useNavigate, useLocation} from "react-router-dom";
 import "./header.css";
 
 export const Header = () => {
-  const {isMobile} = useMedia(620);
+  const {isMobile} = useMedia();
 
   const navigate = useNavigate();
   const location = useLocation();
