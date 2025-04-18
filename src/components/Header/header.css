@@ -31,6 +31,8 @@ nav {
   font-size: 1.4em;
   cursor: pointer;
   transition: var(--transition);
+  pointer-events: all;
+  z-index: 10000;
 }
 
 .nav-item-br {
@@ -72,6 +74,7 @@ nav {
   font-size: 1.8em;
   cursor: pointer;
   transition: var(--transition);
+  pointer-events: all;
 }
 
 .navTogglerIcon:hover {
@@ -87,6 +90,7 @@ nav {
   top: 0px;
   right: 0px;
   margin: 0.6em 0.6em 0em 0em;
+  pointer-events: all;
 }
 
 .nav-small-background {

@@ -18,7 +18,7 @@
 
 .texture-selector {
   position: absolute;
-  bottom: 12px;
+  bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -123,4 +123,15 @@
   .planet-selector-toggler{
     display: flex;
   }
+}
+
+.scroll-to-downside{
+  color: white;
+  font-size: 0.8em;
+  margin-top: 1rem;
+  position: absolute;
+  bottom: -20px;
+  text-align: center;
+  width: 100%;
+  cursor: pointer;
 }

@@ -171,6 +171,8 @@ export const Planets = () => {
               onClick={() => handleTextureChange(planet.texture, planet.system)}
               isActive={currentPlanetarySystem.system === planet.system} moonName={planet.moonName} />
         ))}
+
+        <p className="scroll-to-downside" onClick={() => window.scrollTo({top: window.innerHeight * 0.8, behavior: "smooth"})}>Tap here to scroll to the downside</p>
       </div>
     </div>
   );
