@@ -20,6 +20,7 @@
   cursor: pointer;
   filter: opacity(0.74);
   transition: var(--transition) !important;
+  pointer-events: all;
 }
 
 .project-card:hover {

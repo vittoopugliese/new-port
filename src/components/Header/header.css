@@ -64,6 +64,7 @@ nav {
   background-color: var(--dark1);
   border-radius: 100%;
   padding: 2px;
+  pointer-events: all;
 }
 
 .nav-small-image:hover {

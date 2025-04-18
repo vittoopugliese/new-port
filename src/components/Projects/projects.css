@@ -15,6 +15,7 @@
   gap: 1.5em;
   cursor: pointer;
   transition: var(--transition);
+  pointer-events: all;
 }
 
 .project-image-container {

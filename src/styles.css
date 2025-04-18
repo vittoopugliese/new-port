@@ -66,6 +66,7 @@ h4 {
 }
 p {
   color: rgb(204, 204, 204);
+  pointer-events: all;
 }
 
 .appContainer {
@@ -201,4 +202,5 @@ main, .appContainer {
 
 .b {
   color: white;
+  pointer-events: all;
 }

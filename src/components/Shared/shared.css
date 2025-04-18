@@ -3,6 +3,7 @@
   align-items: center;
   flex-direction: row;
   justify-content: space-between;
+  pointer-events: all;
 }
 
 .section-title div {
@@ -48,6 +49,7 @@
   font-weight: 600;
   background-color: #fff5e0;
   transition: var(--transition);
+  pointer-events: all;
 }
 .button:hover {
   scale: 1.06;

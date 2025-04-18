@@ -35,6 +35,7 @@
   bottom: 50%;
   margin: -17em 0em;
   transition: var(--transition);
+  pointer-events: all;
 }
 
 .slider::before,
