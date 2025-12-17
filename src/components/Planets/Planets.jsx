@@ -5,14 +5,14 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { gsap } from "gsap";
 import "./planets.css";
 import PlanetButton from './PlanetButton';
-import { useMedia } from './../../hooks/useMedia';
+import { LoadingSpinner } from './../Shared/LoadingSpinner';
 
 export const Planets = () => {
   const canvasRef = useRef(null);
   const containerRef = useRef(null);
-  const { isMobile } = useMedia();
   const [currentPlanetarySystem, setCurrentPlanetarySystem] = useState({texture: "/gas.png", system: "jupiter"});
-  const [planetSelectorOpen, setPlanetSelectorOpen] = useState(isMobile);
+  const [planetSelectorOpen, setPlanetSelectorOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -37,9 +37,15 @@ export const Planets = () => {
     const stars = new THREE.Points(starGeometry, starMaterial);
     scene.add(stars);
 
+    // LOADING MANAGER para detectar cuando las texturas terminan de cargar
+    const loadingManager = new THREE.LoadingManager();
+    loadingManager.onLoad = () => {
+      setIsLoading(false);
+    };
+
     // PLANET (getting config from constant) 
     const planetGeometry = new THREE.SphereGeometry(planetConfig.geometrySize, 74, 74);
-    const textureLoader = new THREE.TextureLoader();
+    const textureLoader = new THREE.TextureLoader(loadingManager);
     const planetTexture = textureLoader.load(currentPlanetarySystem.texture);
     
     const planetMaterial = new THREE.MeshStandardMaterial({map: planetTexture, roughness: 0.54, metalness: 0.154});
@@ -146,7 +152,9 @@ export const Planets = () => {
 
   const handleTextureChange = (texture, system) => {
     if (currentPlanetarySystem.system === system) return;
+    setIsLoading(true);
     setCurrentPlanetarySystem({texture, system});
+    setPlanetSelectorOpen(false);
   }
 
   const togglePlanetSelector = () => {
@@ -159,21 +167,36 @@ export const Planets = () => {
 
   return (
     <div className="three-container" ref={containerRef}>
-      <canvas ref={canvasRef} className="webgl" />
+      {isLoading && (
+        <div className="planet-loader">
+          <LoadingSpinner size={4} />
+        </div>
+      )}
+      
+      <canvas ref={canvasRef} className={`webgl ${isLoading ? 'canvas-loading' : ''}`} />
 
-      <div className={"texture-selector" + (planetSelectorOpen ? "open" : "")}>
-        <img className={"planet-selector-toggler" + (planetSelectorOpen ? "" : " pst-opened")} onClick={togglePlanetSelector}
+      {/* Botón toggler siempre visible */}
+      <button 
+        className={`planet-selector-toggler ${planetSelectorOpen ? 'toggler-open' : ''}`} 
+        onClick={togglePlanetSelector}
+        aria-label="Toggle planet selector"
+      >
+        <img 
           src="https://www.svgrepo.com/show/522044/chevron-up-circle.svg"
-          width={24} height={24} draggable={false} />
-        
-        { planets.map((planet) => (
-            <PlanetButton key={planet.system} texture={planet.texture} system={planet.system}
-              onClick={() => handleTextureChange(planet.texture, planet.system)}
-              isActive={currentPlanetarySystem.system === planet.system} moonName={planet.moonName} />
-        ))}
+          width={12} height={12} draggable={false} alt="Toggle" />
+        <span>{planetSelectorOpen ? 'Close' : 'Planets'}</span>
+      </button>
 
-        <p className="scroll-to-downside" onClick={() => window.scrollTo({top: window.innerHeight * 0.8, behavior: "smooth"})}>Tap here to scroll to the downside</p>
+      {/* Selector de planetas */}
+      <div className={`texture-selector ${planetSelectorOpen ? 'open' : ''}`}>
+        { planets.map((planet) => (
+          <PlanetButton key={planet.system} texture={planet.texture} system={planet.system}
+            onClick={() => handleTextureChange(planet.texture, planet.system)}
+            isActive={currentPlanetarySystem.system === planet.system} moonName={planet.moonName} />
+        ))}
       </div>
+
+      <p className="scroll-to-downside" onClick={() => window.scrollTo({top: window.innerHeight * 0.8, behavior: "smooth"})}>Tap here to scroll to the downside</p>
     </div>
   );
 };

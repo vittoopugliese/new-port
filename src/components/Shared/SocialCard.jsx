@@ -1,5 +1,3 @@
-import React from "react";
-
 export const SocialCard = ({social}) => {
   return (
     <a href={social.link} target="_blank" data-aos='fade-up'>

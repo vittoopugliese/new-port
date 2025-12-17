@@ -1,4 +1,3 @@
-import React from "react";
 import {Button} from "../Shared/Button";
 import "./profile.css";
 
@@ -7,7 +6,7 @@ export const Profile = () => {
     <div className="profile-container">
       <div className="profile-data">
         <h1>Vittorio Pugliese</h1>
-        <p>Web & Mobile Developer beyond code.</p>
+        <p>Web & Mobile Product Engineer beyond code.</p>
 
         <div className="profile-buttons">
           <a href="./Vittorio-Pugliese-Resume.pdf" download>

@@ -1,17 +1,57 @@
 export const projects = [
   {
-    title: "GPTherapist",
-    description: "Project Under Maintenance. Talk about your problems with an GPT-based therapist trained with experienced psycologist data. App interactions costs credits.",
+    title: "Spori",
+    description: "Reveals your musical DNA by surfacing top artists, tracks, and dominant genres while visualizing audio features like energy, danceability, and valence. Explore detailed insights across playlists, albums, and artists with a responsive dark-mode interface.",
     image: "./project-images/image1.png",
+    tech: ['next', 'react', 'typescript', 'tailwind'],
+    link: ''
+  },
+  {
+    title: "GPTherapist",
+    description: "Made in 2023, now this project is under maintenance. Talk about your problems with an GPT-based therapist trained with experienced psycologist data. App interactions costs credits.",
+    image: "./project-images/image2.png",
     tech: ['react', 'javascript', 'openai'],
     link: 'https://vittoopugliese.github.io/gptherapist/'
   },
+];
+
+export const moreProjects = [
   {
     title: "NFTorio",
     description: "Digital market. Watch, listen and buy my personal list of images and music NFT's. Integrated Crypto payments. Includes a built-in music player made with vanilla JS.",
-    image: "./project-images/image2.png",
-    tech: ['html', 'css', 'javascript'],
-    link: 'https://vittoopugliese.github.io/NFTorio/'
+    tech: ["html", "css", "javascript"],
+    link: 'https://vittoopugliese.github.io/NFTorio/',
+    aos: 'fade-right'
+  },
+  {
+    title: "drumPads",
+    description:
+      "Assign a letter and a sound to a pad, then play the drums like an expert!",
+    link: "https://vittoopugliese.github.io/drumpads/",
+    tech: ["html", "css", "javascript"],
+    aos: 'fade-left'
+  },
+  {
+    title: "TopCloud",
+    description:
+      "Music page where you can create an account and upload your own music. Made with Angular 9 and Firebase, and integrated a music player made with in Angular.",
+    link: "https://topcloud-9b8d4.web.app/",
+    tech: ["angular", "typescript", "firebase"],
+    aos: 'fade-right'
+  },
+  {
+    title: "Breaking Bad Quotes",
+    description: "Simple page to get quotes from Breaking Bad's characters.",
+    link: "https://vittoopugliese.github.io/breakingBadQuotes-/",
+    tech: ["react", "breakingbad"],
+    aos: 'fade-right'
+  },
+  {
+    title: "Previous Portfolio",
+    description: "My own old portfolio page made with vanilla JS.",
+    link: "https://vittoopugliese.github.io/portfolio/",
+    tech: ["html", "css", "javascript"],
+    aos: 'fade-left'
   },
 ];
 
@@ -23,6 +63,7 @@ export const techslogos = [
   {name: "Angular", desc: "Front-end framework by Google. Used for building dynamic and scalable apps."},
   {name: "RxJS", desc: "Reactive programming library. It allows working with asynchronous data streams."},
   {name: "React", desc: "JavaScript library by Meta that's used for building user interfaces."},
+  {name: "Next", desc: "Full Stack React framework for building server-side rendered and static websites."},
   {name: "Expo", desc: "Framework for React Native that allows you to build mobile apps."},
   {name: "Tailwind", desc: "CSS framework that works with classes."},
   {name: "NodeJS", desc: "A JS runtime environment that allows JS to be run on the server-side."},
@@ -39,8 +80,15 @@ export const socials = [
 
 export const experience = [
   {
-    title: "FrontEnd development - Kubrik Digital",
-    date: "Sep 2022 - Today",
+    title: "Product Engineer - Wollen Labs",
+    date: "Nov 2025 - Today",
+    jobItems: [
+      "Developing a web and mobile application using Next.js 16 and React 19 with Tamagui and TypeScript to create a college marketplace where students can buy and sell their products.",
+    ],
+  },
+  {
+    title: "FrontEnd Developer - Kubrik Digital",
+    date: "Sep 2022 - Nov 2025",
     jobItems: [
       "Led the complete development of a React Native mobile application for a Canadian client, taking full responsibility for the project from June 2024.",
       "Designed and implemented a scalable architecture that enables product growth, including Excel reports automation.",
@@ -51,18 +99,11 @@ export const experience = [
     ],
   },
   {
-    title: "Virtual Card - DSF Representations",
-    date: "Apr 2022",
-    jobItems: [
-      "My client, a businessman, wanted to expand his business and establish an online presence. As a result, he approached me to create a virtual card that would serve as a representation of his company. The page includes various contact details and a list of his products .",
-    ],
-  },
-  {
     title: "Journey Begins...",
     date: "Aug 2020",
     jobItems: [
       "By beeing interested in programming, I started to do some research and learned that programming is hard. So I learned the basics about HTML, CSS and JavaScript. I was not interested on starting a University degree, so I started to learn by my own.",
-      "Eventually, and already with nearly two years of work experience, joined in 2024 to University UTN (Universidad Tecnológica Nacional) to get a degree in Computer Science...",
+      "Eventually, and already with nearly two years of work experience, joined in 2024 to University UTN (Universidad Tecnológica Nacional) to get a degree in Computer Science... which I graduated in 2026!",
     ],
   },
 ];

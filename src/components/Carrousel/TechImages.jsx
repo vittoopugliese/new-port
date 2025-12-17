@@ -10,21 +10,20 @@ export const TechImages = ({tech, techSelected, techHover}) => {
     setTechHovered(techName);
     techHover(tech.desc);
     techSelected(tech.desc);
-
-    showTooltip();
   }
 
   function handleImageUnHover() {
     setTechHovered(null);
     techHover(null);
   }
-  function showTooltip() {}
 
+  let techLogo = `./tech-logos/${tech.name}.webp`
+  if (tech.name == "Next") techLogo = "./tech-logos/Next.png"
   return (
     <div className="tech-slide-image">
       <img style={{scale: techHovered == tech.name ? "1.05" : "1"}}
         className="carrousel-image" draggable="false"
-        src={`./tech-logos/${tech.name}.webp`}
+        src={techLogo}
         onMouseOver={(e) => handleImageHover(e)}
         onMouseLeave={(e) => handleImageUnHover(e)}/>
       <p style={{opacity: techHovered == tech.name ? "1" : "0"}}>{tech.name}</p>
