@@ -6,7 +6,7 @@ import { projects } from './../../utils/constants';
 export const Projects = () => {
   return (
     <section className="projects-section-container">
-      <SectionTitle iconClass='fa-solid fa-layer-group' title='Main Projects' />
+      <SectionTitle iconClass='fa-solid fa-layer-group' title='Main Projects' subtitle='Click on any image to open the viewer' />
       <div className="projects-container">
         {projects.map(project => <ProjectBox project={project} key={project.title} />)}
       </div>

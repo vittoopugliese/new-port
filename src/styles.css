@@ -151,12 +151,12 @@ header {
   }
 
   .project-image-container {
+    width: 100%;
     background-color: transparent;
     justify-content: left;
   }
 
   .project-image-container img {
-    width: 100%;
     border: none;
   }
 

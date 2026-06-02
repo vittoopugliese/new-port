@@ -6,12 +6,25 @@
   pointer-events: all;
 }
 
-.section-title div {
+.section-title > div {
   display: flex;
   align-items: center;
   flex-direction: row;
   gap: 1em;
   margin: 2em 0em;
+}
+
+.section-title__heading {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35em;
+}
+
+.section-title__subtitle {
+  margin: 0;
+  font-size: 0.95em;
+  font-weight: 400;
+  color: #747474;
 }
 
 .section-title i {

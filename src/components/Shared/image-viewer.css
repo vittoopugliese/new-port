@@ -1,0 +1,218 @@
+.image-viewer-overlay {
+  position: fixed;
+  inset: 0;
+  height: 100dvh;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: image-viewer-fade-in 0.2s ease;
+  touch-action: manipulation;
+}
+
+@keyframes image-viewer-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.image-viewer-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1em;
+  padding-top: max(1em, env(safe-area-inset-top));
+  padding-bottom: max(1em, env(safe-area-inset-bottom));
+  padding-left: max(1em, env(safe-area-inset-left));
+  padding-right: max(1em, env(safe-area-inset-right));
+}
+
+.image-viewer-close {
+  position: absolute;
+  top: max(1.2em, env(safe-area-inset-top, 0px));
+  right: max(1.2em, env(safe-area-inset-right, 0px));
+  width: 2.8em;
+  height: 2.8em;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2em;
+  z-index: 2;
+  transition: var(--transition);
+  box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.24);
+  touch-action: manipulation;
+}
+
+.image-viewer-close:hover {
+  background: rgba(255, 255, 255, 0.25);
+  scale: 1.05;
+}
+
+.image-viewer-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3em;
+  height: 3em;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2em;
+  z-index: 2;
+  transition: var(--transition);
+  box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.24);
+  touch-action: manipulation;
+}
+
+.image-viewer-nav:hover {
+  background: rgba(255, 255, 255, 0.25);
+  scale: 1.05;
+}
+
+.image-viewer-nav.prev {
+  left: 1.2em;
+}
+
+.image-viewer-nav.next {
+  right: 1.2em;
+}
+
+.image-viewer-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 0;
+  max-height: calc(100dvh - 10em);
+  touch-action: pan-y;
+}
+
+.image-viewer-main img {
+  max-width: 100%;
+  max-height: min(80vh, calc(100dvh - 12em));
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.image-viewer-counter {
+  color: white;
+  font-size: 1em;
+  font-weight: 600;
+  text-align: center;
+  margin: 0.8em 0 0;
+}
+
+.image-viewer-thumbnails {
+  display: flex;
+  gap: 0.5em;
+  padding: 1em 0 0.5em;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.image-viewer-thumbnails::-webkit-scrollbar {
+  display: none;
+}
+
+.image-viewer-thumbnail {
+  width: 3.75em;
+  height: 3.75em;
+  flex-shrink: 0;
+  border-radius: 0.4em;
+  overflow: hidden;
+  cursor: pointer;
+  padding: 0;
+  border: 2px solid transparent;
+  opacity: 0.6;
+  background: none;
+  transition: var(--transition);
+  touch-action: manipulation;
+}
+
+.image-viewer-thumbnail:hover {
+  opacity: 0.85;
+  scale: 1.02;
+}
+
+.image-viewer-thumbnail.active {
+  border-color: white;
+  opacity: 1;
+}
+
+.image-viewer-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 888px) {
+  .image-viewer-content {
+    padding: 0.75em;
+    padding-top: max(0.75em, env(safe-area-inset-top));
+    padding-bottom: max(0.75em, env(safe-area-inset-bottom));
+  }
+
+  .image-viewer-nav {
+    width: 2.6em;
+    height: 2.6em;
+    font-size: 1em;
+  }
+
+  .image-viewer-nav.prev {
+    left: max(0.4em, env(safe-area-inset-left));
+  }
+
+  .image-viewer-nav.next {
+    right: max(0.4em, env(safe-area-inset-right));
+  }
+
+  .image-viewer-close {
+    top: max(0.6em, env(safe-area-inset-top));
+    right: max(0.6em, env(safe-area-inset-right));
+    width: 2.4em;
+    height: 2.4em;
+    font-size: 1em;
+  }
+
+  .image-viewer-thumbnail {
+    width: 2.75em;
+    height: 2.75em;
+  }
+
+  .image-viewer-main {
+    max-height: calc(100dvh - 9em);
+  }
+
+  .image-viewer-main img {
+    max-height: min(70vh, calc(100dvh - 11em));
+  }
+
+  .image-viewer-thumbnails {
+    width: 100%;
+    padding-left: max(0.5em, env(safe-area-inset-left));
+    padding-right: max(0.5em, env(safe-area-inset-right));
+  }
+}

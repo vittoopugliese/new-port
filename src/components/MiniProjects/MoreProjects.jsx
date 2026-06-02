@@ -9,7 +9,7 @@ export const MoreProjects = () => {
     <div>
       <section className="more-projects-section">
       <SectionTitle iconClass='fa-solid fa-network-wired' 
-      title='More Projects' />
+      title='More Projects'  />
 
         <div className="more-projects-container">
           {moreProjects.map(project => <MiniProjectBox project={project} key={project.title} />)}

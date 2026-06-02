@@ -20,7 +20,13 @@
 
 .project-image-container {
   display: flex;
-  cursor: pointer;
+  align-self: flex-start;
+  flex-shrink: 0;
+  width: 394px;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 0.4em;
+  cursor: zoom-in;
   transition: var(--transition);
 }
 
@@ -29,7 +35,83 @@
 }
 
 .project-image-container img {
-  width: 394px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+.project-carousel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.project-carousel img,
+.project-carousel-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  transition: opacity 0.2s ease;
+  cursor: zoom-in;
+}
+
+.project-carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  color: white;
+  width: 2em;
+  height: 2em;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  z-index: 1;
+}
+
+.project-carousel-btn:hover {
+  background: rgba(0, 0, 0, 0.75);
+  scale: 1.1;
+}
+
+.project-carousel-btn.prev {
+  left: 0.5em;
+}
+
+.project-carousel-btn.next {
+  right: 0.5em;
+}
+
+.project-carousel-dots {
+  position: absolute;
+  bottom: 0.6em;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.4em;
+  z-index: 1;
+}
+
+.project-carousel-dot {
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.project-carousel-dot.active {
+  background: rgba(255, 255, 255, 0.9);
+  scale: 1.2;
 }
 
 .project-info {

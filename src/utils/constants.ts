@@ -1,17 +1,39 @@
 export const projects = [
   {
+    title: "SoundCloud Track Downloader",
+    description: "Chrome extension I built for myself to download SoundCloud tracks — now at 15,000+ users. One-click inline downloads, full playlist and likes support, background bulk jobs with pause/resume, and virtualized selection for thousands of tracks.",
+    images: [
+      "./project-images/STD1.jpeg",
+      "./project-images/STD2.jpeg",
+      "./project-images/STD3.jpeg",
+      "./project-images/STD4.jpeg",
+      "./project-images/STD5.jpeg",
+      "./project-images/STD6.jpeg",
+    ],
+    tech: ['javascript', 'html', 'css'],
+    link: 'https://chromewebstore.google.com/detail/soundcloud-track-download/ekmbbjdpakacalghjkikfppebgdpoebb'
+  },
+  {
     title: "Spori",
     description: "Reveals your musical DNA by surfacing top artists, tracks, and dominant genres while visualizing audio features like energy, danceability, and valence. Explore detailed insights across playlists, albums, and artists with a responsive dark-mode interface.",
-    image: "./project-images/image1.png",
+    images: [
+      "./project-images/spori1.png",
+      "./project-images/spori2.png",
+      "./project-images/spori3.png",
+      "./project-images/spori4.png",
+      "./project-images/spori5.png",
+      "./project-images/spori6.png",
+      "./project-images/spori7.png",
+    ],
     tech: ['next', 'react', 'typescript', 'tailwind'],
-    link: ''
+    link: "https://github.com/vittoopugliese/SpotifyMusicDashboard"
   },
   {
     title: "GPTherapist",
-    description: "Made in 2023, now this project is under maintenance. Talk about your problems with an GPT-based therapist trained with experienced psycologist data. App interactions costs credits.",
+    description: "Made in June 2023, now this project is under maintenance. Talk about your problems with an GPT-based therapist trained with experienced psycologist data. App interactions costs credits.",
     image: "./project-images/image2.png",
     tech: ['react', 'javascript', 'openai'],
-    link: 'https://vittoopugliese.github.io/gptherapist/'
+    link: 'https://github.com/vittoopugliese/gptherapist'
   },
 ];
 
