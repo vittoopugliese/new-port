@@ -11,8 +11,8 @@ export const Button = ({text, path, iconClass, onClick}) => {
 
   return (
     <button type="button" className="button" onClick={handleClick}>
+      {iconClass && <i style={{fontSize: "12px"}} className={`button__icon ${iconClass}`} aria-hidden="true" />}
       <span className="button__label">{text}</span>
-      {iconClass && <i className={`button__icon ${iconClass}`} aria-hidden="true" />}
     </button>
   );
 };

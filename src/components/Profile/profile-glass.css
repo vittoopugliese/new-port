@@ -25,9 +25,13 @@
   transform: translate3d(-50%, 0, 0);
   padding: 1.2em 2.16em 0.96em;
   border-radius: 1.75em;
+  /* width is animated via JS FLIP (see ProfileGlass.jsx) since CSS can't
+     transition a content-driven width on its own */
+  width: fit-content;
   transition:
     padding 0.38s cubic-bezier(0.4, 0, 0.2, 1),
-    border-radius 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+    width 0.42s cubic-bezier(0.34, 1.2, 0.64, 1);
 }
 
 .glass-card.profile-data.minimized {
@@ -41,22 +45,108 @@
   transition:
     padding 0.38s cubic-bezier(0.4, 0, 0.2, 1),
     border-radius 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+    width 0.42s cubic-bezier(0.34, 1.2, 0.64, 1),
     transform 0.2s ease;
-}
-
-.glass-card.profile-data h1,
-.glass-card.profile-data .profile-header p {
-  margin: 0;
 }
 
 .glass-card.profile-data h1 {
   font-size: 1.5em;
+  margin: 0;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
-.glass-card.profile-data .profile-header p {
-  font-size: 0.7em;
+/* Interactive role tag — animated iridescent gradient, click to shuffle */
+.glass-card.profile-data .profile-role {
+  font-family: inherit;
+  font-size: 0.88em;
+  font-weight: 600;
   margin: 0;
-  color: rgba(255, 255, 255, 0.8);
+  padding: 0.05em 0.15em;
+  border: none;
+  background-color: transparent;
+  flex-shrink: 0;
+  white-space: nowrap;
+  background-image: linear-gradient(
+    90deg,
+    #ffe095 0%,
+    #ff9fb3 16%,
+    #ff7eb6 30%,
+    #b78bff 46%,
+    #6ec8ff 62%,
+    #7df0c0 78%,
+    #ffe095 100%
+  );
+  background-size: 200% 100%;
+  background-position: 0% 50%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: none;
+  filter: drop-shadow(0 1px 8px rgba(0, 0, 0, 0.5));
+  cursor: pointer;
+  pointer-events: auto;
+  position: relative;
+  opacity: 0.92;
+  letter-spacing: 0.01em;
+  animation: gradient-flow 7s linear infinite;
+  transition:
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+    filter 0.3s ease;
+}
+
+/* Relucent hover: speeds the flow, brightens, and pops slightly */
+.glass-card.profile-data .profile-role:hover {
+  transform: translateY(-1px) scale(1.021);
+  filter: drop-shadow(0 2px 14px rgba(255, 255, 255, 0.35))
+    brightness(1.18) saturate(1.25);
+  animation-duration: 2.2s;
+}
+
+.glass-card.profile-data .profile-role:active {
+  transform: translateY(0) scale(0.987);
+}
+
+.glass-card.profile-data .profile-role:focus-visible {
+  outline: none;
+  filter: drop-shadow(0 2px 14px rgba(255, 255, 255, 0.4)) brightness(1.2);
+}
+
+/* Swap transition — fade + lift out, content swaps mid-animation */
+.glass-card.profile-data .profile-role.is-swapping {
+  animation: gradient-flow 7s linear infinite, role-swap 0.26s ease both;
+}
+
+@keyframes role-swap {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: drop-shadow(0 1px 8px rgba(0, 0, 0, 0.5)) blur(0);
+  }
+  45% {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.96);
+    filter: drop-shadow(0 1px 8px rgba(0, 0, 0, 0.8)) blur(3px);
+  }
+  55% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.96);
+    filter: drop-shadow(0 1px 8px rgba(0, 0, 0, 0.4)) blur(3px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: drop-shadow(0 1px 8px rgba(0, 0, 0, 0.6)) blur(0);
+  }
+}
+
+@keyframes gradient-flow {
+  from {
+    background-position: 0% 50%;
+  }
+  to {
+    background-position: 200% 50%;
+  }
 }
 
 .profile-header {
@@ -64,19 +154,23 @@
   flex-direction: row;
   align-items: baseline;
   justify-content: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  white-space: nowrap;
   gap: 0.35em 0.45em;
+  width: max-content;
+  max-width: 100%;
 }
 
-.profile-header h1{
+.profile-header h1 {
   position: relative;
-  right: 8px;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .profile-header-sep {
   font-size: 0.85em;
   color: rgba(255, 255, 255, 0.35);
-  font-weight: 300;
+  font-weight: 200;
   user-select: none;
 }
 
@@ -104,28 +198,27 @@
 /* Minimize control */
 .profile-minimize {
   position: absolute;
-  top: 8px;
-  right: 8px;
+  top: 6px;
+  right: 12px;
   z-index: 4;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 18px;
+  height: 18px;
   padding: 0;
   border: none;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.08);
   color: rgba(255, 255, 255, 0.55);
-  font-size: 0.6em;
+  font-size: 0.54em;
   cursor: pointer;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
   opacity: 1;
   visibility: visible;
-  transition:
-    opacity 0.2s ease,
-    visibility 0.2s ease,
-    background 0.2s ease,
-    color 0.2s ease;
+  transition: opacity 0.2s ease, visibility 0.2s ease, background 0.2s ease, color 0.2s ease;
 }
 
 .profile-minimize:hover {
@@ -176,7 +269,7 @@
 }
 
 .profile-compact i {
-  font-size: 0.75em;
+  font-size: 1.95em;
   opacity: 0.8;
 }
 
@@ -184,6 +277,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: max-content;
+  max-width: 100%;
   opacity: 1;
   visibility: visible;
 }
@@ -246,11 +341,51 @@
 
 .glass-shine {
   z-index: 2;
+  overflow: hidden;
   box-shadow:
     inset 1px 1px 0 rgba(255, 255, 255, 0.4),
     inset -1px -1px 0 rgba(255, 255, 255, 0.15),
     inset 0 0 20px rgba(255, 255, 255, 0.05);
   transition: box-shadow 0.2s ease;
+}
+
+/* Iridescent reflection sweeping horizontally across the glass.
+   Width 200% with two identical halves + translateX(-50%) = seamless loop,
+   compositor-only (no repaints). */
+.glass-shine::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(
+    100deg,
+    transparent 2%,
+    rgba(255, 224, 149, 0.07) 10%,
+    rgba(255, 179, 193, 0.1) 18%,
+    rgba(205, 180, 255, 0.09) 26%,
+    rgba(159, 220, 255, 0.07) 34%,
+    transparent 42%,
+    transparent 52%,
+    rgba(255, 224, 149, 0.07) 60%,
+    rgba(255, 179, 193, 0.1) 68%,
+    rgba(205, 180, 255, 0.09) 76%,
+    rgba(159, 220, 255, 0.07) 84%,
+    transparent 92%
+  );
+  mix-blend-mode: screen;
+  will-change: transform;
+  animation: iridescent-sweep 7s linear infinite;
+}
+
+@keyframes iridescent-sweep {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
 }
 
 .glass-card.profile-data:not(.minimized):hover .glass-shine {
@@ -271,12 +406,29 @@
   .glass-card.profile-data:not(.minimized):hover {
     transform: translate3d(-50%, 0, 0);
   }
+
+  .glass-card.profile-data .profile-role {
+    animation: none;
+  }
+
+  .glass-card.profile-data .profile-role.is-swapping {
+    animation: none;
+  }
+
+  .glass-card.profile-data .profile-role:hover {
+    transform: none;
+  }
+
+  .glass-shine::after {
+    animation: none;
+    opacity: 0;
+  }
 }
 
 @media (max-width: 888px) {
   .glass-card.profile-data {
     padding: 1.08em 1.44em 0.84em;
-    width: max-content;
+    width: fit-content;
     max-width: calc(100vw - 32px);
   }
 
