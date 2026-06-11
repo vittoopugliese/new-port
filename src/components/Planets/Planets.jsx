@@ -14,7 +14,6 @@ const INITIAL_EFFECTS = {
   blackHole: false,
   neutronStar: false,
   distantStar: false,
-  ship: false,
   galaxy: false,
 };
 

@@ -1,35 +1,5 @@
 import * as THREE from "three";
 import { gsap } from "gsap";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-
-const STARSHIP_PATH = "/starship.glb";
-const STARSHIP_TARGET_HEIGHT = 1.85;
-
-let starshipCache = null;
-let starshipLoadPromise = null;
-
-function loadStarshipModel() {
-  if (starshipCache) return Promise.resolve(starshipCache);
-  if (starshipLoadPromise) return starshipLoadPromise;
-
-  starshipLoadPromise = new Promise((resolve, reject) => {
-    const loader = new GLTFLoader();
-    loader.load(
-      STARSHIP_PATH,
-      (gltf) => {
-        starshipCache = gltf;
-        resolve(gltf);
-      },
-      undefined,
-      (error) => {
-        starshipLoadPromise = null;
-        reject(error);
-      },
-    );
-  });
-
-  return starshipLoadPromise;
-}
 
 function createRadialTexture(stops, size = 256) {
   const canvas = document.createElement("canvas");
@@ -71,43 +41,6 @@ function disposeObject3D(object) {
       else child.material.dispose();
     }
   });
-}
-
-function createLowPolyShip(group) {
-  const bodyGeometry = new THREE.ConeGeometry(0.12, 0.5, 6);
-  const bodyMaterial = new THREE.MeshStandardMaterial({ color: 0xccccdd, metalness: 0.6, roughness: 0.3 });
-  const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
-  body.rotation.x = Math.PI / 2;
-  group.add(body);
-
-  const wingGeometry = new THREE.BoxGeometry(0.5, 0.02, 0.15);
-  const wingMaterial = new THREE.MeshStandardMaterial({ color: 0x888899, metalness: 0.5, roughness: 0.4 });
-  const wings = new THREE.Mesh(wingGeometry, wingMaterial);
-  wings.position.z = 0.1;
-  group.add(wings);
-
-  const cockpitGeometry = new THREE.SphereGeometry(0.08, 8, 8);
-  const cockpitMaterial = new THREE.MeshStandardMaterial({
-    color: 0x44aaff,
-    emissive: 0x114466,
-    metalness: 0.8,
-    roughness: 0.2,
-  });
-  const cockpit = new THREE.Mesh(cockpitGeometry, cockpitMaterial);
-  cockpit.position.z = -0.15;
-  group.add(cockpit);
-
-  return { bodyGeometry, bodyMaterial, wingGeometry, wingMaterial, cockpitGeometry, cockpitMaterial };
-}
-
-function normalizeStarshipModel(model) {
-  const box = new THREE.Box3().setFromObject(model);
-  const size = box.getSize(new THREE.Vector3());
-  const center = box.getCenter(new THREE.Vector3());
-  model.position.sub(center);
-  const scale = STARSHIP_TARGET_HEIGHT / Math.max(size.y, 0.001);
-  model.scale.setScalar(scale);
-  model.rotation.x = Math.PI / 2;
 }
 
 function createRingTexture(style) {
@@ -424,7 +357,8 @@ function createPolarJet(particleCount, direction) {
 
 export function createBlackHole() {
   const group = new THREE.Group();
-  group.position.set(-16, 9, -42);
+  const sizeScale = 10;
+  group.position.set(-160, 90, -420);
 
   const coreGeometry = new THREE.SphereGeometry(5, 32, 32);
   const coreMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
@@ -476,7 +410,7 @@ export function createBlackHole() {
   particleGeometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
   const particleMaterial = new THREE.PointsMaterial({
     color: 0xff9944,
-    size: 0.15,
+    size: 0.22,
     transparent: true,
     opacity: 0.8,
   });
@@ -491,7 +425,13 @@ export function createBlackHole() {
   group.add(jetDown.points);
 
   group.scale.set(0, 0, 0);
-  gsap.to(group.scale, { x: 1, y: 1, z: 1, duration: 2, ease: "power2.out" });
+  gsap.to(group.scale, {
+    x: sizeScale,
+    y: sizeScale,
+    z: sizeScale,
+    duration: 2.4,
+    ease: "power2.out",
+  });
 
   const updateJet = (jet, elapsed, delta, pulse) => {
     const pos = jet.geometry.attributes.position.array;
@@ -502,7 +442,7 @@ export function createBlackHole() {
       pos[i * 3 + 1] += jet.direction * jet.speeds[i] * delta * 18;
 
       const dist = Math.abs(pos[i * 3 + 1]);
-      if (dist > 22) {
+      if (dist > 22 * sizeScale) {
         pos[i * 3] = (Math.random() - 0.5) * 0.4;
         pos[i * 3 + 1] = jet.direction * (2 + Math.random() * 1.5);
         pos[i * 3 + 2] = (Math.random() - 0.5) * 0.4;
@@ -616,8 +556,8 @@ function createMagneticLoop(radius, tube, arc, rotationY) {
 
 export function createNeutronStar() {
   const group = new THREE.Group();
-  const sizeScale = 3.2;
-  group.position.set(108, 44, -228);
+  const sizeScale = 9.6;
+  group.position.set(324, 132, -684);
   group.rotation.z = 0.28;
 
   const coreGeometry = new THREE.SphereGeometry(0.75, 24, 24);
@@ -795,7 +735,8 @@ export function createNeutronStar() {
 
 export function createDistantStar() {
   const group = new THREE.Group();
-  group.position.set(120, 60, -180);
+  // Abajo-centro, opuesto al agujero negro (arriba-izq) y la neutron star (arriba-der).
+  group.position.set(-50, -105, -360);
 
   const glowTexture = createRadialTexture([
     [0, "rgba(255, 240, 200, 1)"],
@@ -1010,87 +951,10 @@ export function createGalaxyArm() {
   };
 }
 
-export function createOrbitingShip(sceneApi) {
-  const { planetConfig } = sceneApi;
-  const group = new THREE.Group();
-  const orbitRadius = planetConfig.geometrySize + 3.4;
-  const orbitSpeed = 0.28;
-  const orbitElevation = 0.35;
-
-  const shipHolder = new THREE.Group();
-  group.add(shipHolder);
-
-  const engineLight = new THREE.PointLight(0xff6622, 1.8, 5);
-  engineLight.position.set(0, 0, 0.75);
-  shipHolder.add(engineLight);
-
-  let fallbackDisposables = null;
-  let loadedModel = null;
-
-  loadStarshipModel()
-    .then((gltf) => {
-      if (!group.parent) return;
-      const model = gltf.scene.clone(true);
-      normalizeStarshipModel(model);
-      model.position.z = 0.35;
-      shipHolder.add(model);
-      loadedModel = model;
-      const targetScale = model.scale.x;
-      model.scale.set(0, 0, 0);
-      gsap.to(model.scale, {
-        x: targetScale,
-        y: targetScale,
-        z: targetScale,
-        duration: 0.8,
-        ease: "back.out(1.4)",
-      });
-    })
-    .catch(() => {
-      console.warn("[Planets] starship.glb not found — using low-poly fallback. Add public/starship.glb to enable the SpaceX model.");
-      fallbackDisposables = createLowPolyShip(shipHolder);
-      shipHolder.scale.set(0, 0, 0);
-      gsap.to(shipHolder.scale, { x: 1.35, y: 1.35, z: 1.35, duration: 0.8, ease: "back.out(1.4)" });
-    });
-
-  group.scale.set(0, 0, 0);
-  gsap.to(group.scale, { x: 1, y: 1, z: 1, duration: 0.8, ease: "back.out(1.4)" });
-
-  return {
-    object: group,
-    update(elapsed) {
-      const angle = elapsed * orbitSpeed;
-
-      // Circular orbit on a flat plane, slightly above the equator.
-      group.position.x = Math.cos(angle) * orbitRadius;
-      group.position.z = Math.sin(angle) * orbitRadius;
-      group.position.y = orbitElevation;
-
-      // Orient along the actual tangent so the ship doesn't wobble or bank oddly.
-      const nextAngle = angle + 0.02;
-      const lookTarget = new THREE.Vector3(
-        Math.cos(nextAngle) * orbitRadius,
-        orbitElevation,
-        Math.sin(nextAngle) * orbitRadius,
-      );
-      group.lookAt(lookTarget);
-    },
-    dispose() {
-      if (loadedModel) disposeObject3D(loadedModel);
-      if (fallbackDisposables) {
-        Object.values(fallbackDisposables).forEach((d) => {
-          d.geometry?.dispose();
-          d.material?.dispose();
-        });
-      }
-    },
-  };
-}
-
 export const EFFECT_CREATORS = {
   meteors: createMeteorShower,
   blackHole: createBlackHole,
   neutronStar: createNeutronStar,
   distantStar: createDistantStar,
-  ship: createOrbitingShip,
   galaxy: createGalaxyArm,
 };
