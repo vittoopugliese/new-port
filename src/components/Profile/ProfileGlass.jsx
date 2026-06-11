@@ -142,6 +142,16 @@ export const ProfileGlass = ({planetSelectorOpen, onTogglePlanets}) => {
         </defs>
       </svg>
 
+      {planetSelectorOpen && (
+        <button
+          type="button"
+          className="profile-restore-pill"
+          onClick={onTogglePlanets}
+          aria-label="Close planet selector and show profile">
+          <i className="fa-solid fa-xmark" aria-hidden="true" />
+        </button>
+      )}
+
       <div
         ref={cardRef}
         className={[
@@ -149,6 +159,7 @@ export const ProfileGlass = ({planetSelectorOpen, onTogglePlanets}) => {
           "profile-data",
           isMinimized && "minimized",
           isAnimating && "is-animating",
+          planetSelectorOpen && "planets-hidden",
         ]
           .filter(Boolean)
           .join(" ")}

@@ -18,7 +18,7 @@
 
 .planet-panels {
   position: absolute;
-  bottom: 175px;
+  bottom: 68px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -38,16 +38,18 @@
   padding: 10px 14px;
   pointer-events: none;
   opacity: 0;
-  transform: translateY(12px);
+  transform: translateY(32px) scale(0.96);
+  transform-origin: bottom center;
   transition:
-    opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-    transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.38s cubic-bezier(0.34, 1.15, 0.64, 1);
 }
 
 .effects-selector.open {
   opacity: 1;
   pointer-events: all;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
+  transition-delay: 0.1s;
 }
 
 .effects-selector .glass-distortion {
@@ -116,7 +118,6 @@
   position: relative;
   bottom: auto;
   left: auto;
-  transform: none;
   display: flex;
   gap: 2px;
   z-index: 10000;
@@ -126,16 +127,18 @@
   padding: 12px 16px;
   pointer-events: none;
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateY(40px) scale(0.94);
+  transform-origin: bottom center;
   transition:
-    opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-    transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.38s cubic-bezier(0.34, 1.15, 0.64, 1);
 }
 
 .texture-selector.open {
   opacity: 1;
   pointer-events: all;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
+  transition-delay: 0.04s;
 }
 
 .texture-selector .glass-distortion {
@@ -229,7 +232,7 @@
 
 @media (max-width: 578px) {
   .planet-panels {
-    bottom: 160px;
+    bottom: 58px;
     transform: translateX(-50%) scale(0.85);
   }
 
