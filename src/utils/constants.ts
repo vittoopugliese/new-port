@@ -298,6 +298,7 @@ export function getPlanetData(systemName) {
 export const SPACE_EFFECTS = [
   { id: "meteors", label: "Meteors", icon: "fa-solid fa-meteor" },
   { id: "blackHole", label: "Black Hole", icon: "fa-solid fa-circle" },
+  { id: "neutronStar", label: "Neutron Star", icon: "fa-solid fa-atom" },
   { id: "distantStar", label: "Star", icon: "fa-solid fa-star" },
   { id: "ship", label: "Ship", icon: "fa-solid fa-shuttle-space" },
   { id: "galaxy", label: "Galaxy", icon: "fa-solid fa-hurricane" },

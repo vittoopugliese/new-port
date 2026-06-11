@@ -553,6 +553,246 @@ export function createBlackHole() {
   };
 }
 
+function createNeutronDiskTexture(size = 512) {
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext("2d");
+  const gradient = ctx.createRadialGradient(size / 2, size / 2, size * 0.12, size / 2, size / 2, size * 0.48);
+  gradient.addColorStop(0, "rgba(0, 0, 0, 0)");
+  gradient.addColorStop(0.28, "rgba(180, 240, 255, 0.95)");
+  gradient.addColorStop(0.48, "rgba(120, 160, 255, 0.65)");
+  gradient.addColorStop(0.68, "rgba(170, 90, 255, 0.4)");
+  gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, size, size);
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.needsUpdate = true;
+  return texture;
+}
+
+function createNeutronJet(particleCount, direction) {
+  const geometry = new THREE.BufferGeometry();
+  const positions = new Float32Array(particleCount * 3);
+  const speeds = new Float32Array(particleCount);
+  const offsets = new Float32Array(particleCount);
+
+  for (let i = 0; i < particleCount; i++) {
+    positions[i * 3] = (Math.random() - 0.5) * 0.18;
+    positions[i * 3 + 1] = direction * (1.2 + Math.random() * 1.8);
+    positions[i * 3 + 2] = (Math.random() - 0.5) * 0.18;
+    speeds[i] = 1.4 + Math.random() * 1.6;
+    offsets[i] = Math.random() * Math.PI * 2;
+  }
+
+  geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+  const material = new THREE.PointsMaterial({
+    color: 0xd8f4ff,
+    size: 0.2,
+    transparent: true,
+    opacity: 0.92,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+  });
+  const points = new THREE.Points(geometry, material);
+
+  return { points, geometry, material, speeds, offsets, direction, particleCount };
+}
+
+function createMagneticLoop(radius, tube, arc, rotationY) {
+  const geometry = new THREE.TorusGeometry(radius, tube, 8, 56, arc);
+  const material = new THREE.MeshBasicMaterial({
+    color: 0x7eb8ff,
+    transparent: true,
+    opacity: 0.42,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+  });
+  const mesh = new THREE.Mesh(geometry, material);
+  mesh.rotation.x = Math.PI * 0.52;
+  mesh.rotation.y = rotationY;
+  return { mesh, geometry, material };
+}
+
+export function createNeutronStar() {
+  const group = new THREE.Group();
+  const sizeScale = 3.2;
+  group.position.set(108, 44, -228);
+  group.rotation.z = 0.28;
+
+  const coreGeometry = new THREE.SphereGeometry(0.75, 24, 24);
+  const coreMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+  const core = new THREE.Mesh(coreGeometry, coreMaterial);
+  group.add(core);
+
+  const coronaTexture = createRadialTexture([
+    [0, "rgba(255, 255, 255, 1)"],
+    [0.18, "rgba(210, 245, 255, 0.95)"],
+    [0.42, "rgba(120, 200, 255, 0.35)"],
+    [1, "rgba(80, 120, 255, 0)"],
+  ], 512);
+  const coronaMaterial = new THREE.SpriteMaterial({
+    map: coronaTexture,
+    transparent: true,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+  });
+  const corona = new THREE.Sprite(coronaMaterial);
+  corona.scale.set(8, 8, 1);
+  group.add(corona);
+
+  const haloMaterial = new THREE.SpriteMaterial({
+    map: createRadialTexture([
+      [0, "rgba(160, 220, 255, 0)"],
+      [0.35, "rgba(120, 180, 255, 0.12)"],
+      [0.55, "rgba(170, 120, 255, 0.28)"],
+      [1, "rgba(90, 60, 180, 0)"],
+    ], 512),
+    transparent: true,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+  });
+  const halo = new THREE.Sprite(haloMaterial);
+  halo.scale.set(18, 18, 1);
+  group.add(halo);
+
+  const diskTexture = createNeutronDiskTexture();
+  const diskGeometry = new THREE.RingGeometry(2.1, 4.8, 72);
+  const diskMaterial = new THREE.MeshBasicMaterial({
+    map: diskTexture,
+    transparent: true,
+    side: THREE.DoubleSide,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending,
+  });
+  const disk = new THREE.Mesh(diskGeometry, diskMaterial);
+  disk.rotation.x = 1.08;
+  group.add(disk);
+
+  const magneticLoops = [
+    createMagneticLoop(3.2, 0.035, Math.PI * 1.35, 0),
+    createMagneticLoop(3.55, 0.03, Math.PI * 1.15, Math.PI * 0.45),
+    createMagneticLoop(3.85, 0.028, Math.PI * 0.95, Math.PI * 0.9),
+    createMagneticLoop(4.15, 0.024, Math.PI * 0.8, Math.PI * 1.35),
+  ];
+  magneticLoops.forEach(({ mesh }) => group.add(mesh));
+
+  const jetCount = 90;
+  const jetUp = createNeutronJet(jetCount, 1);
+  const jetDown = createNeutronJet(jetCount, -1);
+  group.add(jetUp.points);
+  group.add(jetDown.points);
+
+  const sparkCount = 70;
+  const sparkGeometry = new THREE.BufferGeometry();
+  const sparkPositions = new Float32Array(sparkCount * 3);
+  const sparkAngles = new Float32Array(sparkCount);
+  const sparkRadii = new Float32Array(sparkCount);
+
+  for (let i = 0; i < sparkCount; i++) {
+    sparkAngles[i] = Math.random() * Math.PI * 2;
+    sparkRadii[i] = 1.4 + Math.random() * 2.2;
+    sparkPositions[i * 3] = Math.cos(sparkAngles[i]) * sparkRadii[i];
+    sparkPositions[i * 3 + 1] = (Math.random() - 0.5) * 0.35;
+    sparkPositions[i * 3 + 2] = Math.sin(sparkAngles[i]) * sparkRadii[i];
+  }
+
+  sparkGeometry.setAttribute("position", new THREE.BufferAttribute(sparkPositions, 3));
+  const sparkMaterial = new THREE.PointsMaterial({
+    color: 0xbfe8ff,
+    size: 0.12,
+    transparent: true,
+    opacity: 0.75,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+  });
+  const sparks = new THREE.Points(sparkGeometry, sparkMaterial);
+  sparks.rotation.x = 1.08;
+  group.add(sparks);
+
+  group.scale.set(0, 0, 0);
+  gsap.to(group.scale, {
+    x: sizeScale,
+    y: sizeScale,
+    z: sizeScale,
+    duration: 2,
+    ease: "power2.out",
+  });
+
+  const updateJet = (jet, elapsed, delta, pulse) => {
+    const pos = jet.geometry.attributes.position.array;
+    for (let i = 0; i < jet.particleCount; i++) {
+      const spread = 0.08 + Math.abs(pos[i * 3 + 1]) * 0.025;
+      pos[i * 3] += Math.sin(elapsed * 4 + jet.offsets[i]) * spread * delta;
+      pos[i * 3 + 2] += Math.cos(elapsed * 3.2 + jet.offsets[i]) * spread * delta;
+      pos[i * 3 + 1] += jet.direction * jet.speeds[i] * delta * 28;
+
+      if (Math.abs(pos[i * 3 + 1]) > 28 * sizeScale) {
+        pos[i * 3] = (Math.random() - 0.5) * 0.18;
+        pos[i * 3 + 1] = jet.direction * (1.2 + Math.random() * 1.2);
+        pos[i * 3 + 2] = (Math.random() - 0.5) * 0.18;
+      }
+    }
+    jet.geometry.attributes.position.needsUpdate = true;
+    jet.material.opacity = 0.72 + pulse * 0.28;
+  };
+
+  return {
+    object: group,
+    update(elapsed, delta) {
+      const pulse = 0.5 + Math.sin(elapsed * 3.4) * 0.5;
+      const spin = elapsed * 0.55;
+
+      group.rotation.y = spin * 0.08;
+      disk.rotation.z = spin * 0.9;
+      sparks.rotation.z = spin * 0.65;
+
+      corona.material.opacity = 0.88 + pulse * 0.12;
+      halo.material.opacity = 0.55 + pulse * 0.25;
+      corona.scale.set(8 + pulse * 1.2, 8 + pulse * 1.2, 1);
+
+      magneticLoops.forEach(({ mesh, material }, index) => {
+        mesh.rotation.y += delta * (0.12 + index * 0.03);
+        material.opacity = 0.28 + pulse * 0.22;
+      });
+
+      const sparkPos = sparkGeometry.attributes.position.array;
+      for (let i = 0; i < sparkCount; i++) {
+        sparkAngles[i] += 0.014 + (3.6 - sparkRadii[i]) * 0.004;
+        sparkRadii[i] += Math.sin(elapsed * 2 + i) * 0.002;
+        sparkPos[i * 3] = Math.cos(sparkAngles[i]) * sparkRadii[i];
+        sparkPos[i * 3 + 2] = Math.sin(sparkAngles[i]) * sparkRadii[i];
+      }
+      sparkGeometry.attributes.position.needsUpdate = true;
+      sparkMaterial.opacity = 0.55 + pulse * 0.35;
+
+      updateJet(jetUp, elapsed, delta, pulse);
+      updateJet(jetDown, elapsed, delta, pulse);
+    },
+    dispose() {
+      coreGeometry.dispose();
+      coreMaterial.dispose();
+      coronaTexture.dispose();
+      coronaMaterial.dispose();
+      haloMaterial.map?.dispose();
+      haloMaterial.dispose();
+      diskGeometry.dispose();
+      diskMaterial.dispose();
+      diskTexture.dispose();
+      magneticLoops.forEach(({ geometry, material }) => {
+        geometry.dispose();
+        material.dispose();
+      });
+      sparkGeometry.dispose();
+      sparkMaterial.dispose();
+      jetUp.geometry.dispose();
+      jetUp.material.dispose();
+      jetDown.geometry.dispose();
+      jetDown.material.dispose();
+    },
+  };
+}
+
 export function createDistantStar() {
   const group = new THREE.Group();
   group.position.set(120, 60, -180);
@@ -849,6 +1089,7 @@ export function createOrbitingShip(sceneApi) {
 export const EFFECT_CREATORS = {
   meteors: createMeteorShower,
   blackHole: createBlackHole,
+  neutronStar: createNeutronStar,
   distantStar: createDistantStar,
   ship: createOrbitingShip,
   galaxy: createGalaxyArm,

@@ -12,6 +12,7 @@ import { EFFECT_CREATORS, setupExtraMoons, createPlanetRings } from "./spaceEffe
 const INITIAL_EFFECTS = {
   meteors: false,
   blackHole: false,
+  neutronStar: false,
   distantStar: false,
   ship: false,
   galaxy: false,
