@@ -19,12 +19,14 @@
   text-align: center;
   position: relative;
   z-index: 2;
-  margin-top: 50vh; 
+  margin-top: 50vh;
   transform: translateY(-50%);
-  /* background-color: rgba(23, 23, 23, 0.54); */
-  /* padding: 2em; */
-  /* border-radius: 1.74em; */
-  /* backdrop-filter: blur(2px); */
+}
+
+/* Glass card overrides the centered hero layout above */
+.glass-card.profile-data {
+  margin-top: 0;
+  transform: translate3d(-50%, 0, 0);
 }
 
 .profile-data h1 {

@@ -7,11 +7,10 @@ import "./planets.css";
 import PlanetButton from './PlanetButton';
 import { LoadingSpinner } from './../Shared/LoadingSpinner';
 
-export const Planets = () => {
+export const Planets = ({selectorOpen = false, closeSelector}) => {
   const canvasRef = useRef(null);
   const containerRef = useRef(null);
   const [currentPlanetarySystem, setCurrentPlanetarySystem] = useState({texture: "/gas.png", system: "jupiter"});
-  const [planetSelectorOpen, setPlanetSelectorOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -154,16 +153,8 @@ export const Planets = () => {
     if (currentPlanetarySystem.system === system) return;
     setIsLoading(true);
     setCurrentPlanetarySystem({texture, system});
-    setPlanetSelectorOpen(false);
+    closeSelector();
   }
-
-  const togglePlanetSelector = () => {
-    setPlanetSelectorOpen(!planetSelectorOpen);
-    // const planetSelector = document.querySelector(".texture-selector");
-    // if (planetSelector) {
-    //   gsap.to(planetSelector, { duration: 0.5, y: planetSelectorOpen ? 0 : -50 });
-    // }
-  };
 
   return (
     <div className="three-container" ref={containerRef}>
@@ -175,28 +166,17 @@ export const Planets = () => {
       
       <canvas ref={canvasRef} className={`webgl ${isLoading ? 'canvas-loading' : ''}`} />
 
-      {/* Botón toggler siempre visible */}
-      <button 
-        className={`planet-selector-toggler ${planetSelectorOpen ? 'toggler-open' : ''}`} 
-        onClick={togglePlanetSelector}
-        aria-label="Toggle planet selector"
-      >
-        <img 
-          src="https://www.svgrepo.com/show/522044/chevron-up-circle.svg"
-          width={12} height={12} draggable={false} alt="Toggle" />
-        <span>{planetSelectorOpen ? 'Close' : 'Planets'}</span>
-      </button>
-
-      {/* Selector de planetas */}
-      <div className={`texture-selector ${planetSelectorOpen ? 'open' : ''}`}>
+      {/* Selector de planetas (toggled desde el ProfileGlass) */}
+      <div className={`texture-selector ${selectorOpen ? 'open' : ''}`}>
+        <div className="glass-distortion" />
+        <div className="glass-tint" />
+        <div className="glass-shine" />
         { planets.map((planet) => (
           <PlanetButton key={planet.system} texture={planet.texture} system={planet.system}
             onClick={() => handleTextureChange(planet.texture, planet.system)}
             isActive={currentPlanetarySystem.system === planet.system} moonName={planet.moonName} />
         ))}
       </div>
-
-      <p className="scroll-to-downside" onClick={() => window.scrollTo({top: window.innerHeight * 0.8, behavior: "smooth"})}>Tap here to scroll to the downside</p>
     </div>
   );
 };

@@ -18,26 +18,48 @@
 
 .texture-selector {
   position: absolute;
-  bottom: 80px;
+  bottom: 175px;
   left: 50%;
   transform: translateX(-50%) translateY(20px);
   display: flex;
   gap: 12px;
   z-index: 10000;
-  background-color: rgba(17, 17, 17, 0.85);
-  border-radius: 12px;
+  border-radius: 1.25em;
+  isolation: isolate;
+  overflow: hidden;
   padding: 12px 16px;
-  backdrop-filter: blur(8px);
   pointer-events: none;
   opacity: 0;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 1px solid rgba(255, 224, 149, 0.15);
+  transition:
+    opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .texture-selector.open {
   opacity: 1;
   pointer-events: all;
   transform: translateX(-50%) translateY(0);
+}
+
+.texture-selector .glass-distortion {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.texture-selector .glass-tint {
+  background: rgba(17, 17, 17, 0.45);
+}
+
+@supports (backdrop-filter: url("#liquid-glass")) {
+  .texture-selector:not(.open) .glass-distortion {
+    backdrop-filter: blur(10px) saturate(140%);
+    -webkit-backdrop-filter: blur(10px) saturate(140%);
+  }
+}
+
+.texture-selector > button {
+  position: relative;
+  z-index: 3;
 }
 
 .texture-selector button {
@@ -98,45 +120,6 @@
   box-shadow: 0 0 15px rgba(255, 224, 149, 0.7);
 }
 
-.planet-selector-toggler {
-  position: absolute;
-  bottom: 22px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10001;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background-color: rgba(17, 17, 17, 0.8);
-  border: 1px solid rgba(255, 224, 149, 0.3);
-  border-radius: 30px;
-  padding: 2px 6px;
-  backdrop-filter: blur(6px);
-  transition: all 0.3s ease;
-}
-
-.planet-selector-toggler:hover {
-  background-color: rgba(30, 30, 30, 0.9);
-  border-color: rgba(255, 224, 149, 0.6);
-  transform: translateX(-50%) scale(1.05);
-}
-
-.planet-selector-toggler img {
-  filter: invert(0.9);
-  transition: transform 0.3s ease-in-out;
-}
-
-.planet-selector-toggler.toggler-open img {
-  transform: rotate(180deg);
-}
-
-.planet-selector-toggler span {
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 0.74em;
-  font-weight: 500;
-}
-
 @media (max-width: 888px) {
   .texture-selector {
     transform: translateX(-50%) translateY(20px) scale(0.8);
@@ -152,22 +135,13 @@
     transform: translateX(-50%) translateY(20px) scale(0.85);
     display: grid;
     grid-template-columns: repeat(5, 56px);
-    bottom: 70px;
+    bottom: 160px;
     gap: 8px;
     padding: 10px;
   }
 
   .texture-selector.open {
     transform: translateX(-50%) translateY(0) scale(0.85);
-  }
-
-  .planet-selector-toggler {
-    bottom: 15px;
-    padding: 8px 16px;
-  }
-
-  .planet-selector-toggler span {
-    font-size: 0.85em;
   }
 }
 
@@ -193,15 +167,4 @@
 
 .webgl {
   transition: opacity 0.5s ease-in-out;
-}
-
-.scroll-to-downside{
-  color: rgba(109, 109, 109, 0.94);
-  font-size: 0.6em;
-  margin-top: 1rem;
-  position: absolute;
-  bottom: 4px;
-  text-align: center;
-  width: 100%;
-  cursor: pointer;
 }

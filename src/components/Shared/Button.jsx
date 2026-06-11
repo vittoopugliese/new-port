@@ -1,13 +1,18 @@
 import {useNavigate} from "react-router-dom";
 import "./shared.css";
 
-export const Button = ({text, path, iconClass}) => {
+export const Button = ({text, path, iconClass, onClick}) => {
   const navigate = useNavigate();
 
+  const handleClick = () => {
+    if (onClick) onClick();
+    if (path) navigate(path);
+  };
+
   return (
-    <button className="button" onClick={() => navigate(path)} style={{scale: 0.2}}>
-      <span>{text}</span>
-      <i className={iconClass} style={{marginLeft: "0.4em"}}></i>
+    <button type="button" className="button" onClick={handleClick}>
+      <span className="button__label">{text}</span>
+      {iconClass && <i className={`button__icon ${iconClass}`} aria-hidden="true" />}
     </button>
   );
 };

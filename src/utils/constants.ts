@@ -30,7 +30,7 @@ export const projects = [
   },
   {
     title: "GPTherapist",
-    description: "Made in June 2023, now this project is under maintenance. Talk about your problems with an GPT-based therapist trained with experienced psycologist data. App interactions costs credits.",
+    description: " I made 'by hand' a chatbot app to conclude my first AI product. Talk about your problems with GPT-based therapist trained with experienced psycologist data. June 2023, Now under maintenance.",
     image: "./project-images/image2.png",
     tech: ['react', 'javascript', 'openai'],
     link: 'https://github.com/vittoopugliese/gptherapist'
@@ -102,30 +102,31 @@ export const socials = [
 
 export const experience = [
   {
-    title: "Product Engineer - Wollen Labs",
+    title: "Product Engineer - Luno (Wollen Labs)",
     date: "Nov 2025 - Today",
     jobItems: [
-      "Developing a web and mobile application using Next.js 16 and React 19 with Tamagui and TypeScript to create a college marketplace where students can buy and sell their products.",
+      "Building CampusHub, a college marketplace, simultaneously for Android, iOS and Web from a single monorepo: Next.js 16 web app, React Native (Expo) app, and a Hono + tRPC backend.",
+      "Writing shared components in packages, reused and optimized per platform with Tamagui, React 19 and TypeScript.",
+      "Also developing OS, the internal back-office, in parallel with the consumer apps.",
+      "Heavy AI usage across the workflow, drastically reducing time-per-feature.",
     ],
   },
   {
     title: "FrontEnd Developer - Kubrik Digital",
     date: "Sep 2022 - Nov 2025",
     jobItems: [
-      "Led the complete development of a React Native mobile application for a Canadian client, taking full responsibility for the project from June 2024.",
-      "Designed and implemented a scalable architecture that enables product growth, including Excel reports automation.",
-      "Successfully completed a comprehensive migration from Angular 9 to Angular 16 for an internal ERP project, implementing performance optimizations that resulted in a 25% reduction in application response times.",
-      "Developed reusable components to reduce development time and collaborated closely with the UX/UI team to ensure intuitive interfaces aligned with design standards.",
-      "Maintained direct communication with clients, receiving excellent feedback.",
-      "Technologies used: React Native, Expo, TypeScript, Redux, Angular, HTML5, CSS, Git"
+      "Led a React Native (Expo) app for a Canadian client, fully owning the project from June 2024 — scalable architecture, Excel reports automation, and direct client communication with excellent feedback.",
+      "Migrated an internal ERP from Angular 9 to 16, cutting response times by 25%.",
+      "Built reusable components alongside the UX/UI team to speed up development.",
+      "Stack: React Native, Expo, TypeScript, Redux, Angular, HTML5, CSS, Git.",
     ],
   },
   {
     title: "Journey Begins...",
     date: "Aug 2020",
     jobItems: [
-      "By beeing interested in programming, I started to do some research and learned that programming is hard. So I learned the basics about HTML, CSS and JavaScript. I was not interested on starting a University degree, so I started to learn by my own.",
-      "Eventually, and already with nearly two years of work experience, joined in 2024 to University UTN (Universidad Tecnológica Nacional) to get a degree in Computer Science... which I graduated in 2026!",
+      "Self-taught from day one: learned HTML, CSS and JavaScript on my own instead of going straight to university.",
+      "In 2024, with two years of work experience, enrolled at UTN (Universidad Tecnológica Nacional) for a Computer Science degree — graduated in 2026!",
     ],
   },
 ];

@@ -13,49 +13,37 @@ export const AboutPage = () => {
       <div style={{paddingTop: 60}}></div>
       <SectionTitle aperture={true} title="About me" />
       <p>
-        Im a Front-end and Mobile Developer based in Buenos Aires, Argentina.{" "}
-        <br />
-        Passionate about technology from a young age, I have been exploring the
-        world of computers and music since childhood. I started web development
-        and general programming in June 2020, focusing on <b>
-          JavaScript
-        </b>, <b>TypeScript</b>, and the web while building my skills along the
-        way.
+        Im a Front-end and Mobile Developer based in Buenos Aires, Argentina,
+        coding since June 2020 — focused on <b>JavaScript</b>,{" "}
+        <b>TypeScript</b> and everything web & mobile.
         <br />
         <br />
-        Currently, I work as a Product Engineer at{" "}
-        <a
-          href="https://www.linkedin.com/company/meet-luno-ai/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="b">
-          {" "}
-          Luno{" "}
-        </a>
-        , where I help build the newest mobile and web college-user-based
-        marketplace, <b className="b">CampusHub</b>. <br />
-        <br />
-        Before that, I led mobile development at{" "}
-        <b className="b">Kubrik Digital</b>, on a project for a Canadian client
-        with <b>React Native</b> and the
-        <b className="b"> Expo framework </b>. At the same time, I contributed
-        to their main AI project, <b className="b">Conversa</b>, and the
-        internal ERP tool, <b className="b">TimelogBook</b>, using{" "}
-        <b>Angular</b>.<br />
-        <br />
-        To keep growing professionally, I enrolled at{" "}
-        <b>UTN (Universidad Tecnológica Nacional) </b>
-        in 2024 to study Computer Systems and strengthen my theoretical
-        foundation alongside hands-on work. I graduated in 2026 and continue as
-        a Product Engineer at{" "}
+        Currently a Product Engineer at{" "}
         <a
           href="https://www.linkedin.com/company/meet-luno-ai/"
           target="_blank"
           rel="noopener noreferrer"
           className="b">
           Luno
-        </a>
-        .
+        </a>{" "}
+        (Wollen Labs), building <b className="b">CampusHub</b> — a college
+        marketplace — simultaneously for <b>Android</b>, <b>iOS</b> and{" "}
+        <b>Web</b> from a single monorepo: a <b>Next.js</b> web app, a{" "}
+        <b>React Native (Expo)</b> app and a <b>Hono + tRPC</b> backend, plus{" "}
+        <b className="b">OS</b>, our internal back-office. Shared components
+        live in packages, reused and optimized per platform, with heavy AI
+        usage to cut time-per-feature.
+        <br />
+        <br />
+        Before that, I led mobile development at{" "}
+        <b className="b">Kubrik Digital</b> with <b>React Native</b> and{" "}
+        <b className="b">Expo</b>, while contributing to their AI product{" "}
+        <b className="b">Conversa</b> and the internal ERP{" "}
+        <b className="b">TimelogBook</b> with <b>Angular</b>.
+        <br />
+        <br />
+        In 2024 I enrolled at <b>UTN (Universidad Tecnológica Nacional)</b> to
+        back hands-on experience with theory — graduated in 2026.
       </p>
       <Experiences />
       <Certificates />

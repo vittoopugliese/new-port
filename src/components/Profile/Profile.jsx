@@ -10,7 +10,7 @@ export const Profile = () => {
 
         <div className="profile-buttons">
           <a href="./Vittorio-Pugliese-Resume.pdf" download>
-            <Button text="Download Resume" resume={true} iconClass={"fa-solid fa-paperclip"}/>
+            <Button text="Resume" />
             {/* <Button text="LinkedIn" resume={true} iconClass={"fa-brands fa-linkedin-in"} /> */}
           </a>
         </div>
