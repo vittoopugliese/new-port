@@ -104,26 +104,26 @@ export const ProfileGlass = ({planetSelectorOpen, onTogglePlanets}) => {
           </div>
 
           <div className="profile-expanded" aria-hidden={isMinimized}>
-            <h1>Vittorio</h1>
-            <p>Product Engineer</p>
+            <div className="profile-header">
+              <h1>Vittorio...</h1>
+              {/* <span className="profile-header-sep" aria-hidden="true">
+                ,
+              </span> */}
+              <p>Product Engineer</p>
+            </div>
+            <p className="profile-tagline">
+              Web & Mobile shipping Android, iOS and web.
+            </p>
             <div className="profile-buttons">
               <a href="./Vittorio-Pugliese-Resume.pdf" download>
                 <Button text="Resume" />
               </a>
               <Button
                 text={planetSelectorOpen ? "Close" : "Planets"}
-                iconClass={`fa-solid ${planetSelectorOpen ? "fa-chevron-down" : "fa-chevron-up"}`}
                 onClick={onTogglePlanets}
               />
-              <Button
-                text="Scroll"
-                iconClass="fa-solid fa-chevron-down"
-                onClick={scrollToContent}
-              />
+              <Button text="Scroll" onClick={scrollToContent} />
             </div>
-            <span className="profile-scroll-hint">
-              Scroll or tap to explore the downside
-            </span>
           </div>
         </div>
       </div>

@@ -23,7 +23,7 @@
   left: 50%;
   margin-top: 0;
   transform: translate3d(-50%, 0, 0);
-  padding: 1em 1.8em 0.8em;
+  padding: 1.2em 2.16em 0.96em;
   border-radius: 1.75em;
   transition:
     padding 0.38s cubic-bezier(0.4, 0, 0.2, 1),
@@ -44,32 +44,61 @@
     transform 0.2s ease;
 }
 
-.glass-card.profile-data h1 {
-  font-size: 1.5em;
+.glass-card.profile-data h1,
+.glass-card.profile-data .profile-header p {
   margin: 0;
 }
 
-.glass-card.profile-data p {
+.glass-card.profile-data h1 {
+  font-size: 1.5em;
+}
+
+.glass-card.profile-data .profile-header p {
   font-size: 0.7em;
-  margin: 0.15em 0 0;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.profile-header {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.35em 0.45em;
+}
+
+.profile-header h1{
+  position: relative;
+  right: 8px;
+}
+
+.profile-header-sep {
+  font-size: 0.85em;
+  color: rgba(255, 255, 255, 0.35);
+  font-weight: 300;
+  user-select: none;
+}
+
+.glass-card.profile-data .profile-tagline {
+  font-size: 0.64em;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.02em;
+  margin: 0.55em 0 1.25em;
+  max-width: 34ch;
+  user-select: none;
+  text-shadow: none;
 }
 
 .glass-card.profile-data .profile-buttons {
-  margin: 0.8em 0 0.4em;
+  margin: 0;
   gap: 0.5em;
 }
 
 .glass-card.profile-data .button {
   padding: 0.55em 1.1em;
   font-size: 0.78rem;
-}
-
-.profile-scroll-hint {
-  font-size: 0.55em;
-  color: rgba(255, 255, 255, 0.45);
-  letter-spacing: 0.03em;
-  cursor: default;
-  user-select: none;
 }
 
 /* Minimize control */
@@ -246,7 +275,7 @@
 
 @media (max-width: 888px) {
   .glass-card.profile-data {
-    padding: 0.9em 1.2em 0.7em;
+    padding: 1.08em 1.44em 0.84em;
     width: max-content;
     max-width: calc(100vw - 32px);
   }

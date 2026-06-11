@@ -21,7 +21,7 @@ export const MainPage = ({planetSelectorOpen, onTogglePlanets}) => {
       <MoreProjects />
 
       <div className="button-container">
-        <Button text="About me" path="/about" iconClass="fa-solid fa-chevron-right" />
+        <Button text="About me" path="/about" />
       </div>
     </main>
   );
