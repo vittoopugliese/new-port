@@ -7,14 +7,14 @@ import "./planets.css";
 import PlanetButton from "./PlanetButton";
 import EffectsPanel from "./EffectsPanel";
 import { LoadingSpinner } from "./../Shared/LoadingSpinner";
-import { EFFECT_CREATORS } from "./spaceEffects";
+import { EFFECT_CREATORS, setupExtraMoons, createPlanetRings } from "./spaceEffects";
 
 const INITIAL_EFFECTS = {
   meteors: false,
   blackHole: false,
   distantStar: false,
   ship: false,
-  extraMoons: false,
+  galaxy: false,
 };
 
 export const Planets = ({ selectorOpen = false, closeSelector }) => {
@@ -32,9 +32,6 @@ export const Planets = ({ selectorOpen = false, closeSelector }) => {
 
   activeEffectsRef.current = activeEffects;
 
-  const planetConfig = getPlanetData(currentPlanetarySystem.system);
-  const extraMoonsAvailable = (planetConfig.extraMoons?.length ?? 0) > 0;
-
   const disposeAllEffects = useCallback(() => {
     const sceneApi = sceneApiRef.current;
     if (!sceneApi) return;
@@ -51,9 +48,7 @@ export const Planets = ({ selectorOpen = false, closeSelector }) => {
     if (!sceneApi) return;
 
     Object.keys(EFFECT_CREATORS).forEach((key) => {
-      const shouldBeActive =
-        activeEffectsRef.current[key] &&
-        !(key === "extraMoons" && !(sceneApi.planetConfig.extraMoons?.length > 0));
+      const shouldBeActive = activeEffectsRef.current[key];
       const current = effectInstancesRef.current[key];
 
       if (shouldBeActive && !current) {
@@ -72,6 +67,7 @@ export const Planets = ({ selectorOpen = false, closeSelector }) => {
     if (!canvasRef.current) return;
 
     let animationFrameId;
+    let extraMoonsApi = null;
     const config = getPlanetData(currentPlanetarySystem.system);
     const scene = new THREE.Scene();
 
@@ -113,6 +109,12 @@ export const Planets = ({ selectorOpen = false, closeSelector }) => {
       scene.add(moon);
     }
 
+    let rings = null;
+    if (config.ringConfig) {
+      rings = createPlanetRings(config);
+      scene.add(rings.mesh);
+    }
+
     const ambientLight = new THREE.AmbientLight(0x404040, 0.94);
     scene.add(ambientLight);
 
@@ -145,6 +147,17 @@ export const Planets = ({ selectorOpen = false, closeSelector }) => {
 
     const clock = new THREE.Clock();
 
+    const timeline = gsap.timeline({ defaults: { duration: 1 } });
+    timeline.fromTo(planet.scale, { z: 0, x: 0, y: 0 }, { z: 1, x: 1, y: 1 });
+    if (rings) {
+      timeline.fromTo(rings.mesh.scale, { z: 0, x: 0, y: 0 }, { z: 1, x: 1, y: 1, duration: 1.2 }, "-=0.7");
+    }
+    if (moon) {
+      timeline.fromTo(moon.scale, { z: 0, x: 0, y: 0 }, { z: 1, x: 1, y: 1 }, "-=0.5");
+    }
+
+    extraMoonsApi = setupExtraMoons(config, textureLoader, scene, timeline);
+
     sceneApiRef.current = { scene, camera, renderer, clock, planetConfig: config, textureLoader };
     effectInstancesRef.current = {};
     syncEffects();
@@ -164,6 +177,8 @@ export const Planets = ({ selectorOpen = false, closeSelector }) => {
           Math.sin(elapsedTime * config.orbitSpeed * config.orbitDirection) * config.orbitRadius;
       }
 
+      extraMoonsApi?.update(elapsedTime);
+
       Object.values(effectInstancesRef.current).forEach((effect) => {
         effect.update(elapsedTime, delta);
       });
@@ -172,12 +187,6 @@ export const Planets = ({ selectorOpen = false, closeSelector }) => {
       renderer.render(scene, camera);
       animationFrameId = window.requestAnimationFrame(animate);
     };
-
-    const timeline = gsap.timeline({ defaults: { duration: 1 } });
-    timeline.fromTo(planet.scale, { z: 0, x: 0, y: 0 }, { z: 1, x: 1, y: 1 });
-    if (moon) {
-      timeline.fromTo(moon.scale, { z: 0, x: 0, y: 0 }, { z: 1, x: 1, y: 1 }, "-=0.5");
-    }
 
     animate();
 
@@ -196,6 +205,11 @@ export const Planets = ({ selectorOpen = false, closeSelector }) => {
     return () => {
       window.removeEventListener("resize", handleResize);
       window.cancelAnimationFrame(animationFrameId);
+      if (rings) {
+        scene.remove(rings.mesh);
+        rings.dispose();
+      }
+      extraMoonsApi?.dispose();
       disposeAllEffects();
       renderer.dispose();
       sceneApiRef.current = null;
@@ -205,12 +219,6 @@ export const Planets = ({ selectorOpen = false, closeSelector }) => {
   useEffect(() => {
     syncEffects();
   }, [activeEffects, syncEffects]);
-
-  useEffect(() => {
-    if (!extraMoonsAvailable && activeEffects.extraMoons) {
-      setActiveEffects((prev) => ({ ...prev, extraMoons: false }));
-    }
-  }, [extraMoonsAvailable, activeEffects.extraMoons]);
 
   const handleTextureChange = (texture, system) => {
     if (currentPlanetarySystem.system === system) return;
@@ -238,7 +246,6 @@ export const Planets = ({ selectorOpen = false, closeSelector }) => {
           open={selectorOpen}
           activeEffects={activeEffects}
           onToggle={handleEffectToggle}
-          extraMoonsAvailable={extraMoonsAvailable}
         />
 
         <div className={`texture-selector ${selectorOpen ? "open" : ""}`}>

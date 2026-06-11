@@ -136,12 +136,12 @@ export const planets = [
   { texture: "/saturn.webp", system: "saturn", moonName: "titan" },
   { texture: "/neptune.webp", system: "neptune", moonName: "triton" },
   { texture: "/uranus.webp", system: "uranus", moonName: "umbriel" },
-  { texture: "/earth.webp", system: "earth", moonName: "moon" },
+  // { texture: "/earth.webp", system: "earth", moonName: "moon" },
   { texture: "/mars.webp", system: "mars", moonName: "deimos" },
-  { texture: "/venus.webp", system: "venus", moonName: null },
-  { texture: "/mercury.webp", system: "mercury", moonName: null },
+  // { texture: "/venus.webp", system: "venus", moonName: null },
+  // { texture: "/mercury.webp", system: "mercury", moonName: null },
   { texture: "/pluto.webp", system: "pluto", moonName: "charon" },
-  { texture: "/sun.webp", system: "sun", moonName: null },
+  // { texture: "/sun.webp", system: "sun", moonName: null },
 ];
 
 export function getPlanetData(systemName) {
@@ -172,6 +172,8 @@ export function getPlanetData(systemName) {
       orbitDirection: 1,
       initialPosition: [7, 0, 0],
       hasRings: true,
+      // Proporciones reales: anillo C desde ~1.24 radios, anillo A hasta ~2.27 radios. Inclinación axial de Saturno ~26.7°
+      ringConfig: { innerFactor: 1.24, outerFactor: 2.27, tiltX: 0.42, tiltZ: 0.12, opacity: 1, style: "saturn" },
       extraMoons: [
         { name: "Enceladus", size: 0.08, orbitRadius: 5.5, orbitSpeed: 0.55, orbitDirection: 1, phase: 0.5, color: 0xeeeeff },
         { name: "Rhea", size: 0.12, orbitRadius: 8.5, orbitSpeed: 0.28, orbitDirection: 1, phase: 2, color: 0xcccccc },
@@ -202,6 +204,8 @@ export function getPlanetData(systemName) {
       orbitDirection: 1,
       initialPosition: [4, 0, 0],
       hasRings: true,
+      // Urano tiene anillos finos y oscuros, casi verticales (inclinación axial ~98°)
+      ringConfig: { innerFactor: 1.6, outerFactor: 2.0, tiltX: 1.4, tiltZ: 0.25, opacity: 0.55, style: "uranus" },
       extraMoons: [
         { name: "Miranda", size: 0.06, orbitRadius: 3.2, orbitSpeed: 0.5, orbitDirection: 1, phase: 0, color: 0xaaaabb },
         { name: "Ariel", size: 0.08, orbitRadius: 4.2, orbitSpeed: 0.38, orbitDirection: 1, phase: 1.2, color: 0x99aacc },
@@ -296,7 +300,7 @@ export const SPACE_EFFECTS = [
   { id: "blackHole", label: "Black Hole", icon: "fa-solid fa-circle" },
   { id: "distantStar", label: "Star", icon: "fa-solid fa-star" },
   { id: "ship", label: "Ship", icon: "fa-solid fa-shuttle-space" },
-  { id: "extraMoons", label: "Moons", icon: "fa-solid fa-moon" },
+  { id: "galaxy", label: "Galaxy", icon: "fa-solid fa-hurricane" },
 ] as const;
 
 export type SpaceEffectId = (typeof SPACE_EFFECTS)[number]["id"];

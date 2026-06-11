@@ -245,7 +245,7 @@
 
   .texture-selector {
     display: grid;
-    grid-template-columns: repeat(5, 56px);
+    grid-template-columns: repeat(3, 56px);
     gap: 8px;
     padding: 10px;
   }
