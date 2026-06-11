@@ -155,7 +155,12 @@ export function getPlanetData(systemName) {
       orbitSpeed: 0.5,
       orbitDirection: 1,
       initialPosition: [8, 0, 0],
-      hasRings: false
+      hasRings: false,
+      extraMoons: [
+        { name: "Io", size: 0.12, orbitRadius: 6.5, orbitSpeed: 0.7, orbitDirection: 1, phase: 0, color: 0xffaa44 },
+        { name: "Ganymede", size: 0.18, orbitRadius: 9.5, orbitSpeed: 0.35, orbitDirection: 1, phase: 1.5, color: 0x888899 },
+        { name: "Callisto", size: 0.14, orbitRadius: 11, orbitSpeed: 0.25, orbitDirection: 1, phase: 3, color: 0x665544 },
+      ],
     },
     saturn: {
       texturePath: "/saturn.webp",
@@ -166,7 +171,12 @@ export function getPlanetData(systemName) {
       orbitSpeed: 0.3,
       orbitDirection: 1,
       initialPosition: [7, 0, 0],
-      hasRings: true            // Saturno es famoso por sus anillos
+      hasRings: true,
+      extraMoons: [
+        { name: "Enceladus", size: 0.08, orbitRadius: 5.5, orbitSpeed: 0.55, orbitDirection: 1, phase: 0.5, color: 0xeeeeff },
+        { name: "Rhea", size: 0.12, orbitRadius: 8.5, orbitSpeed: 0.28, orbitDirection: 1, phase: 2, color: 0xcccccc },
+        { name: "Iapetus", size: 0.11, orbitRadius: 10, orbitSpeed: 0.18, orbitDirection: 1, phase: 4, color: 0x998877 },
+      ],
     },
     neptune: {
       texturePath: "/neptune.webp",
@@ -177,7 +187,10 @@ export function getPlanetData(systemName) {
       orbitSpeed: 0.4,
       orbitDirection: -1,       // Tritón orbita en dirección retrógrada
       initialPosition: [5, 0, 0],
-      hasRings: false
+      hasRings: false,
+      extraMoons: [
+        { name: "Proteus", size: 0.09, orbitRadius: 3.8, orbitSpeed: 0.6, orbitDirection: 1, phase: 1, color: 0x777788 },
+      ],
     },
     uranus: {
       texturePath: "/uranus.webp",
@@ -188,7 +201,13 @@ export function getPlanetData(systemName) {
       orbitSpeed: 0.35,
       orbitDirection: 1,
       initialPosition: [4, 0, 0],
-      hasRings: true            // Urano tiene anillos, aunque son menos visibles que los de Saturno
+      hasRings: true,
+      extraMoons: [
+        { name: "Miranda", size: 0.06, orbitRadius: 3.2, orbitSpeed: 0.5, orbitDirection: 1, phase: 0, color: 0xaaaabb },
+        { name: "Ariel", size: 0.08, orbitRadius: 4.2, orbitSpeed: 0.38, orbitDirection: 1, phase: 1.2, color: 0x99aacc },
+        { name: "Titania", size: 0.1, orbitRadius: 5.5, orbitSpeed: 0.25, orbitDirection: 1, phase: 2.5, color: 0x8899aa },
+        { name: "Oberon", size: 0.09, orbitRadius: 6.5, orbitSpeed: 0.2, orbitDirection: 1, phase: 3.8, color: 0x778899 },
+      ],
     },
     earth: {
       texturePath: "/earth.webp",
@@ -199,7 +218,8 @@ export function getPlanetData(systemName) {
       orbitSpeed: 0.2,
       orbitDirection: 1,
       initialPosition: [2, 2, 0],
-      hasRings: false
+      hasRings: false,
+      extraMoons: [],
     },
     mars: {
       texturePath: "/mars.webp",
@@ -210,7 +230,10 @@ export function getPlanetData(systemName) {
       orbitSpeed: 0.25,
       orbitDirection: 1,        // Deimos orbita en la misma dirección que Marte rota
       initialPosition: [1, 2, 0],
-      hasRings: false
+      hasRings: false,
+      extraMoons: [
+        { name: "Phobos", size: 0.04, orbitRadius: 1.4, orbitSpeed: 0.45, orbitDirection: 1, phase: 0, color: 0xaa8866 },
+      ],
     },
     venus: {
       texturePath: "/venus.webp",
@@ -221,7 +244,8 @@ export function getPlanetData(systemName) {
       orbitSpeed: 0,
       orbitDirection: 1,
       initialPosition: [10, 0, 0],
-      hasRings: false
+      hasRings: false,
+      extraMoons: [],
     },
     mercury: {
       texturePath: "/mercury.webp",
@@ -232,7 +256,8 @@ export function getPlanetData(systemName) {
       orbitSpeed: 0,
       orbitDirection: 1,
       initialPosition: [0, 0, 0],
-      hasRings: false
+      hasRings: false,
+      extraMoons: [],
     },
     pluto: {
       texturePath: "/pluto.webp",
@@ -243,7 +268,11 @@ export function getPlanetData(systemName) {
       orbitSpeed: 0.15,
       orbitDirection: 1,
       initialPosition: [0.5, 0, 0],
-      hasRings: false
+      hasRings: false,
+      extraMoons: [
+        { name: "Nix", size: 0.006, orbitRadius: 0.35, orbitSpeed: 0.3, orbitDirection: 1, phase: 0.8, color: 0xbbbbcc },
+        { name: "Hydra", size: 0.005, orbitRadius: 0.42, orbitSpeed: 0.22, orbitDirection: 1, phase: 2.2, color: 0x999aaa },
+      ],
     },
     sun: {
       texturePath: "/sun.webp",
@@ -254,9 +283,20 @@ export function getPlanetData(systemName) {
       orbitSpeed: 0,
       orbitDirection: 1,
       initialPosition: [0, 0, 0],
-      hasRings: false
+      hasRings: false,
+      extraMoons: [],
     }
   };
 
   return moonData[systemName];
 }
+
+export const SPACE_EFFECTS = [
+  { id: "meteors", label: "Meteors", icon: "fa-solid fa-meteor" },
+  { id: "blackHole", label: "Black Hole", icon: "fa-solid fa-circle" },
+  { id: "distantStar", label: "Star", icon: "fa-solid fa-star" },
+  { id: "ship", label: "Ship", icon: "fa-solid fa-shuttle-space" },
+  { id: "extraMoons", label: "Moons", icon: "fa-solid fa-moon" },
+] as const;
+
+export type SpaceEffectId = (typeof SPACE_EFFECTS)[number]["id"];

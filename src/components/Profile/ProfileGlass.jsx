@@ -176,28 +176,19 @@ export const ProfileGlass = ({planetSelectorOpen, onTogglePlanets}) => {
 
         <div className="glass-content">
           <div className="profile-compact" aria-hidden={!isMinimized}>
-            <i className="fa-solid fa-chevron-up" aria-hidden="true" />
+            <i style={{fontSize: "1em", opacity: "0.72", position: "relative", top: "1px", left: "0"}} className="fa-solid fa-chevron-up" aria-hidden="true" />
             <span>Vittorio</span>
           </div>
 
           <div className="profile-expanded" aria-hidden={isMinimized}>
             <div className="profile-header">
               <h1>Vittorio...</h1>
-              {/* <span className="profile-header-sep" aria-hidden="true">
-                ,
-              </span> */}
-              <button
-                type="button"
-                className={`profile-role ${isSwapping ? "is-swapping" : ""}`}
-                onClick={handleRoleSwap}
-                title="Click to shuffle"
+              <button type="button" className={`profile-role ${isSwapping ? "is-swapping" : ""}`} onClick={handleRoleSwap} title="Click to shuffle"
                 aria-label={`Role: ${ROLE_TAGS[roleIndex]}. Click to shuffle.`}>
                 {ROLE_TAGS[roleIndex]}
               </button>
             </div>
-            <p className="profile-tagline">
-              Web & Mobile shipping Android, iOS and web.
-            </p>
+            <p className="profile-tagline">Web & Mobile shipping Android, iOS and Web.</p>
             <div className="profile-buttons">
               <a href="./Vittorio-Pugliese-Resume.pdf" download>
                 <Button iconClass="fa-solid fa-file-pdf" text="Resume" />

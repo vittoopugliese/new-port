@@ -16,13 +16,109 @@
   outline: none;
 }
 
-.texture-selector {
+.planet-panels {
   position: absolute;
   bottom: 175px;
   left: 50%;
-  transform: translateX(-50%) translateY(20px);
+  transform: translateX(-50%);
   display: flex;
-  gap: 12px;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  z-index: 10000;
+  pointer-events: none;
+}
+
+.effects-selector {
+  display: flex;
+  gap: 10px;
+  border-radius: 1.25em;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 10px 14px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.effects-selector.open {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateY(0);
+}
+
+.effects-selector .glass-distortion {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.effects-selector .glass-tint {
+  background: rgba(17, 17, 17, 0.45);
+}
+
+@supports (backdrop-filter: url("#liquid-glass")) {
+  .effects-selector:not(.open) .glass-distortion {
+    backdrop-filter: blur(10px) saturate(140%);
+    -webkit-backdrop-filter: blur(10px) saturate(140%);
+  }
+}
+
+.effects-selector > button {
+  position: relative;
+  z-index: 3;
+  background: transparent;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  padding: 6px 12px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: rgb(180, 180, 180);
+  min-width: 2.5em;
+  transition: all 254ms ease;
+}
+
+.effects-selector button:hover:not(.disabled) {
+  transform: translateY(-3px);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.effects-selector button.active {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 224, 149, 0.5);
+  color: white;
+}
+
+.effects-selector button.active i {
+  color: rgba(255, 224, 149, 0.95);
+}
+
+.effects-selector button.disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.effects-selector button span {
+  margin-top: 6px;
+  font-size: 0.75em;
+  letter-spacing: 0.02em;
+}
+
+.effects-selector button i {
+  font-size: 1.1em;
+}
+
+.texture-selector {
+  position: relative;
+  bottom: auto;
+  left: auto;
+  transform: none;
+  display: flex;
+  gap: 2px;
   z-index: 10000;
   border-radius: 1.25em;
   isolation: isolate;
@@ -30,6 +126,7 @@
   padding: 12px 16px;
   pointer-events: none;
   opacity: 0;
+  transform: translateY(20px);
   transition:
     opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1),
     transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
@@ -38,7 +135,7 @@
 .texture-selector.open {
   opacity: 1;
   pointer-events: all;
-  transform: translateX(-50%) translateY(0);
+  transform: translateY(0);
 }
 
 .texture-selector .glass-distortion {
@@ -121,27 +218,36 @@
 }
 
 @media (max-width: 888px) {
-  .texture-selector {
-    transform: translateX(-50%) translateY(20px) scale(0.8);
+  .planet-panels {
+    transform: translateX(-50%) scale(0.85);
   }
-  
-  .texture-selector.open {
-    transform: translateX(-50%) translateY(0) scale(0.8);
+
+  .effects-selector button span {
+    font-size: 0.7em;
   }
 }
 
 @media (max-width: 578px) {
-  .texture-selector {
-    transform: translateX(-50%) translateY(20px) scale(0.85);
-    display: grid;
-    grid-template-columns: repeat(5, 56px);
+  .planet-panels {
     bottom: 160px;
-    gap: 8px;
-    padding: 10px;
+    transform: translateX(-50%) scale(0.85);
   }
 
-  .texture-selector.open {
-    transform: translateX(-50%) translateY(0) scale(0.85);
+  .effects-selector {
+    gap: 6px;
+    padding: 8px 10px;
+  }
+
+  .effects-selector button {
+    padding: 5px 8px;
+    min-width: 2em;
+  }
+
+  .texture-selector {
+    display: grid;
+    grid-template-columns: repeat(5, 56px);
+    gap: 8px;
+    padding: 10px;
   }
 }
 

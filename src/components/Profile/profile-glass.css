@@ -23,7 +23,7 @@
   left: 50%;
   margin-top: 0;
   transform: translate3d(-50%, 0, 0);
-  padding: 1.2em 2.16em 0.96em;
+  padding: 1em 2.16em 0.96em;
   border-radius: 1.75em;
   /* width is animated via JS FLIP (see ProfileGlass.jsx) since CSS can't
      transition a content-driven width on its own */
@@ -59,7 +59,7 @@
 /* Interactive role tag — animated iridescent gradient, click to shuffle */
 .glass-card.profile-data .profile-role {
   font-family: inherit;
-  font-size: 0.88em;
+  font-size: 1.154em;
   font-weight: 600;
   margin: 0;
   padding: 0.05em 0.15em;
@@ -175,7 +175,7 @@
 }
 
 .glass-card.profile-data .profile-tagline {
-  font-size: 0.64em;
+  font-size: 0.67em;
   line-height: 1;
   color: rgba(255, 255, 255, 0.5);
   letter-spacing: 0.02em;
@@ -360,7 +360,7 @@
   width: 200%;
   height: 100%;
   background: linear-gradient(
-    100deg,
+    120deg,
     transparent 2%,
     rgba(255, 224, 149, 0.07) 10%,
     rgba(255, 179, 193, 0.1) 18%,
@@ -376,7 +376,8 @@
   );
   mix-blend-mode: screen;
   will-change: transform;
-  animation: iridescent-sweep 7s linear infinite;
+  opacity: 0.92;
+  animation: iridescent-sweep 8s ease-in-out infinite;
 }
 
 @keyframes iridescent-sweep {
@@ -427,7 +428,7 @@
 
 @media (max-width: 888px) {
   .glass-card.profile-data {
-    padding: 1.08em 1.44em 0.84em;
+    padding: 0.74em 1.44em 0.84em;
     width: fit-content;
     max-width: calc(100vw - 32px);
   }
