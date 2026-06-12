@@ -1,6 +1,7 @@
 import {useCallback, useEffect, useLayoutEffect, useRef, useState} from "react";
 import {Button} from "../Shared/Button";
 import {usePrefersReducedMotion} from "../../hooks/usePrefersReducedMotion";
+import {useMedia} from "../../hooks/useMedia";
 import "./profile.css";
 import "./profile-glass.css";
 
@@ -16,7 +17,7 @@ const ROLE_TAGS = [
   "Product Engineer",
   "Front-end Developer",
   "Neverending Learner",
-  "Technologic Enthusiast",
+  "Techno Enthusiast",
   "Mobile Developer",
   "React Native Dev",
   "Web Developer",
@@ -28,7 +29,7 @@ const ROLE_TAGS = [
   "Graduated",
   "Monorepo Wrangler",
   "TypeScript Believer",
-  "Coffee to Code Converter",
+  "Coffee Converter",
   "Problem Solver",
 ];
 
@@ -41,7 +42,8 @@ const pickDifferentIndex = (current, length) => {
 
 export const ProfileGlass = ({planetSelectorOpen, onTogglePlanets}) => {
   const prefersReducedMotion = usePrefersReducedMotion();
-  const [isIntroActive, setIsIntroActive] = useState(() => !prefersReducedMotion);
+  const {isMobile} = useMedia();
+  const [isIntroActive, setIsIntroActive] = useState(() => !prefersReducedMotion && !isMobile);
   const [isMinimized, setIsMinimized] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [roleIndex, setRoleIndex] = useState(0);
@@ -61,7 +63,7 @@ export const ProfileGlass = ({planetSelectorOpen, onTogglePlanets}) => {
   }, []);
 
   useEffect(() => {
-    if (!isIntroActive) return;
+    if (isMobile || !isIntroActive) return;
 
     let dismissed = false;
     const onDismissIntro = () => {
@@ -77,7 +79,7 @@ export const ProfileGlass = ({planetSelectorOpen, onTogglePlanets}) => {
       if (introTimerRef.current) clearTimeout(introTimerRef.current);
       window.removeEventListener(SCENE_MOVE_EVENT, onDismissIntro);
     };
-  }, [dismissIntro, isIntroActive]);
+  }, [dismissIntro, isIntroActive, isMobile]);
 
   const runCollapseAnimation = useCallback((nextMinimized) => {
     if (animTimerRef.current) clearTimeout(animTimerRef.current);
@@ -205,7 +207,7 @@ export const ProfileGlass = ({planetSelectorOpen, onTogglePlanets}) => {
     runCollapseAnimation(false);
   };
 
-  const showMaximize = !isIntroActive && !isMinimized && !planetSelectorOpen;
+  const showMaximize = !isMobile && !isIntroActive && !isMinimized && !planetSelectorOpen;
 
   return (
     <div className="profile-container">
@@ -220,7 +222,7 @@ export const ProfileGlass = ({planetSelectorOpen, onTogglePlanets}) => {
       )}
 
       <div
-        className={["glass-card", "profile-data", isIntroActive && "intro-active", isMinimized && "minimized", isAnimating && "is-animating", planetSelectorOpen && "planets-hidden"].filter(Boolean).join(" ")}
+        className={["glass-card", "profile-data", isMobile && "mobile-static", isIntroActive && "intro-active", isMinimized && "minimized", isAnimating && "is-animating", planetSelectorOpen && "planets-hidden"].filter(Boolean).join(" ")}
         ref={cardRef} onWheel={handleWheel} onClick={isMinimized ? handleRestore : undefined}
         onKeyDown={isMinimized ? handleRestoreKeyDown : undefined}
         role={isMinimized ? "button" : undefined} tabIndex={isMinimized ? 0 : undefined}
@@ -230,26 +232,28 @@ export const ProfileGlass = ({planetSelectorOpen, onTogglePlanets}) => {
         <div className="glass-tint" aria-hidden="true" />
         <div className="glass-shine" aria-hidden="true" />
 
-        <div className="profile-window-controls">
-          {showMaximize && (
+        {!isMobile && (
+          <div className="profile-window-controls">
+            {showMaximize && (
+              <button
+                type="button"
+                className="profile-maximize"
+                onClick={handleMaximizeIntro}
+                aria-label="Center and enlarge profile card"
+                tabIndex={0}>
+                <i className="fa-solid fa-maximize" aria-hidden="true" />
+              </button>
+            )}
             <button
               type="button"
-              className="profile-maximize"
-              onClick={handleMaximizeIntro}
-              aria-label="Center and enlarge profile card"
-              tabIndex={0}>
-              <i className="fa-solid fa-maximize" aria-hidden="true" />
+              className="profile-minimize"
+              onClick={handleMinimize}
+              aria-label="Minimize profile card"
+              tabIndex={isMinimized ? -1 : 0}>
+              <i className="fa-solid fa-window-minimize" aria-hidden="true" />
             </button>
-          )}
-          <button
-            type="button"
-            className="profile-minimize"
-            onClick={handleMinimize}
-            aria-label="Minimize profile card"
-            tabIndex={isMinimized ? -1 : 0}>
-            <i className="fa-solid fa-window-minimize" aria-hidden="true" />
-          </button>
-        </div>
+          </div>
+        )}
 
         <div className="glass-content">
           <div className="profile-compact" aria-hidden={!isMinimized}>
@@ -281,10 +285,12 @@ export const ProfileGlass = ({planetSelectorOpen, onTogglePlanets}) => {
                 <i className="button__icon fa-solid fa-file-pdf" aria-hidden="true" />
                 <span className="button__label">Resume</span>
               </a>
-              <Button iconClass="fa-solid fa-globe"
-                text={planetSelectorOpen ? "Close" : "Planets"}
-                onClick={onTogglePlanets}
-              />
+              {!isMobile && (
+                <Button iconClass="fa-solid fa-globe"
+                  text={planetSelectorOpen ? "Close" : "Planets"}
+                  onClick={onTogglePlanets}
+                />
+              )}
               <Button text="Scroll" iconClass="fa-solid fa-arrow-down" onClick={scrollToContent} />
             </div>
           </div>

@@ -617,13 +617,29 @@
 }
 
 @media (max-width: 888px) {
-  .glass-card.profile-data {
+  .glass-card.profile-data,
+  .glass-card.profile-data.mobile-static {
+    top: 50%;
+    bottom: auto;
+    transform: translate3d(-50%, -50%, 0) scale(1);
     padding: 0.74em 1.44em 0.84em;
     width: fit-content;
     max-width: calc(100vw - 32px);
+    transition:
+      padding 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+      border-radius 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+      width 0.42s cubic-bezier(0.34, 1.2, 0.64, 1);
+  }
+
+  .glass-card.profile-data:not(.minimized):hover {
+    transform: translate3d(-50%, -50%, 0) scale(1);
   }
 
   .glass-card.profile-data.minimized {
     padding: 0.5em 1.2em;
+  }
+
+  .profile-window-controls {
+    display: none;
   }
 }

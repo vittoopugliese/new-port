@@ -6,11 +6,14 @@ import {useEffect, useState} from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import {Planets} from "./components/Planets/Planets";
+import {PlanetsMobile} from "./components/Planets/PlanetsMobile";
 import {GlassSvgDefs} from "./components/Shared/GlassSvgDefs";
+import {useMedia} from "./hooks/useMedia";
 
 function AppContent() {
   const location = useLocation();
   const isMainPage = location.pathname === "/";
+  const {isMobile} = useMedia();
   const [planetSelectorOpen, setPlanetSelectorOpen] = useState(false);
 
   const togglePlanetSelector = () => setPlanetSelectorOpen((open) => !open);
@@ -20,10 +23,14 @@ function AppContent() {
     <>
       <GlassSvgDefs />
       {isMainPage && (
-        <Planets
-          selectorOpen={planetSelectorOpen}
-          closeSelector={closePlanetSelector}
-        />
+        isMobile ? (
+          <PlanetsMobile />
+        ) : (
+          <Planets
+            selectorOpen={planetSelectorOpen}
+            closeSelector={closePlanetSelector}
+          />
+        )
       )}
       <div className="appContainer" data-aos="fade-up">
         <Header data-aos="fade-down" />
