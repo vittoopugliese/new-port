@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { getPlanetData, planets, PLANET_LIGHT_POSITION } from "../../utils/constants";
+import { getPlanetData, planets, PLANET_AMBIENT_LIGHT_COLOR, PLANET_AMBIENT_LIGHT_INTENSITY, PLANET_DIRECTIONAL_LIGHT_INTENSITY, PLANET_LIGHT_POSITION } from "../../utils/constants";
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { gsap } from "gsap";
@@ -8,6 +8,7 @@ import PlanetButton from "./PlanetButton";
 import EffectsPanel from "./EffectsPanel";
 import { LoadingSpinner } from "./../Shared/LoadingSpinner";
 import { EFFECT_CREATORS, setupExtraMoons, createPlanetRings } from "./spaceEffects";
+import { createPlanetSurfaceMaterial } from "./planetMaterial";
 
 const INITIAL_EFFECTS = {
   meteors: false,
@@ -17,10 +18,6 @@ const INITIAL_EFFECTS = {
   distantStar: false,
   galaxy: false,
 };
-
-// Pre-upgrade baseline was ambient 0.94 / directional 1.0 — +20% brightness, soft contrast.
-const AMBIENT_LIGHT_INTENSITY = 0.94 * 1.2;
-const DIRECTIONAL_LIGHT_INTENSITY = 1 * 1.2;
 
 function disposeMaterial(material) {
   if (!material) return;
@@ -126,12 +123,7 @@ export const Planets = ({ selectorOpen = false, closeSelector }) => {
     const planetGeometry = new THREE.SphereGeometry(config.geometrySize, 74, 74);
     const textureLoader = new THREE.TextureLoader(loadingManager);
     const planetTexture = textureLoader.load(currentPlanetarySystem.texture);
-    const planetMaterial = new THREE.MeshStandardMaterial({
-      map: planetTexture,
-      roughness: 1,
-      metalness: 0,
-      transparent: false,
-    });
+    const planetMaterial = createPlanetSurfaceMaterial(planetTexture);
     const planet = new THREE.Mesh(planetGeometry, planetMaterial);
     scene.add(planet);
 
@@ -139,12 +131,7 @@ export const Planets = ({ selectorOpen = false, closeSelector }) => {
     if (config.moonTexturePath) {
       const moonGeometry = new THREE.SphereGeometry(config.moonGeometrySize, 32, 32);
       const moonTexture = textureLoader.load(config.moonTexturePath);
-      const moonMaterial = new THREE.MeshStandardMaterial({
-        map: moonTexture,
-        roughness: 1,
-        metalness: 0,
-        transparent: false,
-      });
+      const moonMaterial = createPlanetSurfaceMaterial(moonTexture);
       moon = new THREE.Mesh(moonGeometry, moonMaterial);
       moon.position.set(...config.initialPosition);
       scene.add(moon);
@@ -156,10 +143,10 @@ export const Planets = ({ selectorOpen = false, closeSelector }) => {
       scene.add(rings.mesh);
     }
 
-    const ambientLight = new THREE.AmbientLight(0x505050, AMBIENT_LIGHT_INTENSITY);
+    const ambientLight = new THREE.AmbientLight(PLANET_AMBIENT_LIGHT_COLOR, PLANET_AMBIENT_LIGHT_INTENSITY);
     scene.add(ambientLight);
 
-    const directionalLight = new THREE.DirectionalLight(0xffffff, DIRECTIONAL_LIGHT_INTENSITY);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, PLANET_DIRECTIONAL_LIGHT_INTENSITY);
     directionalLight.position.set(
       PLANET_LIGHT_POSITION.x,
       PLANET_LIGHT_POSITION.y,

@@ -15,15 +15,26 @@ function AppContent() {
   const isMainPage = location.pathname === "/";
   const {isMobile} = useMedia();
   const [planetSelectorOpen, setPlanetSelectorOpen] = useState(false);
+  const [mobileFull, setMobileFull] = useState(false);
 
   const togglePlanetSelector = () => setPlanetSelectorOpen((open) => !open);
   const closePlanetSelector = () => setPlanetSelectorOpen(false);
+  const toggleMobileFull = () => {
+    setMobileFull((open) => {
+      if (open) setPlanetSelectorOpen(false);
+      return !open;
+    });
+  };
+
+  useEffect(() => {
+    if (!isMobile) setMobileFull(false);
+  }, [isMobile]);
 
   return (
     <>
       <GlassSvgDefs />
       {isMainPage && (
-        isMobile ? (
+        isMobile && !mobileFull ? (
           <PlanetsMobile />
         ) : (
           <Planets
@@ -41,6 +52,8 @@ function AppContent() {
               <MainPage
                 planetSelectorOpen={planetSelectorOpen}
                 onTogglePlanets={togglePlanetSelector}
+                mobileFull={mobileFull}
+                onToggleMobileFull={toggleMobileFull}
               />
             }
           />

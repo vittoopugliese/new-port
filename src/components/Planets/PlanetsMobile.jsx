@@ -1,13 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { getPlanetData, planets, PLANET_LIGHT_POSITION } from "../../utils/constants";
+import { getPlanetData, planets, PLANET_AMBIENT_LIGHT_COLOR, PLANET_AMBIENT_LIGHT_INTENSITY, PLANET_DIRECTIONAL_LIGHT_INTENSITY, PLANET_LIGHT_POSITION } from "../../utils/constants";
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import "./planets.css";
 import { LoadingSpinner } from "../Shared/LoadingSpinner";
+import { createPlanetSurfaceMaterial } from "./planetMaterial";
 
 const PAGE_BACKGROUND = "#171717";
-const AMBIENT_LIGHT_INTENSITY = 0.94 * 1.2;
-const DIRECTIONAL_LIGHT_INTENSITY = 1 * 1.2;
 
 function disposeMaterial(material) {
   if (!material) return;
@@ -52,19 +51,14 @@ export const PlanetsMobile = () => {
     const planetGeometry = new THREE.SphereGeometry(jupiterConfig.geometrySize, 64, 64);
     const textureLoader = new THREE.TextureLoader(loadingManager);
     const planetTexture = textureLoader.load(initialTexture);
-    const planetMaterial = new THREE.MeshStandardMaterial({
-      map: planetTexture,
-      roughness: 1,
-      metalness: 0,
-      transparent: false,
-    });
+    const planetMaterial = createPlanetSurfaceMaterial(planetTexture);
     const planet = new THREE.Mesh(planetGeometry, planetMaterial);
     scene.add(planet);
 
-    const ambientLight = new THREE.AmbientLight(0x505050, AMBIENT_LIGHT_INTENSITY);
+    const ambientLight = new THREE.AmbientLight(PLANET_AMBIENT_LIGHT_COLOR, PLANET_AMBIENT_LIGHT_INTENSITY);
     scene.add(ambientLight);
 
-    const directionalLight = new THREE.DirectionalLight(0xffffff, DIRECTIONAL_LIGHT_INTENSITY);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, PLANET_DIRECTIONAL_LIGHT_INTENSITY);
     directionalLight.position.set(
       PLANET_LIGHT_POSITION.x,
       PLANET_LIGHT_POSITION.y,

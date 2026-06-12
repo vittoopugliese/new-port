@@ -5,7 +5,7 @@ import {Carrousel} from "../components/Carrousel/Carrousel";
 import {Button} from "../components/Shared/Button";
 import {useEffect} from "react";
 
-export const MainPage = ({planetSelectorOpen, onTogglePlanets}) => {
+export const MainPage = ({planetSelectorOpen, onTogglePlanets, mobileFull, onToggleMobileFull}) => {
   useEffect(() => {
     window.scroll(0, 0);
   }, []);
@@ -15,6 +15,8 @@ export const MainPage = ({planetSelectorOpen, onTogglePlanets}) => {
       <ProfileGlass
         planetSelectorOpen={planetSelectorOpen}
         onTogglePlanets={onTogglePlanets}
+        mobileFull={mobileFull}
+        onToggleMobileFull={onToggleMobileFull}
       />
       <Projects />
       <Carrousel />

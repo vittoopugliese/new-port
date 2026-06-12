@@ -40,7 +40,7 @@ const pickDifferentIndex = (current, length) => {
   return next;
 };
 
-export const ProfileGlass = ({planetSelectorOpen, onTogglePlanets}) => {
+export const ProfileGlass = ({planetSelectorOpen, onTogglePlanets, mobileFull, onToggleMobileFull}) => {
   const prefersReducedMotion = usePrefersReducedMotion();
   const {isMobile} = useMedia();
   const [isIntroActive, setIsIntroActive] = useState(() => !prefersReducedMotion && !isMobile);
@@ -285,13 +285,20 @@ export const ProfileGlass = ({planetSelectorOpen, onTogglePlanets}) => {
                 <i className="button__icon fa-solid fa-file-pdf" aria-hidden="true" />
                 <span className="button__label">Resume</span>
               </a>
-              {!isMobile && (
-                <Button iconClass="fa-solid fa-globe"
+              {isMobile && !mobileFull ? (
+                <Button iconClass="fa-solid fa-expand" text="Full" onClick={onToggleMobileFull} />
+              ) : (
+                <Button
+                  iconClass="fa-solid fa-globe"
                   text={planetSelectorOpen ? "Close" : "Planets"}
                   onClick={onTogglePlanets}
                 />
               )}
-              <Button text="Scroll" iconClass="fa-solid fa-arrow-down" onClick={scrollToContent} />
+              {isMobile && mobileFull ? (
+                <Button iconClass="fa-solid fa-compress" text="Load Less" onClick={onToggleMobileFull} />
+              ) : (
+                <Button text="Scroll" iconClass="fa-solid fa-arrow-down" onClick={scrollToContent} />
+              )}
             </div>
           </div>
         </div>

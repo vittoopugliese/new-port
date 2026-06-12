@@ -298,6 +298,11 @@ export function getPlanetData(systemName) {
 /** Dirección de la luz principal del planeta (debe coincidir con el Sol visible). */
 export const PLANET_LIGHT_POSITION = { x: 5, y: 3, z: 5 } as const;
 
+/** Strong ambient fill + moderate sun: bright, soft, no harsh dark side. */
+export const PLANET_AMBIENT_LIGHT_COLOR = 0x888888;
+export const PLANET_AMBIENT_LIGHT_INTENSITY = 0.94 * 2.2;
+export const PLANET_DIRECTIONAL_LIGHT_INTENSITY = 1 * 1.3;
+
 export const SPACE_EFFECTS = [
   { id: "meteors", label: "Meteors", icon: "fa-solid fa-meteor" },
   { id: "sun", label: "Sun", icon: "fa-solid fa-sun" },
