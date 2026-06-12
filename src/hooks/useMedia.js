@@ -1,20 +1,15 @@
-import { useEffect, useState} from "react";
+import {useEffect, useState} from "react";
+
+const BREAKPOINT = 888;
 
 export function useMedia() {
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < BREAKPOINT);
 
   useEffect(() => {
-    window.addEventListener("resize", handleToggle);
-
-    function handleToggle() {
-      window.innerWidth < 888 ? setIsMobile(false) : setIsMobile(true);
-    }
-
-    handleToggle()
-
-    return () => {
-      window.removeEventListener("resize", handleToggle);
-    };
+    const handleResize = () => setIsMobile(window.innerWidth < BREAKPOINT);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return {isMobile};

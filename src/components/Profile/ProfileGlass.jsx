@@ -1,13 +1,16 @@
 import {useCallback, useEffect, useLayoutEffect, useRef, useState} from "react";
 import {Button} from "../Shared/Button";
+import {usePrefersReducedMotion} from "../../hooks/usePrefersReducedMotion";
 import "./profile.css";
 import "./profile-glass.css";
 
-const scrollToContent = () =>
-  window.scrollTo({top: window.innerHeight * 0.8, behavior: "smooth"});
+const scrollToContent = () => window.scrollTo({top: window.innerHeight * 0.8, behavior: "smooth"});
 
 const COLLAPSE_MS = 380;
 const SWAP_MS = 260;
+const ROLE_AUTO_MS = 3_000;
+const INTRO_HOLD_MS = 10_000;
+const SCENE_MOVE_EVENT = "portfolio-scene-move";
 
 const ROLE_TAGS = [
   "Product Engineer",
@@ -16,10 +19,13 @@ const ROLE_TAGS = [
   "Technologic Enthusiast",
   "Mobile Developer",
   "React Native Dev",
+  "Web Developer",
+  "AI tools enthusiast",
   "Full-stack Tinkerer",
   "UI/UX Craftsman",
   "Pixel Perfectionist",
   "AI-powered Builder",
+  "Graduated",
   "Monorepo Wrangler",
   "TypeScript Believer",
   "Coffee to Code Converter",
@@ -34,15 +40,44 @@ const pickDifferentIndex = (current, length) => {
 };
 
 export const ProfileGlass = ({planetSelectorOpen, onTogglePlanets}) => {
+  const prefersReducedMotion = usePrefersReducedMotion();
+  const [isIntroActive, setIsIntroActive] = useState(() => !prefersReducedMotion);
   const [isMinimized, setIsMinimized] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [roleIndex, setRoleIndex] = useState(0);
   const [isSwapping, setIsSwapping] = useState(false);
   const animTimerRef = useRef(null);
   const swapTimerRef = useRef(null);
+  const introTimerRef = useRef(null);
+  const autoSwapTimeoutRef = useRef(null);
+  const isSwappingRef = useRef(false);
   const cardRef = useRef(null);
   const prevWidthRef = useRef(null);
   const widthCleanupRef = useRef(null);
+
+  const dismissIntro = useCallback(() => {
+    if (introTimerRef.current) clearTimeout(introTimerRef.current);
+    setIsIntroActive(false);
+  }, []);
+
+  useEffect(() => {
+    if (!isIntroActive) return;
+
+    let dismissed = false;
+    const onDismissIntro = () => {
+      if (dismissed) return;
+      dismissed = true;
+      dismissIntro();
+    };
+
+    introTimerRef.current = setTimeout(onDismissIntro, INTRO_HOLD_MS);
+    window.addEventListener(SCENE_MOVE_EVENT, onDismissIntro);
+
+    return () => {
+      if (introTimerRef.current) clearTimeout(introTimerRef.current);
+      window.removeEventListener(SCENE_MOVE_EVENT, onDismissIntro);
+    };
+  }, [dismissIntro, isIntroActive]);
 
   const runCollapseAnimation = useCallback((nextMinimized) => {
     if (animTimerRef.current) clearTimeout(animTimerRef.current);
@@ -51,24 +86,60 @@ export const ProfileGlass = ({planetSelectorOpen, onTogglePlanets}) => {
     animTimerRef.current = setTimeout(() => setIsAnimating(false), COLLAPSE_MS);
   }, []);
 
-  useEffect(
-    () => () => {
-      if (animTimerRef.current) clearTimeout(animTimerRef.current);
+  const clearAutoSwap = useCallback(() => {
+    if (autoSwapTimeoutRef.current) {
+      clearTimeout(autoSwapTimeoutRef.current);
+      autoSwapTimeoutRef.current = null;
+    }
+  }, []);
+
+  const performRoleSwap = useCallback(
+    (afterSwap) => {
+      if (isSwappingRef.current) {
+        afterSwap?.();
+        return;
+      }
+      isSwappingRef.current = true;
+      setIsSwapping(true);
       if (swapTimerRef.current) clearTimeout(swapTimerRef.current);
-      if (widthCleanupRef.current) widthCleanupRef.current();
+      swapTimerRef.current = setTimeout(() => {
+        if (cardRef.current) prevWidthRef.current = cardRef.current.offsetWidth;
+        setRoleIndex((current) => pickDifferentIndex(current, ROLE_TAGS.length));
+        isSwappingRef.current = false;
+        setIsSwapping(false);
+        afterSwap?.();
+      }, SWAP_MS);
     },
     [],
   );
 
+  const scheduleAutoSwap = useCallback(() => {
+    clearAutoSwap();
+    if (prefersReducedMotion || isMinimized || planetSelectorOpen) return;
+    autoSwapTimeoutRef.current = setTimeout(() => {
+      performRoleSwap(scheduleAutoSwap);
+    }, ROLE_AUTO_MS);
+  }, [clearAutoSwap, isMinimized, performRoleSwap, planetSelectorOpen, prefersReducedMotion]);
+
+  useEffect(() => {
+    scheduleAutoSwap();
+    return clearAutoSwap;
+  }, [scheduleAutoSwap, clearAutoSwap]);
+
+  useEffect(
+    () => () => {
+      if (animTimerRef.current) clearTimeout(animTimerRef.current);
+      if (swapTimerRef.current) clearTimeout(swapTimerRef.current);
+      clearAutoSwap();
+      if (widthCleanupRef.current) widthCleanupRef.current();
+    },
+    [clearAutoSwap],
+  );
+
   const handleRoleSwap = (event) => {
     event.stopPropagation();
-    if (isSwapping) return;
-    setIsSwapping(true);
-    swapTimerRef.current = setTimeout(() => {
-      if (cardRef.current) prevWidthRef.current = cardRef.current.offsetWidth;
-      setRoleIndex((current) => pickDifferentIndex(current, ROLE_TAGS.length));
-      setIsSwapping(false);
-    }, SWAP_MS);
+    clearAutoSwap();
+    performRoleSwap(scheduleAutoSwap);
   };
 
   // Animate the card width (FLIP) when the role changes length — CSS can't
@@ -110,7 +181,23 @@ export const ProfileGlass = ({planetSelectorOpen, onTogglePlanets}) => {
   const handleMinimize = (event) => {
     event.stopPropagation();
     if (planetSelectorOpen) onTogglePlanets();
+    dismissIntro();
     runCollapseAnimation(true);
+  };
+
+  const handleMaximizeIntro = (event) => {
+    event.stopPropagation();
+    if (prefersReducedMotion) return;
+    if (planetSelectorOpen) onTogglePlanets();
+    if (isMinimized) runCollapseAnimation(false);
+    setIsIntroActive(true);
+  };
+
+  const handleRestoreKeyDown = (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      handleRestore();
+    }
   };
 
   const handleRestore = () => {
@@ -118,30 +205,10 @@ export const ProfileGlass = ({planetSelectorOpen, onTogglePlanets}) => {
     runCollapseAnimation(false);
   };
 
+  const showMaximize = !isIntroActive && !isMinimized && !planetSelectorOpen;
+
   return (
     <div className="profile-container">
-      <svg className="glass-filter-defs" aria-hidden="true">
-        <defs>
-          <filter id="liquid-glass" x="0%" y="0%" width="100%" height="100%">
-            <feTurbulence
-              type="fractalNoise"
-              baseFrequency="0.008 0.012"
-              numOctaves="2"
-              seed="2"
-              result="noise"
-            />
-            <feGaussianBlur in="noise" stdDeviation="2" result="blurredNoise" />
-            <feDisplacementMap
-              in="SourceGraphic"
-              in2="blurredNoise"
-              scale="70"
-              xChannelSelector="R"
-              yChannelSelector="G"
-            />
-          </filter>
-        </defs>
-      </svg>
-
       {planetSelectorOpen && (
         <button
           type="button"
@@ -153,37 +220,36 @@ export const ProfileGlass = ({planetSelectorOpen, onTogglePlanets}) => {
       )}
 
       <div
-        ref={cardRef}
-        className={[
-          "glass-card",
-          "profile-data",
-          isMinimized && "minimized",
-          isAnimating && "is-animating",
-          planetSelectorOpen && "planets-hidden",
-        ]
-          .filter(Boolean)
-          .join(" ")}
-        onWheel={handleWheel}
-        onClick={isMinimized ? handleRestore : undefined}
-        onKeyDown={
-          isMinimized ? (e) => e.key === "Enter" && handleRestore() : undefined
-        }
-        role={isMinimized ? "button" : undefined}
-        tabIndex={isMinimized ? 0 : undefined}
+        className={["glass-card", "profile-data", isIntroActive && "intro-active", isMinimized && "minimized", isAnimating && "is-animating", planetSelectorOpen && "planets-hidden"].filter(Boolean).join(" ")}
+        ref={cardRef} onWheel={handleWheel} onClick={isMinimized ? handleRestore : undefined}
+        onKeyDown={isMinimized ? handleRestoreKeyDown : undefined}
+        role={isMinimized ? "button" : undefined} tabIndex={isMinimized ? 0 : undefined}
         aria-label={isMinimized ? "Expand profile card" : undefined}
-        aria-expanded={!isMinimized}>
+        aria-expanded={isMinimized ? false : undefined}>
         <div className="glass-distortion" aria-hidden="true" />
         <div className="glass-tint" aria-hidden="true" />
         <div className="glass-shine" aria-hidden="true" />
 
-        <button
-          type="button"
-          className="profile-minimize"
-          onClick={handleMinimize}
-          aria-label="Minimize profile card"
-          tabIndex={isMinimized ? -1 : 0}>
-          <i className="fa-solid fa-chevron-down" aria-hidden="true" />
-        </button>
+        <div className="profile-window-controls">
+          {showMaximize && (
+            <button
+              type="button"
+              className="profile-maximize"
+              onClick={handleMaximizeIntro}
+              aria-label="Center and enlarge profile card"
+              tabIndex={0}>
+              <i className="fa-solid fa-maximize" aria-hidden="true" />
+            </button>
+          )}
+          <button
+            type="button"
+            className="profile-minimize"
+            onClick={handleMinimize}
+            aria-label="Minimize profile card"
+            tabIndex={isMinimized ? -1 : 0}>
+            <i className="fa-solid fa-window-minimize" aria-hidden="true" />
+          </button>
+        </div>
 
         <div className="glass-content">
           <div className="profile-compact" aria-hidden={!isMinimized}>
@@ -191,18 +257,29 @@ export const ProfileGlass = ({planetSelectorOpen, onTogglePlanets}) => {
             <span>Vittorio</span>
           </div>
 
-          <div className="profile-expanded" aria-hidden={isMinimized}>
+          <div className="profile-expanded" aria-hidden={isMinimized} inert={isMinimized || undefined}>
             <div className="profile-header">
               <h1>Vittorio...</h1>
               <button type="button" className={`profile-role ${isSwapping ? "is-swapping" : ""}`} onClick={handleRoleSwap} title="Click to shuffle"
                 aria-label={`Role: ${ROLE_TAGS[roleIndex]}. Click to shuffle.`}>
-                {ROLE_TAGS[roleIndex]}
+                <span className="profile-role-label">
+                  {ROLE_TAGS[roleIndex]}
+                  {!prefersReducedMotion && !isMinimized && (
+                    <span className="profile-role-shine" key={roleIndex} aria-hidden="true">
+                      {ROLE_TAGS[roleIndex]}
+                    </span>
+                  )}
+                </span>
               </button>
             </div>
             <p className="profile-tagline">Web & Mobile shipping Android, iOS and Web.</p>
             <div className="profile-buttons">
-              <a href="./Vittorio-Pugliese-Resume.pdf" download>
-                <Button iconClass="fa-solid fa-file-pdf" text="Resume" />
+              <a
+                href="./Vittorio-Pugliese-Resume.pdf"
+                download
+                className="button profile-resume-link">
+                <i className="button__icon fa-solid fa-file-pdf" aria-hidden="true" />
+                <span className="button__label">Resume</span>
               </a>
               <Button iconClass="fa-solid fa-globe"
                 text={planetSelectorOpen ? "Close" : "Planets"}

@@ -22,6 +22,16 @@ nav {
   gap: 2.5em;
 }
 
+.nav-item,
+.navTogglerIcon,
+.closeNavIcon {
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  padding: 0;
+}
+
 .nav-item {
   display: flex;
   justify-content: center;
@@ -101,6 +111,9 @@ nav {
   position: fixed;
   top: 0px;
   left: 0px;
+  border: none;
+  padding: 0;
+  cursor: pointer;
 }
 
 .items-container {

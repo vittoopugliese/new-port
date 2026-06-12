@@ -115,7 +115,7 @@
   z-index: 1;
   opacity: 0.654;
   font-weight: 400;
-  letter-spacing: 0.0654em;
+  letter-spacing: 0.024em;
   scale: 1.07;
   margin: -1px 6px;
 }
@@ -185,28 +185,179 @@
 .socials-container {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   flex-direction: row;
-  gap: 1.6em;
-  margin-left: 0.2em;
-  margin: 1em 0em;
+  gap: 0.85em;
+  margin: 1em 0;
 }
-.social {
-  display: flex;
-  gap: 0.6em;
+
+.social-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: inline-flex;
+}
+
+.social-glass {
+  position: relative;
+  display: inline-flex;
   align-items: center;
-  border: 2px solid var(--dark2);
-  padding: 0.9em 1.2em;
-  border-radius: 1.2em;
-  transition: var(--transition);
+  justify-content: center;
+  padding: 0.75em 1.25em;
+  border-radius: 999px;
+  isolation: isolate;
+  overflow: hidden;
   cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
-.social:hover{
-  scale: 1.04;
+
+.social-glass .glass-distortion,
+.social-glass .glass-tint,
+.social-glass .glass-shine {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
 }
-.social p {
-  font-size: 1.1em;
+
+.social-glass .glass-distortion {
+  z-index: 0;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  backdrop-filter: blur(8px) saturate(160%);
+  -webkit-backdrop-filter: blur(8px) saturate(160%);
+}
+
+@supports (backdrop-filter: url("#liquid-glass-btn")) {
+  .social-glass .glass-distortion {
+    backdrop-filter: url("#liquid-glass-btn") blur(4px) saturate(160%);
+    -webkit-backdrop-filter: url("#liquid-glass-btn") blur(4px) saturate(160%);
+  }
+}
+
+.social-glass .glass-tint {
+  z-index: 1;
+  background: rgba(23, 23, 23, 0.35);
+}
+
+.social-glass .glass-shine {
+  z-index: 2;
+  overflow: hidden;
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.55),
+    inset 0 -1px 1px rgba(255, 255, 255, 0.15),
+    0 4px 16px rgba(0, 0, 0, 0.25);
+  transition: box-shadow 0.2s ease;
+}
+
+.social-glass .glass-shine::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent 2%,
+    rgba(255, 224, 149, 0.07) 10%,
+    rgba(255, 179, 193, 0.1) 18%,
+    rgba(205, 180, 255, 0.09) 26%,
+    rgba(159, 220, 255, 0.07) 34%,
+    transparent 42%,
+    transparent 52%,
+    rgba(255, 224, 149, 0.07) 60%,
+    rgba(255, 179, 193, 0.1) 68%,
+    rgba(205, 180, 255, 0.09) 76%,
+    rgba(159, 220, 255, 0.07) 84%,
+    transparent 92%
+  );
+  mix-blend-mode: screen;
+  will-change: transform;
+  opacity: 0.92;
+  animation: social-iridescent-sweep 8s ease-in-out infinite;
+}
+
+@keyframes social-iridescent-sweep {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.social-glass__content {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 0.55em;
+  pointer-events: none;
+}
+
+.social-glass__icon {
+  font-size: 1.35em;
+  color: var(--social-accent, white);
+  opacity: 0.85;
+  filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.35));
+  transition: opacity 0.2s ease;
+}
+
+.social-glass__label {
+  font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+  font-size: 0.875rem;
   font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+  color: var(--social-accent, white);
+  opacity: 0.72;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  transition: opacity 0.2s ease;
 }
-.social i {
-  font-size: 1.8em;
+
+.social-card-link:hover .social-glass {
+  transform: translateY(-2px) scale(1.04);
+}
+
+.social-card-link:hover .social-glass .glass-shine {
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.7),
+    inset 0 -1px 1px rgba(255, 255, 255, 0.25),
+    0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.social-card-link:hover .social-glass__icon,
+.social-card-link:hover .social-glass__label {
+  opacity: 1;
+}
+
+.social-card-link:active .social-glass {
+  transform: scale(0.97);
+  transition: transform 0.08s ease-out;
+}
+
+.social-card-link:focus-visible .social-glass {
+  outline: none;
+}
+
+.social-card-link:focus-visible .social-glass .glass-shine {
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.55),
+    inset 0 -1px 1px rgba(255, 255, 255, 0.15),
+    0 0 0 2px var(--primary),
+    0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .social-card-link:hover .social-glass,
+  .social-card-link:active .social-glass {
+    transform: none;
+  }
+
+  .social-glass .glass-shine::after {
+    animation: none;
+    opacity: 0;
+  }
 }

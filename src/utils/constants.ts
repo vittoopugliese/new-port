@@ -295,8 +295,12 @@ export function getPlanetData(systemName) {
   return moonData[systemName];
 }
 
+/** Dirección de la luz principal del planeta (debe coincidir con el Sol visible). */
+export const PLANET_LIGHT_POSITION = { x: 5, y: 3, z: 5 } as const;
+
 export const SPACE_EFFECTS = [
   { id: "meteors", label: "Meteors", icon: "fa-solid fa-meteor" },
+  { id: "sun", label: "Sun", icon: "fa-solid fa-sun" },
   { id: "blackHole", label: "Black Hole", icon: "fa-solid fa-circle" },
   { id: "neutronStar", label: "Neutron Star", icon: "fa-solid fa-atom" },
   { id: "distantStar", label: "Star", icon: "fa-solid fa-star" },

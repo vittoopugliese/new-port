@@ -33,15 +33,6 @@ function createAccretionTexture(size = 512) {
   return texture;
 }
 
-function disposeObject3D(object) {
-  object.traverse((child) => {
-    if (child.geometry) child.geometry.dispose();
-    if (child.material) {
-      if (Array.isArray(child.material)) child.material.forEach((m) => m.dispose());
-      else child.material.dispose();
-    }
-  });
-}
 
 function createRingTexture(style) {
   const width = 1024;
@@ -154,23 +145,43 @@ export function createPlanetRings(planetConfig) {
   };
 }
 
+function disposeMaterial(material) {
+  if (!material) return;
+  if (Array.isArray(material)) {
+    material.forEach(disposeMaterial);
+    return;
+  }
+  material.map?.dispose();
+  material.dispose();
+}
+
+function disposeMesh(scene, mesh) {
+  if (!mesh) return;
+  scene.remove(mesh);
+  mesh.geometry?.dispose();
+  disposeMaterial(mesh.material);
+}
+
 /** Extra moons always visible per planet — not a toggle effect. */
 export function setupExtraMoons(planetConfig, textureLoader, scene, timeline) {
   const extraMoons = planetConfig.extraMoons ?? [];
   const moonMeshes = [];
   const disposables = [];
+  const sharedMoonTexture =
+    extraMoons.length > 0 ? textureLoader.load("/moon.webp") : null;
 
   extraMoons.forEach((moonData, index) => {
     const geometry = new THREE.SphereGeometry(moonData.size, 24, 24);
-    const texture = textureLoader.load("/moon.webp");
     const material = new THREE.MeshStandardMaterial({
-      map: texture,
+      map: sharedMoonTexture,
       color: moonData.color,
+      roughness: 1,
+      metalness: 0,
     });
     const mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
     moonMeshes.push({ mesh, ...moonData, index });
-    disposables.push({ geometry, material, texture });
+    disposables.push({ geometry, material });
 
     mesh.scale.set(0, 0, 0);
     timeline.fromTo(
@@ -197,6 +208,7 @@ export function setupExtraMoons(planetConfig, textureLoader, scene, timeline) {
         geometry.dispose();
         material.dispose();
       });
+      sharedMoonTexture?.dispose();
     },
   };
 }
@@ -315,6 +327,9 @@ export function createMeteorShower() {
     },
     dispose() {
       meteors.forEach((m) => {
+        group.remove(m.mesh);
+        group.remove(m.trail);
+        if (m.glow) group.remove(m.glow);
         m.mesh.geometry.dispose();
         m.mesh.material.dispose();
         m.trail.geometry.dispose();
@@ -322,7 +337,6 @@ export function createMeteorShower() {
         if (m.glow) m.glow.material.dispose();
       });
       glowTexture.dispose();
-      disposeObject3D(group);
     },
   };
 }
@@ -425,7 +439,7 @@ export function createBlackHole() {
   group.add(jetDown.points);
 
   group.scale.set(0, 0, 0);
-  gsap.to(group.scale, {
+  const introTween = gsap.to(group.scale, {
     x: sizeScale,
     y: sizeScale,
     z: sizeScale,
@@ -476,6 +490,7 @@ export function createBlackHole() {
       updateJet(jetDown, elapsed, delta, pulse);
     },
     dispose() {
+      introTween.kill();
       coreGeometry.dispose();
       coreMaterial.dispose();
       haloMaterial.map?.dispose();
@@ -651,7 +666,7 @@ export function createNeutronStar() {
   group.add(sparks);
 
   group.scale.set(0, 0, 0);
-  gsap.to(group.scale, {
+  const introTween = gsap.to(group.scale, {
     x: sizeScale,
     y: sizeScale,
     z: sizeScale,
@@ -710,6 +725,7 @@ export function createNeutronStar() {
       updateJet(jetDown, elapsed, delta, pulse);
     },
     dispose() {
+      introTween.kill();
       coreGeometry.dispose();
       coreMaterial.dispose();
       coronaTexture.dispose();
@@ -729,6 +745,75 @@ export function createNeutronStar() {
       jetUp.material.dispose();
       jetDown.geometry.dispose();
       jetDown.material.dispose();
+    },
+  };
+}
+
+export function createDistantSun(sceneApi) {
+  const group = new THREE.Group();
+  const lightDir = sceneApi?.lightDirection?.clone() ?? new THREE.Vector3(5, 3, 5).normalize();
+
+  // Misma dirección que la luz, lejos en el fondo pero dentro del encuadre de la cámara.
+  group.position.set(
+    lightDir.x * 310,
+    lightDir.y * 310,
+    -420,
+  );
+
+  const coronaTexture = createRadialTexture([
+    [0, "rgba(255, 250, 220, 0)"],
+    [0.25, "rgba(255, 230, 160, 0.12)"],
+    [0.48, "rgba(255, 200, 90, 0.22)"],
+    [0.68, "rgba(255, 170, 60, 0.12)"],
+    [1, "rgba(255, 120, 30, 0)"],
+  ], 512);
+
+  const outerMaterial = new THREE.SpriteMaterial({
+    map: coronaTexture,
+    transparent: true,
+    opacity: 0.42,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+    depthTest: false,
+  });
+  const outerGlow = new THREE.Sprite(outerMaterial);
+  outerGlow.scale.set(90, 90, 1);
+  group.add(outerGlow);
+
+  const coreMaterial = new THREE.SpriteMaterial({
+    map: createRadialTexture([
+      [0, "rgba(255, 255, 255, 0.95)"],
+      [0.42, "rgba(255, 255, 220, 0.5)"],
+      [1, "rgba(255, 240, 180, 0)"],
+    ], 256),
+    transparent: true,
+    opacity: 0.52,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+    depthTest: false,
+  });
+  const core = new THREE.Sprite(coreMaterial);
+  core.scale.set(11, 11, 1);
+  group.add(core);
+
+  group.scale.set(0, 0, 0);
+  const introTween = gsap.to(group.scale, { x: 1, y: 1, z: 1, duration: 1.6, ease: "power2.out" });
+
+  return {
+    object: group,
+    update(elapsed) {
+      const pulse = 0.92 + Math.sin(elapsed * 0.7) * 0.06;
+
+      outerMaterial.opacity = 0.36 * pulse;
+      coreMaterial.opacity = 0.46 + Math.sin(elapsed * 1.1) * 0.04;
+      outerGlow.scale.set(90 * pulse, 90 * pulse, 1);
+    },
+    dispose() {
+      introTween.kill();
+      coronaTexture.dispose();
+      outerMaterial.dispose();
+      coreMaterial.map?.dispose();
+      coreMaterial.dispose();
     },
   };
 }
@@ -768,7 +853,7 @@ export function createDistantStar() {
   group.add(core);
 
   group.scale.set(0, 0, 0);
-  gsap.to(group.scale, { x: 1, y: 1, z: 1, duration: 1.5, ease: "power2.out" });
+  const introTween = gsap.to(group.scale, { x: 1, y: 1, z: 1, duration: 1.5, ease: "power2.out" });
 
   return {
     object: group,
@@ -779,6 +864,7 @@ export function createDistantStar() {
       sprite.scale.set(25 * pulse, 25 * pulse, 1);
     },
     dispose() {
+      introTween.kill();
       glowTexture.dispose();
       coreMaterial.map?.dispose();
       spriteMaterial.dispose();
@@ -929,14 +1015,16 @@ export function createGalaxyArm() {
   // Fade-in de todo el conjunto. El glow central usa un proxy porque su
   // opacidad también se modula por frame en update().
   const fade = { value: 0 };
-  gsap.to(fade, { value: 1, duration: 3, ease: "power2.out" });
-  gsap.to(starMaterial, { opacity: 0.85, duration: 2.5, ease: "power2.out" });
-  nebulaMaterials.forEach(({ material, target }) =>
-    gsap.to(material, { opacity: target, duration: 3, ease: "power2.out" }),
-  );
-  dustMaterials.forEach(({ material, target }) =>
-    gsap.to(material, { opacity: target, duration: 3, ease: "power2.out" }),
-  );
+  const gsapTweens = [
+    gsap.to(fade, { value: 1, duration: 3, ease: "power2.out" }),
+    gsap.to(starMaterial, { opacity: 0.85, duration: 2.5, ease: "power2.out" }),
+    ...nebulaMaterials.map(({ material, target }) =>
+      gsap.to(material, { opacity: target, duration: 3, ease: "power2.out" }),
+    ),
+    ...dustMaterials.map(({ material, target }) =>
+      gsap.to(material, { opacity: target, duration: 3, ease: "power2.out" }),
+    ),
+  ];
 
   return {
     object: group,
@@ -946,6 +1034,7 @@ export function createGalaxyArm() {
       coreGlowMaterial.opacity = (0.14 + Math.sin(elapsed * 0.35) * 0.025) * fade.value;
     },
     dispose() {
+      gsapTweens.forEach((tween) => tween.kill());
       disposables.forEach((item) => item.dispose());
     },
   };
@@ -953,6 +1042,7 @@ export function createGalaxyArm() {
 
 export const EFFECT_CREATORS = {
   meteors: createMeteorShower,
+  sun: createDistantSun,
   blackHole: createBlackHole,
   neutronStar: createNeutronStar,
   distantStar: createDistantStar,

@@ -46,7 +46,14 @@ function AppContent() {
 
 export default function App() {
   useEffect(() => {
-    AOS.init();
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    AOS.init({
+      once: true,
+      disable: prefersReducedMotion,
+    });
   }, []);
 
   return (

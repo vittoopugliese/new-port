@@ -11,12 +11,12 @@ export const Header = () => {
   const location = useLocation();
 
   return (
-    <header style={{height: !isMobile ? "74px" : "90px"}}>
-      {isMobile ? <NavLarge /> : <NavSmall />}
+    <header style={{height: isMobile ? "90px" : "74px"}}>
+      {isMobile ? <NavSmall /> : <NavLarge />}
 
       {!isMobile && location.pathname !== "/" && (
         <img
-          src="../avatar.png"
+          src="/avatar.png"
           onClick={() => navigate("/")}
           alt="my personal image"
           draggable={false}

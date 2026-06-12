@@ -1,20 +1,24 @@
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 
 export const NavLink = ({text, path, iconClass, setNavOpen}) => {
   const navigate = useNavigate();
-  const location = window.location.pathname;
+  const location = useLocation();
+  const isActive = location.pathname === path;
+
+  const handleNavigate = () => {
+    navigate(path);
+    setNavOpen?.(false);
+  };
 
   return (
-    <div
-      onClick={() => {
-        navigate(path)
-        if(setNavOpen) setNavOpen(false)
-      }}
-      className={location == path ? 'nav-item nav-item-br' : 'nav-item'}
-      style={{fontWeight: '600'}}
-      >
-      <i className={iconClass}></i>
+    <button
+      type="button"
+      onClick={handleNavigate}
+      className={isActive ? "nav-item nav-item-br" : "nav-item"}
+      style={{fontWeight: "600"}}
+      aria-current={isActive ? "page" : undefined}>
+      <i className={iconClass} aria-hidden="true" />
       <p>{text}</p>
-    </div>
+    </button>
   );
 };

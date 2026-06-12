@@ -19,22 +19,37 @@
 /* Compact card anchored to the bottom */
 .glass-card.profile-data {
   position: absolute;
+  top: auto;
   bottom: 18px;
   left: 50%;
   margin-top: 0;
-  transform: translate3d(-50%, 0, 0);
+  transform: translate3d(-50%, 0, 0) scale(1);
+  transform-origin: center center;
   padding: 1em 2.16em 0.96em;
   border-radius: 1.75em;
   /* width is animated via JS FLIP (see ProfileGlass.jsx) since CSS can't
      transition a content-driven width on its own */
   width: fit-content;
   transition:
+    top 1.1s cubic-bezier(0.4, 0, 0.2, 1),
+    bottom 1.1s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 1.1s cubic-bezier(0.34, 1.1, 0.64, 1),
     padding 0.38s cubic-bezier(0.4, 0, 0.2, 1),
     border-radius 0.38s cubic-bezier(0.4, 0, 0.2, 1),
     width 0.42s cubic-bezier(0.34, 1.2, 0.64, 1);
 }
 
+/* Hero intro — centered on load until timeout or Three.js interaction */
+.glass-card.profile-data.intro-active {
+  top: 50%;
+  bottom: auto;
+  transform: translate3d(-50%, -50%, 0) scale(1.254);
+}
+
 .glass-card.profile-data.minimized {
+  top: auto;
+  bottom: 18px;
+  transform: translate3d(-50%, 0, 0) scale(1);
   padding: 0.5em 1.2em;
   border-radius: 999px;
   cursor: pointer;
@@ -52,6 +67,11 @@
     padding 0.38s cubic-bezier(0.4, 0, 0.2, 1),
     border-radius 0.38s cubic-bezier(0.4, 0, 0.2, 1),
     width 0.42s cubic-bezier(0.34, 1.2, 0.64, 1);
+}
+
+.glass-card.profile-data.planets-hidden *,
+.glass-card.profile-data.minimized .profile-expanded * {
+  animation-play-state: paused !important;
 }
 
 /* Compact pill shown while the planet selector is open */
@@ -118,8 +138,8 @@
   }
 }
 
-.glass-card.profile-data:not(.minimized):hover {
-  transform: translate3d(-50%, -3px, 0);
+.glass-card.profile-data:not(.minimized):not(.intro-active):hover {
+  transform: translate3d(-50%, -3px, 0) scale(1);
   transition:
     padding 0.38s cubic-bezier(0.4, 0, 0.2, 1),
     border-radius 0.38s cubic-bezier(0.4, 0, 0.2, 1),
@@ -145,6 +165,19 @@
   background-color: transparent;
   flex-shrink: 0;
   white-space: nowrap;
+  cursor: pointer;
+  pointer-events: auto;
+  position: relative;
+  opacity: 0.92;
+  letter-spacing: 0.01em;
+  transition:
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+    filter 0.3s ease;
+}
+
+.glass-card.profile-data .profile-role-label {
+  position: relative;
+  display: inline-block;
   background-image: linear-gradient(
     90deg,
     #ffe095 0%,
@@ -159,23 +192,61 @@
   background-position: 0% 50%;
   -webkit-background-clip: text;
   background-clip: text;
-  color: transparent;
-  text-shadow: none;
-  filter: drop-shadow(0 1px 8px rgba(0, 0, 0, 0.5));
-  cursor: pointer;
-  pointer-events: auto;
+  scale: 1.0654;
   position: relative;
-  opacity: 0.92;
-  letter-spacing: 0.01em;
+  top: 0;
+  left: 7px;
+  color: transparent;
+  filter: drop-shadow(0 1px 8px rgba(0, 0, 0, 0.5));
   animation: gradient-flow 7s linear infinite;
-  transition:
-    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
-    filter 0.3s ease;
+}
+
+.glass-card.profile-data .profile-role-shine {
+  position: absolute;
+  inset: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  white-space: inherit;
+  background-image: linear-gradient(
+    105deg,
+    transparent 0%,
+    transparent 38%,
+    rgba(255, 255, 255, 0.95) 50%,
+    transparent 62%,
+    transparent 100%
+  );
+  background-size: 280% 100%;
+  background-position: 120% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  pointer-events: none;
+  animation: role-shine-sweep 3s cubic-bezier(0.42, 0, 0.18, 1) forwards;
+}
+
+@keyframes role-shine-sweep {
+  0% {
+    background-position: 120% 0;
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  88% {
+    opacity: 1;
+  }
+  100% {
+    background-position: -120% 0;
+    opacity: 0;
+  }
 }
 
 /* Relucent hover: speeds the flow, brightens, and pops slightly */
 .glass-card.profile-data .profile-role:hover {
   transform: translateY(-1px) scale(1.021);
+}
+
+.glass-card.profile-data .profile-role:hover .profile-role-label {
   filter: drop-shadow(0 2px 14px rgba(255, 255, 255, 0.35))
     brightness(1.18) saturate(1.25);
   animation-duration: 2.2s;
@@ -186,13 +257,23 @@
 }
 
 .glass-card.profile-data .profile-role:focus-visible {
-  outline: none;
+  outline: 2px solid rgba(255, 224, 149, 0.85);
+  outline-offset: 3px;
+  border-radius: 0.2em;
+}
+
+.glass-card.profile-data .profile-role:focus-visible .profile-role-label {
   filter: drop-shadow(0 2px 14px rgba(255, 255, 255, 0.4)) brightness(1.2);
 }
 
 /* Swap transition — fade + lift out, content swaps mid-animation */
-.glass-card.profile-data .profile-role.is-swapping {
+.glass-card.profile-data .profile-role.is-swapping .profile-role-label {
   animation: gradient-flow 7s linear infinite, role-swap 0.26s ease both;
+}
+
+.glass-card.profile-data .profile-role.is-swapping .profile-role-shine {
+  opacity: 0;
+  animation: none;
 }
 
 @keyframes role-swap {
@@ -273,12 +354,19 @@
   font-size: 0.78rem;
 }
 
-/* Minimize control */
-.profile-minimize {
+/* Window controls — minimize / maximize */
+.profile-window-controls {
   position: absolute;
   top: 6px;
   right: 12px;
   z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.profile-minimize,
+.profile-maximize {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -291,20 +379,27 @@
   color: rgba(255, 255, 255, 0.55);
   font-size: 0.54em;
   cursor: pointer;
-  justify-content: center;
-  align-items: center;
   text-align: center;
   opacity: 1;
   visibility: visible;
   transition: opacity 0.2s ease, visibility 0.2s ease, background 0.2s ease, color 0.2s ease;
 }
 
-.profile-minimize:hover {
+.profile-minimize:hover,
+.profile-maximize:hover {
   background: rgba(255, 255, 255, 0.18);
   color: white;
 }
 
-.glass-card.profile-data.minimized .profile-minimize {
+.profile-maximize i {
+  font-size: 0.92em;
+}
+
+.profile-minimize i {
+  font-size: 0.82em;
+}
+
+.glass-card.profile-data.minimized .profile-window-controls {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -479,6 +574,7 @@
   .profile-compact,
   .profile-expanded,
   .profile-minimize,
+  .profile-maximize,
   .profile-restore-pill {
     transition: none;
     animation: none;
@@ -488,16 +584,26 @@
     opacity: 1;
   }
 
-  .glass-card.profile-data:not(.minimized):hover {
-    transform: translate3d(-50%, 0, 0);
+  .glass-card.profile-data:not(.minimized):hover,
+  .glass-card.profile-data.intro-active {
+    transform: translate3d(-50%, 0, 0) scale(1);
   }
 
-  .glass-card.profile-data .profile-role {
+  .glass-card.profile-data.intro-active {
+    top: auto;
+    bottom: 18px;
+  }
+
+  .glass-card.profile-data .profile-role-label {
     animation: none;
   }
 
-  .glass-card.profile-data .profile-role.is-swapping {
+  .glass-card.profile-data .profile-role.is-swapping .profile-role-label {
     animation: none;
+  }
+
+  .glass-card.profile-data .profile-role-shine {
+    display: none;
   }
 
   .glass-card.profile-data .profile-role:hover {

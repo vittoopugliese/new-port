@@ -1,8 +1,13 @@
-const PlanetButton = ({texture, system, onClick, isActive, moonName}) => {
+const PlanetButton = ({texture, system, onClick, isActive}) => {
   return (
-    <button onClick={onClick} className={isActive ? "active" : ""}>
-      <img src={texture} alt={system} className="texture-thumb" />
-        <span>{system}</span> 
+    <button
+      type="button"
+      onClick={onClick}
+      className={isActive ? "active" : ""}
+      aria-pressed={isActive}
+      aria-label={`Select ${system} planetary system`}>
+      <img src={texture} alt="" className="texture-thumb" aria-hidden="true" />
+      <span>{system}</span>
     </button>
   );
 };

@@ -19,7 +19,14 @@ export const ProjectBox = ({project}) => {
   }));
 
   const handleOpenLink = () => {
-    if (project.link) window.open(project.link);
+    if (project.link) window.open(project.link, "_blank", "noopener,noreferrer");
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      handleOpenLink();
+    }
   };
 
   const stopClick = (e) => e.stopPropagation();
@@ -30,6 +37,10 @@ export const ProjectBox = ({project}) => {
         className="project-box"
         data-aos="fade-up"
         onClick={handleOpenLink}
+        onKeyDown={handleKeyDown}
+        role={project.link ? "link" : undefined}
+        tabIndex={project.link ? 0 : undefined}
+        aria-label={project.link ? `Open ${project.title} project` : undefined}
       >
         <div className="project-image-container" onClick={stopClick}>
           {project.images?.length ? (
