@@ -4,8 +4,8 @@ import * as THREE from "three";
 export function createPlanetSurfaceMaterial(map) {
   return new THREE.MeshStandardMaterial({
     map,
-    roughness: 0.78,
-    metalness: 0.14,
-    transparent: false,
+    roughness: 0.64,
+    metalness: 0.54,
+    transparent: true,
   });
 }
