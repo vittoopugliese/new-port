@@ -1,11 +1,11 @@
 import * as THREE from "three";
 
-/** Matte surface with Phong lighting — bright response, zero specular highlights. */
+/** PBR surface with a subtle metallic sheen on the lit side. */
 export function createPlanetSurfaceMaterial(map) {
-  return new THREE.MeshPhongMaterial({
+  return new THREE.MeshStandardMaterial({
     map,
-    specular: 0x000000,
-    shininess: 0,
+    roughness: 0.78,
+    metalness: 0.14,
     transparent: false,
   });
 }
