@@ -1,33 +1,34 @@
-import React, {useEffect, useRef, useState} from "react";
-import {TechImages} from "./TechImages";
+import {useState} from "react";
+import {CarouselItem} from "./CarouselItem";
 import "./carrousel.css";
-import { SectionTitle } from "../Shared/SectionTitle";
-import { techslogos } from "../../utils/constants";
+import {SectionTitle} from "../Shared/SectionTitle";
 
-export const Carrousel = () => {
-  const [techSelected, setTechSelected] = useState('Hover a tech to see a description...');
-  const [opacity, setOpacity] = useState(0);
-  const [carrouselVel, setCarrouselVel] = useState(50);
-
-  function handleTechSelected(e){
-    setTechSelected(e)
-  }
+export const Carrousel = ({iconClass, title, items, logoFolder, placeholderDesc, className, carrouselVel = 50, }) => {
+  const [selectedDesc, setSelectedDesc] = useState(placeholderDesc);
+  const [descVisible, setDescVisible] = useState(false);
 
   return (
-    <section className="carousel">
+    <section className={["carousel", className].filter(Boolean).join(" ")}>
       <div className="carrousel-velocity">
-      <SectionTitle iconClass={'fa-solid fa-microchip'} title={'Technologies I use'}/>
+        <SectionTitle iconClass={iconClass} title={title} />
       </div>
 
-      <p className="tech-desc" style={{opacity:opacity ? '1' : '0'}} > {techSelected} </p>
-
       <div className="slider">
-        <div className="slide-track" style={{ '--carrousel-vel': carrouselVel + 's' }}>
+        <div className="slide-track" style={{"--carrousel-vel": carrouselVel + "s"}}>
           <div className="slide">
-            {techslogos.map((t, i) => <TechImages tech={t} key={i * i} techHover={e => setOpacity(e)} techSelected={handleTechSelected} />)}
+            {items.map((item, i) => (
+              <CarouselItem key={item.name + i} item={item} logoFolder={logoFolder}
+                onUnhover={() => setDescVisible(false)}
+                onHover={(desc) => {
+                  setDescVisible(true);
+                  setSelectedDesc(desc);
+                }}
+              />
+            ))}
           </div>
         </div>
       </div>
+      <p className="carousel-desc" style={{opacity: descVisible ? "1" : "0"}}>{selectedDesc}</p>
     </section>
   );
 };

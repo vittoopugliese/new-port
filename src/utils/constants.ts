@@ -1,7 +1,7 @@
 export const projects = [
   {
     title: "SoundCloud Track Downloader",
-    description: "Chrome extension I built for myself to download SoundCloud tracks — now at 15,000+ users. One-click inline downloads, full playlist and likes support, background bulk jobs with pause/resume, and virtualized selection for thousands of tracks.",
+    description: "Chrome extension I built for myself to download SoundCloud tracks, now at 15,000+ users. One-click inline downloads, full playlist and likes support, background bulk jobs with pause/resume, and virtualized selection for thousands of tracks.",
     images: [
       "./project-images/STD1.jpeg",
       "./project-images/STD2.jpeg",
@@ -61,13 +61,13 @@ export const moreProjects = [
     tech: ["angular", "typescript", "firebase"],
     aos: 'fade-right'
   },
-  {
-    title: "Breaking Bad Quotes",
-    description: "Simple page to get quotes from Breaking Bad's characters.",
-    link: "https://vittoopugliese.github.io/breakingBadQuotes-/",
-    tech: ["react", "breakingbad"],
-    aos: 'fade-right'
-  },
+  // {
+  //   title: "Breaking Bad Quotes",
+  //   description: "Simple page to get quotes from Breaking Bad's characters.",
+  //   link: "https://vittoopugliese.github.io/breakingBadQuotes-/",
+  //   tech: ["react", "breakingbad"],
+  //   aos: 'fade-right'
+  // },
   {
     title: "Previous Portfolio",
     description: "My own old portfolio page made with vanilla JS.",
@@ -75,6 +75,23 @@ export const moreProjects = [
     tech: ["html", "css", "javascript"],
     aos: 'fade-left'
   },
+];
+
+export const favoriteModels = [
+  {name: "GPT-5.5 (xhigh)", logo: "openai", desc: "My heavy-lift mode: xhigh reasoning for ambiguous, multi-step work, it plans ahead, chains tools, and keeps going until the task is actually done."},
+  {name: "Claude Fable 5", logo: "anthropic", desc: "Anthropic's most capable widely released model. First pick for long-horizon agentic work and the hardest reasoning problems."},
+  {name: "Claude Opus 4.8", logo: "anthropic", desc: "Reliable frontier depth without overthinking. Great when I want Opus-level quality on complex tasks with a predictable feel."},
+  {name: "Composer 2.5", logo: "cursor.png", desc: "Cursor's frontier multimodal model with native long-context and best cost-efficiency in the 2026 top-10. Strong needle-in-haystack retrieval over very long documents."},
+  {name: "Gemini 3.1 Pro", logo: "gemini.webp", desc: "Google's frontier multimodal model with native long-context and best cost-efficiency in the 2026 top-10. Strong needle-in-haystack retrieval over very long documents."},
+  {name: "GPT-5.5 (medium)", logo: "openai", desc: "Daily driver, medium effort balances speed and smarts. Fast enough to iterate, capable enough for real features."},
+  {name: "Claude Opus 4.5", logo: "anthropic", desc: "Premium intelligence with practical performance. Still excellent for complex reasoning when I don't need the latest frontier tier."},
+  {name: "Grok 4.3", logo: "grok.png", desc: "Benchmark leader in pure reasoning across 2026 rankings. First pick when the workload is logic-heavy, hard science, or math, it plans deep and doesn't cut corners."},
+  {name: "DeepSeek V4 Pro", logo: "deepseek.png", desc: "MIT-licensed open-weight at frontier quality with a 75% price cut. Near-frontier reasoning at $0.28 input / $0.42 output, the best absolute value in 2026."},
+  {name: "GPT-5.5 Pro", logo: "openai", desc: "When accuracy beats latency. Extra test-time compute for tasks where a wrong answer costs more than waiting."},
+  {name: "Qwen 3.7 Max", logo: "qwen.png", desc: "Surprised the field with benchmark wins in spring 2026. Cheapest model in the GPQA Diamond top-10. Reach for it when budget matters but intelligence can't slip."},
+  {name: "Claude Opus 4.6", logo: "anthropic", desc: "1M-token context for entire monorepos. Agent Teams make large refactors and cross-package changes feel manageable."},
+  {name: "MiniMax M3", logo: "minimax.webp", desc: "Frontier-class coding as open-weight at ~$0.60/M tokens. Shipped June 2025 and immediately became the serious self-hoster alternative to proprietary APIs."},
+  {name: "Claude Sonnet 4.6", logo: "anthropic", desc: "Best speed-to-intelligence ratio. My go-to for rapid prototyping when Opus would be overkill."},
 ];
 
 export const techslogos = [
@@ -85,7 +102,7 @@ export const techslogos = [
   {name: "Angular", desc: "Front-end framework by Google. Used for building dynamic and scalable apps."},
   {name: "RxJS", desc: "Reactive programming library. It allows working with asynchronous data streams."},
   {name: "React", desc: "JavaScript library by Meta that's used for building user interfaces."},
-  {name: "Next", desc: "Full Stack React framework for building server-side rendered and static websites."},
+  {name: "Next", logo: "Next.png", desc: "Full Stack React framework for building server-side rendered and static websites."},
   {name: "Expo", desc: "Framework for React Native that allows you to build mobile apps."},
   {name: "Tailwind", desc: "CSS framework that works with classes."},
   {name: "NodeJS", desc: "A JS runtime environment that allows JS to be run on the server-side."},
@@ -96,7 +113,6 @@ export const techslogos = [
 export const socials = [
   { name: "LinkedIn", color: "#466cf4", link: "https://www.linkedin.com/in/vittoopugliese/", },
   { name: "GitHub", color: "#d5d5d5", link: "https://github.com/vittoopugliese" },
-  { name: "Twitter", color: "#549ef9", link: "https://twitter.com/vittoopugliese", },
   { name: "SoundCloud", color: "#f09c34", link: "https://soundcloud.com/tttorio", },
 ];
 
@@ -115,7 +131,7 @@ export const experience = [
     title: "FrontEnd Developer - Kubrik Digital",
     date: "Sep 2022 - Nov 2025",
     jobItems: [
-      "Led a React Native (Expo) app for a Canadian client, fully owning the project from June 2024 — scalable architecture, Excel reports automation, and direct client communication with excellent feedback.",
+      "Led a React Native (Expo) app for a Canadian client, fully owning the project from June 2024, scalable architecture, Excel reports automation, and direct client communication with excellent feedback.",
       "Migrated an internal ERP from Angular 9 to 16, cutting response times by 25%.",
       "Built reusable components alongside the UX/UI team to speed up development.",
       "Stack: React Native, Expo, TypeScript, Redux, Angular, HTML5, CSS, Git.",
@@ -126,7 +142,7 @@ export const experience = [
     date: "Aug 2020",
     jobItems: [
       "Self-taught from day one: learned HTML, CSS and JavaScript on my own instead of going straight to university.",
-      "In 2024, with two years of work experience, enrolled at UTN (Universidad Tecnológica Nacional) for a Computer Science degree — graduated in 2026!",
+      "In 2024, with two years of work experience, enrolled at UTN (Universidad Tecnológica Nacional) for a Computer Science degree, graduated in 2026!",
     ],
   },
 ];

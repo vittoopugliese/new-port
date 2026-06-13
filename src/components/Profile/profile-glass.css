@@ -157,7 +157,7 @@
 /* Interactive role tag — animated iridescent gradient, click to shuffle */
 .glass-card.profile-data .profile-role {
   font-family: inherit;
-  font-size: 1.154em;
+  font-size: 1.254em;
   font-weight: 600;
   margin: 0;
   padding: 0.05em 0.15em;
@@ -192,9 +192,8 @@
   background-position: 0% 50%;
   -webkit-background-clip: text;
   background-clip: text;
-  scale: 1.0654;
   position: relative;
-  top: 0;
+  top: -1px;
   left: 7px;
   color: transparent;
   filter: drop-shadow(0 1px 8px rgba(0, 0, 0, 0.5));
@@ -509,16 +508,16 @@
 
 .glass-tint {
   z-index: 1;
-  background: rgba(23, 23, 23, 0.35);
+  background: rgba(23, 23, 23, 0.42);
 }
 
 .glass-shine {
   z-index: 2;
   overflow: hidden;
   box-shadow:
-    inset 1px 1px 0 rgba(255, 255, 255, 0.4),
-    inset -1px -1px 0 rgba(255, 255, 255, 0.15),
-    inset 0 0 20px rgba(255, 255, 255, 0.05);
+    inset 1px 1px 0 rgba(255, 255, 255, 0.54),
+    inset -1px -1px 0 rgba(255, 255, 255, 0.24),
+    inset 0 0 20px rgba(255, 255, 255, 0.054);
   transition: box-shadow 0.2s ease;
 }
 

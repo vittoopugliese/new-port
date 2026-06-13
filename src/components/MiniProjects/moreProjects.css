@@ -1,5 +1,5 @@
 .more-projects-section {
-  margin-top: 10em;
+  margin-top: 2em;
 }
 
 .more-projects-container {
@@ -62,6 +62,6 @@
 
 @media (max-width: 888px) {
   .more-projects-section {
-    margin-top: 9em !important;
+    margin-top: 1.5em !important;
   }
 }

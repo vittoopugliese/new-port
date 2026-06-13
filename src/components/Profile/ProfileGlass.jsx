@@ -276,7 +276,7 @@ export const ProfileGlass = ({planetSelectorOpen, onTogglePlanets, mobileFull, o
                 </span>
               </button>
             </div>
-            <p className="profile-tagline">Web & Mobile shipping Android, iOS and Web.</p>
+            <p className="profile-tagline">Shipping Android, iOS and Web since 2020.</p>
             <div className="profile-buttons">
               <a
                 href="./Vittorio-Pugliese-Resume.pdf"
