@@ -1,36 +1,32 @@
 .map-controls-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 10002;
+  z-index: 10050;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 1.5em;
-  background: rgba(0, 0, 0, 0.45);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.62);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   animation: map-controls-fade-in 0.22s ease;
+  cursor: pointer;
 }
 
 .map-controls-modal {
   width: min(100%, 420px);
   max-height: min(88vh, 560px);
-  overflow: hidden;
-  padding: 0;
-  border-radius: 1.4em;
-  animation: map-controls-slide-in 0.28s cubic-bezier(0.34, 1.15, 0.64, 1);
-}
-
-.map-controls-modal .glass-tint {
-  background: rgba(17, 17, 17, 0.62);
-}
-
-.map-controls-content {
-  position: relative;
-  z-index: 3;
-  padding: 1.35em 1.5em 1.5em;
   overflow-y: auto;
-  max-height: min(88vh, 560px);
+  padding: 1.35em 1.5em 1.5em;
+  border-radius: 1.4em;
+  background: rgba(23, 23, 23, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.55),
+    inset 1px 1px 0 rgba(255, 255, 255, 0.08);
+  cursor: default;
+  animation: map-controls-slide-in 0.28s cubic-bezier(0.34, 1.15, 0.64, 1);
+  pointer-events: auto;
 }
 
 .map-controls-header {
@@ -56,15 +52,16 @@
   height: 2em;
   border: none;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.06);
-  color: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.85);
   cursor: pointer;
   transition: var(--transition);
   flex-shrink: 0;
+  pointer-events: auto;
 }
 
 .map-controls-close:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.16);
   color: white;
   scale: 1.05;
 }
