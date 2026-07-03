@@ -10,7 +10,7 @@ export const AboutPage = () => {
 
   return (
     <section className="about-section-container">
-      <div style={{paddingTop: 60}}></div>
+      <div style={{paddingTop: 90}}></div>
       <SectionTitle aperture={true} title="About me" />
       <p>
         Im a Front-end and Mobile Developer based in Buenos Aires, Argentina,
@@ -49,7 +49,7 @@ export const AboutPage = () => {
       <Certificates />
       <div style={{height: "50px"}}></div>
       <Socials />
-      <div style={{height: "500px"}}></div>
+      <div style={{height: "140px"}}></div>
     </section>
   );
 };

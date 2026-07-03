@@ -9,24 +9,81 @@
   margin: 2em 0em;
 }
 
+/* Glass-look card — no backdrop-filter (sits on a flat background,
+   and 6 blurs in a grid would hurt perf) */
 .project-card {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
   padding: 1.4em;
-  border-radius: 1em;
-  border: 3px solid var(--dark2);
+  border-radius: var(--radius-md);
   display: flex;
   justify-content: space-between;
   flex-direction: column;
   gap: 1em;
   cursor: pointer;
-  filter: opacity(0.74);
-  transition: var(--transition) !important;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.05),
+    rgba(255, 255, 255, 0.02)
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.03),
+    inset 1px 0 0 rgba(255, 255, 255, 0.05),
+    inset -1px 0 0 rgba(255, 255, 255, 0.05),
+    0 8px 24px rgba(0, 0, 0, 0.22);
+  transition: var(--transition);
   pointer-events: all;
 }
 
+/* Iridescent sweep, revealed on hover only */
+.project-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  background: var(--iridescent-sweep);
+  mix-blend-mode: screen;
+  opacity: 0;
+  pointer-events: none;
+  animation: iridescent-sweep 8s ease-in-out infinite;
+  animation-play-state: paused;
+  transition: opacity 0.3s ease;
+}
+
 .project-card:hover {
-  border: 3px solid #545454;
-  scale: 1.025;
-  filter: opacity(1);
+  transform: translateY(-3px);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.075),
+    rgba(255, 255, 255, 0.03)
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.06),
+    inset 1px 0 0 rgba(255, 255, 255, 0.08),
+    inset -1px 0 0 rgba(255, 255, 255, 0.08),
+    0 14px 34px rgba(0, 0, 0, 0.32);
+}
+
+.project-card:hover::after {
+  opacity: 0.8;
+  animation-play-state: running;
+}
+
+.project-card:focus-visible {
+  outline: none;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    0 0 0 2px var(--primary),
+    0 8px 24px rgba(0, 0, 0, 0.22);
+}
+
+.project-card h3 {
+  color: var(--text-hi);
 }
 
 .project-card p {
@@ -44,10 +101,12 @@
   justify-content: space-between;
   align-items: center;
 }
+
 .openlinkicon {
   transition: var(--transition);
   font-size: 0.6em;
   opacity: 0;
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .project-card:hover .openlinkicon {
@@ -60,8 +119,22 @@
   filter: var(--icon-drop);
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .project-card:hover {
+    transform: none;
+  }
+
+  .project-card::after {
+    display: none;
+  }
+}
+
 @media (max-width: 888px) {
   .more-projects-section {
-    margin-top: 1.5em !important;
+    margin-top: 1.5em;
+  }
+
+  .more-projects-container {
+    grid-template-columns: 1fr;
   }
 }

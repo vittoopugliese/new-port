@@ -2,13 +2,20 @@ import {BrowserRouter, Route, Routes, useLocation} from "react-router-dom";
 import {Header} from "./components/Header/Header";
 import {MainPage} from "./pages/MainPage";
 import {AboutPage} from "./pages/AboutPage";
-import {useEffect, useState} from "react";
+import {lazy, Suspense, useEffect, useState} from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import {Planets} from "./components/Planets/Planets";
-import {PlanetsMobile} from "./components/Planets/PlanetsMobile";
 import {GlassSvgDefs} from "./components/Shared/GlassSvgDefs";
 import {useMedia} from "./hooks/useMedia";
+
+// Code-split the 3D hero: three.js + gsap only load when the scene mounts,
+// keeping them out of the main bundle
+const Planets = lazy(() =>
+  import("./components/Planets/Planets").then((m) => ({default: m.Planets})),
+);
+const PlanetsMobile = lazy(() =>
+  import("./components/Planets/PlanetsMobile").then((m) => ({default: m.PlanetsMobile})),
+);
 
 function AppContent() {
   const location = useLocation();
@@ -34,14 +41,16 @@ function AppContent() {
     <>
       <GlassSvgDefs />
       {isMainPage && (
-        isMobile && !mobileFull ? (
-          <PlanetsMobile />
-        ) : (
-          <Planets
-            selectorOpen={planetSelectorOpen}
-            closeSelector={closePlanetSelector}
-          />
-        )
+        <Suspense fallback={null}>
+          {isMobile && !mobileFull ? (
+            <PlanetsMobile />
+          ) : (
+            <Planets
+              selectorOpen={planetSelectorOpen}
+              closeSelector={closePlanetSelector}
+            />
+          )}
+        </Suspense>
       )}
       <div className="appContainer" data-aos="fade-up">
         <Header data-aos="fade-down" />

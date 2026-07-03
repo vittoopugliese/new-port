@@ -8,10 +8,82 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+
+  /* ---- palette ---- */
   --dark1: #171717;
   --dark2: #343434;
+  --dark3: #545454;
   --primary: #ffe095;
+  --primary-rgb: 255, 224, 149;
+  --text-hi: rgba(255, 255, 255, 0.95);
+  --text-mid: rgb(204, 204, 204);
+  --text-low: #8f8f8f;
+
+  /* ---- glass ---- */
+  --glass-tint: rgba(23, 23, 23, 0.42);
+  --glass-tint-soft: rgba(23, 23, 23, 0.35);
+  --glass-tint-strong: rgba(17, 17, 17, 0.5);
+  --glass-blur: blur(12px) saturate(150%);
+  --glass-blur-soft: blur(8px) saturate(160%);
+  --glass-edge: rgba(255, 255, 255, 0.08);
+  --glass-shine-card:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.54),
+    inset -1px -1px 0 rgba(255, 255, 255, 0.24),
+    inset 0 0 20px rgba(255, 255, 255, 0.054),
+    0 12px 40px rgba(0, 0, 0, 0.3);
+  --glass-shine-card-hover:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.55),
+    inset -1px -1px 0 rgba(255, 255, 255, 0.25),
+    inset 0 0 30px rgba(255, 255, 255, 0.1),
+    0 16px 48px rgba(0, 0, 0, 0.34);
+  --glass-shine-btn:
+    inset 0 1px 1px rgba(255, 255, 255, 0.55),
+    inset 0 -1px 1px rgba(255, 255, 255, 0.15),
+    0 4px 16px rgba(0, 0, 0, 0.25);
+  --glass-shine-btn-hover:
+    inset 0 1px 1px rgba(255, 255, 255, 0.7),
+    inset 0 -1px 1px rgba(255, 255, 255, 0.25),
+    0 6px 20px rgba(0, 0, 0, 0.3);
+
+  /* ---- iridescence ---- */
+  --iridescent-text: linear-gradient(
+    90deg,
+    #ffe095 0%,
+    #ff9fb3 16%,
+    #ff7eb6 30%,
+    #b78bff 46%,
+    #6ec8ff 62%,
+    #7df0c0 78%,
+    #ffe095 100%
+  );
+  --iridescent-sweep: linear-gradient(
+    120deg,
+    transparent 2%,
+    rgba(255, 224, 149, 0.07) 10%,
+    rgba(255, 179, 193, 0.1) 18%,
+    rgba(205, 180, 255, 0.09) 26%,
+    rgba(159, 220, 255, 0.07) 34%,
+    transparent 42%,
+    transparent 52%,
+    rgba(255, 224, 149, 0.07) 60%,
+    rgba(255, 179, 193, 0.1) 68%,
+    rgba(205, 180, 255, 0.09) 76%,
+    rgba(159, 220, 255, 0.07) 84%,
+    transparent 92%
+  );
+
+  /* ---- geometry ---- */
+  --radius-sm: 0.65em;
+  --radius-md: 1em;
+  --radius-lg: 1.75em;
+  --radius-pill: 999px;
+
+  /* ---- motion ---- */
   --transition: all 0.2s cubic-bezier(0.39, 0.575, 0.565, 1);
+  --ease-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.15, 0.64, 1);
+
+  /* ---- misc ---- */
   --icon-drop: drop-shadow(2px 2px 1px rgba(100, 100, 100, 0.64));
   --gradient: linear-gradient(to right, var(--dark1) -60%, #fff5e0 100%);
 }
@@ -28,17 +100,18 @@ html {
 }
 
 *::selection {
-  background-color: #343434;
+  background-color: var(--dark2);
   color: #fff5e0;
 }
 
 a {
   font-weight: 500;
   text-decoration: inherit;
-  color: #171717;
+  color: var(--text-hi);
+  transition: color 0.2s ease;
 }
 a:hover {
-  color: #171717;
+  color: var(--primary);
 }
 
 body {
@@ -64,7 +137,7 @@ h4 {
   font-size: 1.1em;
 }
 p {
-  color: rgb(204, 204, 204);
+  color: var(--text-mid);
   pointer-events: all;
 }
 
@@ -88,11 +161,9 @@ main {
 }
 
 hr {
-  opacity: 0.15;
-}
-
-header {
-  position: absolute;
+  border: none;
+  height: 1px;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.02));
 }
 
 /* scrollbar */
@@ -107,7 +178,7 @@ header {
   border-radius: 30px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background-color: #545454;
+  background-color: var(--dark3);
 }
 
 @media (max-width: 888px) {
@@ -125,60 +196,8 @@ header {
     font-size: 1.2em;
   }
 
-  .projects-container {
-    gap: 3em;
-  }
-
-  .more-projects-container {
-    grid-template-columns: 1fr;
-  }
-
   .appContainer {
     width: 92vw;
-  }
-
-  .profile-buttons {
-    justify-content: center;
-  }
-
-  .project-box {
-    flex-direction: column;
-  }
-
-  .project-info {
-    gap: 1em;
-  }
-
-  .project-image-container {
-    width: 100%;
-    background-color: transparent;
-    justify-content: left;
-  }
-
-  .project-image-container img {
-    border: none;
-  }
-
-  .icons-buttons-container {
-    flex-direction: row;
-  }
-
-  .socials-container {
-    flex-direction: column;
-    display: grid;
-    align-items: center;
-    text-align: center;
-    gap: 0.75em;
-  }
-
-  .social-card-link {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .social-glass {
-    width: 100%;
-    justify-content: center;
   }
 }
 
@@ -196,10 +215,10 @@ header {
 }
 
 main, .appContainer {
-  /* 
-    esta god line hace que los eventos del mouse ignoren el cointainer de profile data 
-    luego olvida el de main y luego el de app container (es asi el orden en cascada invertida) 
-    y luego le pasa los eventos de arrastrar o zoom al canvas de planetas :D 
+  /*
+    esta god line hace que los eventos del mouse ignoren el cointainer de profile data
+    luego olvida el de main y luego el de app container (es asi el orden en cascada invertida)
+    y luego le pasa los eventos de arrastrar o zoom al canvas de planetas :D
   */
   pointer-events: none;
 }

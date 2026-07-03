@@ -35,7 +35,7 @@ export const NavSmall = () => {
           onClick={() => setNavOpen(true)}
         />
 
-        <div className="items-container" style={{left: navOpen ? "-20px" : "-260px"}}>
+        <div className={`items-container ${navOpen ? "open" : ""}`}>
           <button
             type="button"
             className="closeNavIcon fa-solid fa-arrow-right"

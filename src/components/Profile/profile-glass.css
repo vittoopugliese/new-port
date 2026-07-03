@@ -1,11 +1,3 @@
-.glass-filter-defs {
-  position: absolute;
-  width: 0;
-  height: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-
 .glass-card {
   position: relative;
   border-radius: 1.75em;
@@ -325,13 +317,6 @@
   white-space: nowrap;
 }
 
-.profile-header-sep {
-  font-size: 0.85em;
-  color: rgba(255, 255, 255, 0.35);
-  font-weight: 200;
-  user-select: none;
-}
-
 .glass-card.profile-data .profile-tagline {
   font-size: 0.67em;
   line-height: 1;
@@ -475,97 +460,17 @@
   pointer-events: none;
 }
 
-/* Glass layers — own compositor layer, stable during resize */
-.glass-distortion,
-.glass-tint,
-.glass-shine {
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-}
-
-.glass-distortion {
-  z-index: 0;
-  transform: translateZ(0);
-  backface-visibility: hidden;
-  backdrop-filter: blur(12px) saturate(150%);
-  -webkit-backdrop-filter: blur(12px) saturate(150%);
-}
-
+/* Glass layer overrides — base layers live in Shared/shared.css.
+   Cheaper blur while the card is resizing — avoids SVG filter flicker. */
 @supports (backdrop-filter: url("#liquid-glass")) {
-  .glass-distortion {
-    backdrop-filter: url("#liquid-glass") blur(3px) saturate(140%);
-    -webkit-backdrop-filter: url("#liquid-glass") blur(3px) saturate(140%);
-  }
-
-  /* Cheaper blur while the card is resizing — avoids SVG filter flicker */
   .glass-card.profile-data.is-animating .glass-distortion {
     backdrop-filter: blur(10px) saturate(140%);
     -webkit-backdrop-filter: blur(10px) saturate(140%);
   }
 }
 
-.glass-tint {
-  z-index: 1;
-  background: rgba(23, 23, 23, 0.42);
-}
-
-.glass-shine {
-  z-index: 2;
-  overflow: hidden;
-  box-shadow:
-    inset 1px 1px 0 rgba(255, 255, 255, 0.54),
-    inset -1px -1px 0 rgba(255, 255, 255, 0.24),
-    inset 0 0 20px rgba(255, 255, 255, 0.054);
-  transition: box-shadow 0.2s ease;
-}
-
-/* Iridescent reflection sweeping horizontally across the glass.
-   Width 200% with two identical halves + translateX(-50%) = seamless loop,
-   compositor-only (no repaints). */
-.glass-shine::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 200%;
-  height: 100%;
-  background: linear-gradient(
-    120deg,
-    transparent 2%,
-    rgba(255, 224, 149, 0.07) 10%,
-    rgba(255, 179, 193, 0.1) 18%,
-    rgba(205, 180, 255, 0.09) 26%,
-    rgba(159, 220, 255, 0.07) 34%,
-    transparent 42%,
-    transparent 52%,
-    rgba(255, 224, 149, 0.07) 60%,
-    rgba(255, 179, 193, 0.1) 68%,
-    rgba(205, 180, 255, 0.09) 76%,
-    rgba(159, 220, 255, 0.07) 84%,
-    transparent 92%
-  );
-  mix-blend-mode: screen;
-  will-change: transform;
-  opacity: 0.92;
-  animation: iridescent-sweep 8s ease-in-out infinite;
-}
-
-@keyframes iridescent-sweep {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-  to {
-    transform: translate3d(-50%, 0, 0);
-  }
-}
-
 .glass-card.profile-data:not(.minimized):hover .glass-shine {
-  box-shadow:
-    inset 1px 1px 0 rgba(255, 255, 255, 0.55),
-    inset -1px -1px 0 rgba(255, 255, 255, 0.25),
-    inset 0 0 30px rgba(255, 255, 255, 0.1);
+  box-shadow: var(--glass-shine-card-hover);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -607,11 +512,6 @@
 
   .glass-card.profile-data .profile-role:hover {
     transform: none;
-  }
-
-  .glass-shine::after {
-    animation: none;
-    opacity: 0;
   }
 }
 

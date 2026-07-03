@@ -5,14 +5,35 @@ header {
   flex-direction: row;
   width: 100%;
   height: 90px;
-  margin-top: 4px;
-  position: sticky;
-  left: 0px;
-  top: 0px;
+  padding: 0 4vw;
+  position: fixed;
+  left: 0;
+  top: 0;
   z-index: 10000;
   transition: var(--transition);
-  /* background-color: var(--dark1);  */
   background-color: transparent;
+}
+
+/* Glass bar — fades in once the page is scrolled */
+header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0;
+  background: var(--glass-tint-strong);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-bottom: 1px solid var(--glass-edge);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 8px 32px rgba(0, 0, 0, 0.35);
+  transition: opacity 0.3s var(--ease-out);
+  pointer-events: none;
+}
+
+header.scrolled::before {
+  opacity: 1;
 }
 
 nav {
@@ -45,26 +66,17 @@ nav {
   z-index: 10000;
 }
 
+.nav-item p {
+  transition: var(--transition);
+}
+
+.nav-item:hover p {
+  color: var(--primary);
+}
+
 .nav-item-br {
   font-weight: 800 !important;
   filter: drop-shadow(0px 0px 4px rgba(164, 164, 164, 0.64));
-}
-
-.theme-toggler {
-  cursor: pointer;
-}
-
-.theme-toggler img {
-  transition: var(--transition);
-  width: 1.74em;
-  position: relative;
-  top: 3px;
-  filter: contrast(0.74) drop-shadow(0px 0px 6px rgba(255, 255, 255, 0.54));
-}
-
-.theme-toggler:hover img {
-  scale: 1.14;
-  filter: contrast(0.94) drop-shadow(0px 0px 10px rgba(255, 255, 255, 0.64));
 }
 
 .nav-small-image {
@@ -101,59 +113,142 @@ nav {
   filter: drop-shadow(0px 0px 6px rgba(255, 224, 149, 0.45));
 }
 
+/* ---- mobile nav ---- */
 .navTogglerIcon {
-  font-size: 1.8em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.9em;
+  height: 1.9em;
+  font-size: 1.4em;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: var(--glass-blur-soft);
+  -webkit-backdrop-filter: var(--glass-blur-soft);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.05),
+    0 4px 14px rgba(0, 0, 0, 0.3);
+  color: rgba(255, 255, 255, 0.88);
   cursor: pointer;
   transition: var(--transition);
   pointer-events: all;
 }
 
 .navTogglerIcon:hover {
-  scale: 1.1;
+  scale: 1.06;
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .closeNavIcon {
-  font-size: 1.5em;
+  font-size: 1.3em;
   rotate: 180deg;
   cursor: pointer;
   transition: var(--transition);
   position: absolute;
   top: 0px;
   right: 0px;
-  margin: 0.6em 0.6em 0em 0em;
+  margin: 0.8em 0.8em 0em 0em;
+  color: rgba(255, 255, 255, 0.6);
   pointer-events: all;
+}
+
+.closeNavIcon:hover {
+  color: white;
 }
 
 .nav-small-background {
   width: 100vw;
   height: 100vh;
-  background-color: #0000006c;
+  background-color: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   position: fixed;
   top: 0px;
   left: 0px;
   border: none;
   padding: 0;
   cursor: pointer;
+  animation: nav-backdrop-in 0.25s var(--ease-out);
 }
 
+@keyframes nav-backdrop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Glass drawer */
 .items-container {
   display: flex;
   justify-content: center;
-  align-items: left;
+  align-items: stretch;
   flex-direction: column;
-  transition: var(--transition);
   gap: 0.8em;
   font-size: 1.24em;
-  width: 225px;
-  height: 100vh;
-  background-color: #212121;
+  width: 240px;
+  height: 100dvh;
+  padding: 0 0.5em;
   position: fixed;
-  top: 0px;
-  left: -20px;
+  top: 0;
+  left: 0;
+  background: rgba(23, 23, 23, 0.78);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-right: 1px solid var(--glass-edge);
+  box-shadow:
+    inset -1px 0 0 rgba(255, 255, 255, 0.04),
+    8px 0 40px rgba(0, 0, 0, 0.45);
+  transform: translateX(calc(-100% - 56px));
+  transition: transform 0.32s var(--ease-spring);
+}
+
+.items-container.open {
+  transform: translateX(0);
 }
 
 .items-container .nav-item {
   display: flex;
-  justify-content: left;
-  margin: 0em 1em;
+  justify-content: flex-start;
+  gap: 0.7em;
+  margin: 0;
+  padding: 0.55em 0.9em;
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+}
+
+.items-container .nav-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.items-container .nav-item i {
+  font-size: 0.85em;
+  opacity: 0.7;
+  width: 1.2em;
+  text-align: center;
+}
+
+.items-container .nav-item-br {
+  background: rgba(255, 224, 149, 0.08);
+  filter: none;
+}
+
+.items-container .nav-item-br p {
+  color: var(--primary);
+}
+
+.items-container .nav-item-br i {
+  color: var(--primary);
+  opacity: 0.9;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .items-container,
+  .nav-small-background {
+    transition: none;
+    animation: none;
+  }
 }

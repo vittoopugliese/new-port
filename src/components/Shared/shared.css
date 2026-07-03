@@ -1,3 +1,104 @@
+/* ============================================================
+   Liquid glass base layers.
+   Any component can opt in by rendering, inside a container with
+   `isolation: isolate; overflow: hidden; border-radius: ...`:
+     <div class="glass-distortion" />
+     <div class="glass-tint" />
+     <div class="glass-shine" />
+   and putting its content above them (z-index: 3).
+   ============================================================ */
+.glass-distortion,
+.glass-tint,
+.glass-shine {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.glass-distortion {
+  z-index: 0;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
+
+@supports (backdrop-filter: url("#liquid-glass")) {
+  .glass-distortion {
+    backdrop-filter: url("#liquid-glass") blur(3px) saturate(140%);
+    -webkit-backdrop-filter: url("#liquid-glass") blur(3px) saturate(140%);
+  }
+}
+
+.glass-tint {
+  z-index: 1;
+  background: var(--glass-tint);
+}
+
+.glass-shine {
+  z-index: 2;
+  overflow: hidden;
+  box-shadow: var(--glass-shine-card);
+  transition: box-shadow 0.2s ease;
+}
+
+/* Soft gloss falling from the top edge */
+.glass-shine::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    120% 64% at 50% 0%,
+    rgba(255, 255, 255, 0.1),
+    transparent 62%
+  );
+}
+
+/* Iridescent reflection sweeping horizontally across the glass.
+   Width 200% with two identical halves + translateX(-50%) = seamless
+   loop, compositor-only (no repaints). */
+.glass-shine::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  background: var(--iridescent-sweep);
+  mix-blend-mode: screen;
+  will-change: transform;
+  opacity: 0.92;
+  animation: iridescent-sweep 8s ease-in-out infinite;
+}
+
+@keyframes iridescent-sweep {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glass-shine::after {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+.glass-filter-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* ============================================================
+   Section titles
+   ============================================================ */
 .section-title {
   display: flex;
   align-items: center;
@@ -10,7 +111,7 @@
   display: flex;
   align-items: center;
   flex-direction: row;
-  gap: 1em;
+  gap: 0.85em;
   margin: 2em 0em;
 }
 
@@ -20,17 +121,56 @@
   gap: 0.35em;
 }
 
+.section-title__heading h2 {
+  position: relative;
+  width: fit-content;
+}
+
+/* Iridescent underline accent */
+.section-title__heading h2::after {
+  content: "";
+  display: block;
+  height: 3px;
+  width: 1.9em;
+  margin-top: 0.22em;
+  border-radius: var(--radius-pill);
+  background: var(--iridescent-text);
+  opacity: 0.85;
+}
+
 .section-title__subtitle {
   margin: 0;
   font-size: 0.95em;
   font-weight: 400;
-  color: #747474;
+  color: var(--text-low);
 }
 
-.section-title i {
-  font-size: 1.74em;
+/* Icon chip — subtle glass square behind the section icon */
+.section-title i,
+.section-title img {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.9em;
+  height: 1.9em;
+  flex-shrink: 0;
+  font-size: 1.25em;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.04),
+    0 4px 14px rgba(0, 0, 0, 0.25);
+  color: rgba(255, 255, 255, 0.88);
 }
 
+.section-title img {
+  padding: 0.4em;
+}
+
+/* ============================================================
+   Page load
+   ============================================================ */
 .page-load-content {
   width: 100%;
   display: flex;
@@ -49,14 +189,9 @@
   filter: drop-shadow(0px 0px 6px rgba(107, 107, 107, 0.24));
 }
 
-.glass-filter-defs {
-  position: absolute;
-  width: 0;
-  height: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-
+/* ============================================================
+   Glass pill button
+   ============================================================ */
 .button {
   display: inline-flex;
   align-items: center;
@@ -66,7 +201,7 @@
   height: auto;
   padding: 0.7em 1.6em;
   border: none;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   position: relative;
   overflow: hidden;
   z-index: 1;
@@ -79,12 +214,9 @@
   color: white;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
   background-color: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(8px) saturate(160%);
-  -webkit-backdrop-filter: blur(8px) saturate(160%);
-  box-shadow:
-    inset 0 1px 1px rgba(255, 255, 255, 0.55),
-    inset 0 -1px 1px rgba(255, 255, 255, 0.15),
-    0 4px 16px rgba(0, 0, 0, 0.25);
+  backdrop-filter: var(--glass-blur-soft);
+  -webkit-backdrop-filter: var(--glass-blur-soft);
+  box-shadow: var(--glass-shine-btn);
   transition: var(--transition);
   pointer-events: all;
 }
@@ -101,7 +233,7 @@
   width: 100%;
   height: 36%;
   padding: 0;
-  border-radius: 999px 999px 0 0;
+  border-radius: var(--radius-pill) var(--radius-pill) 0 0;
   position: absolute;
   top: 0;
   left: 0;
@@ -132,10 +264,7 @@
   scale: 1.04;
   color: white;
   background-color: rgba(255, 255, 255, 0.14);
-  box-shadow:
-    inset 0 1px 1px rgba(255, 255, 255, 0.7),
-    inset 0 -1px 1px rgba(255, 255, 255, 0.25),
-    0 6px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--glass-shine-btn-hover);
 }
 
 .button:active {
@@ -146,10 +275,8 @@
 .button:focus-visible {
   outline: none;
   box-shadow:
-    inset 0 1px 1px rgba(255, 255, 255, 0.55),
-    inset 0 -1px 1px rgba(255, 255, 255, 0.15),
-    0 0 0 2px var(--primary),
-    0 4px 16px rgba(0, 0, 0, 0.25);
+    var(--glass-shine-btn),
+    0 0 0 2px var(--primary);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -159,29 +286,9 @@
   }
 }
 
-.email-button {
-  width: 100%;
-  height: 125px;
-  font-size: 1.8em;
-  color: var(--dark1);
-  border: none;
-  border-radius: 0.6em;
-  cursor: pointer;
-  position: relative;
-  transition: var(--transition) !important;
-}
-
-.email-button p {
-  color: white;
-}
-
-.email-button i {
-  color: white;
-}
-.email-button:hover {
-  scale: 1.04;
-}
-
+/* ============================================================
+   Social cards (glass pills with brand accent)
+   ============================================================ */
 .socials-container {
   display: flex;
   align-items: center;
@@ -207,7 +314,7 @@
   align-items: center;
   justify-content: center;
   padding: 0.75em 1.25em;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   isolation: isolate;
   overflow: hidden;
   cursor: pointer;
@@ -216,21 +323,9 @@
     box-shadow 0.2s ease;
 }
 
-.social-glass .glass-distortion,
-.social-glass .glass-tint,
-.social-glass .glass-shine {
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-}
-
 .social-glass .glass-distortion {
-  z-index: 0;
-  transform: translateZ(0);
-  backface-visibility: hidden;
-  backdrop-filter: blur(8px) saturate(160%);
-  -webkit-backdrop-filter: blur(8px) saturate(160%);
+  backdrop-filter: var(--glass-blur-soft);
+  -webkit-backdrop-filter: var(--glass-blur-soft);
 }
 
 @supports (backdrop-filter: url("#liquid-glass-btn")) {
@@ -241,55 +336,11 @@
 }
 
 .social-glass .glass-tint {
-  z-index: 1;
-  background: rgba(23, 23, 23, 0.35);
+  background: var(--glass-tint-soft);
 }
 
 .social-glass .glass-shine {
-  z-index: 2;
-  overflow: hidden;
-  box-shadow:
-    inset 0 1px 1px rgba(255, 255, 255, 0.55),
-    inset 0 -1px 1px rgba(255, 255, 255, 0.15),
-    0 4px 16px rgba(0, 0, 0, 0.25);
-  transition: box-shadow 0.2s ease;
-}
-
-.social-glass .glass-shine::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 200%;
-  height: 100%;
-  background: linear-gradient(
-    120deg,
-    transparent 2%,
-    rgba(255, 224, 149, 0.07) 10%,
-    rgba(255, 179, 193, 0.1) 18%,
-    rgba(205, 180, 255, 0.09) 26%,
-    rgba(159, 220, 255, 0.07) 34%,
-    transparent 42%,
-    transparent 52%,
-    rgba(255, 224, 149, 0.07) 60%,
-    rgba(255, 179, 193, 0.1) 68%,
-    rgba(205, 180, 255, 0.09) 76%,
-    rgba(159, 220, 255, 0.07) 84%,
-    transparent 92%
-  );
-  mix-blend-mode: screen;
-  will-change: transform;
-  opacity: 0.92;
-  animation: social-iridescent-sweep 8s ease-in-out infinite;
-}
-
-@keyframes social-iridescent-sweep {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-  to {
-    transform: translate3d(-50%, 0, 0);
-  }
+  box-shadow: var(--glass-shine-btn);
 }
 
 .social-glass__content {
@@ -326,10 +377,7 @@
 }
 
 .social-card-link:hover .social-glass .glass-shine {
-  box-shadow:
-    inset 0 1px 1px rgba(255, 255, 255, 0.7),
-    inset 0 -1px 1px rgba(255, 255, 255, 0.25),
-    0 6px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--glass-shine-btn-hover);
 }
 
 .social-card-link:hover .social-glass__icon,
@@ -348,10 +396,8 @@
 
 .social-card-link:focus-visible .social-glass .glass-shine {
   box-shadow:
-    inset 0 1px 1px rgba(255, 255, 255, 0.55),
-    inset 0 -1px 1px rgba(255, 255, 255, 0.15),
-    0 0 0 2px var(--primary),
-    0 4px 16px rgba(0, 0, 0, 0.25);
+    var(--glass-shine-btn),
+    0 0 0 2px var(--primary);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -359,9 +405,24 @@
   .social-card-link:active .social-glass {
     transform: none;
   }
+}
 
-  .social-glass .glass-shine::after {
-    animation: none;
-    opacity: 0;
+@media (max-width: 888px) {
+  .socials-container {
+    flex-direction: column;
+    display: grid;
+    align-items: center;
+    text-align: center;
+    gap: 0.75em;
+  }
+
+  .social-card-link {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .social-glass {
+    width: 100%;
+    justify-content: center;
   }
 }

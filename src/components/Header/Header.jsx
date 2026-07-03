@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {NavLarge} from "./NavLarge";
 import {NavSmall} from "./NavSmall";
 import {MapControlsModal} from "./MapControlsModal";
@@ -9,13 +9,21 @@ import "./header.css";
 export const Header = () => {
   const {isMobile} = useMedia();
   const [controlsOpen, setControlsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
   const isHome = location.pathname === "/";
 
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    onScroll();
+    window.addEventListener("scroll", onScroll, {passive: true});
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <header style={{height: isMobile ? "90px" : "74px"}}>
+    <header className={scrolled ? "scrolled" : undefined} style={{height: isMobile ? "70px" : "64px"}}>
       {isMobile ? <NavSmall /> : <NavLarge />}
 
       {!isMobile && isHome && (

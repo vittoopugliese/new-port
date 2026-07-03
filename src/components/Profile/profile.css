@@ -54,16 +54,6 @@ a.button.profile-resume-link {
   text-decoration: none;
 }
 
-.profile-resume {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5em;
-  background-color: var(--primary);
-  color: #343434;
-  font-weight: 600;
-}
-
 .profile-data, .profile-buttons {
   /* god lines importantes, .profile buttons no haria falta porque ya esta dentro de profile-data */
   pointer-events: auto;
