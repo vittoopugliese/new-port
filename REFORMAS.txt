@@ -1,0 +1,158 @@
+Lista de issues para corregir YA
+Críticos
+
+404 en /about — SPA deployada en Netlify sin regla de rewrite: la ruta existe en el router del cliente pero no al pedir la URL directa. Se arregla con un archivo _redirects (/* /index.html 200) o netlify.toml.
+CSR total en el portfolio — no es legible para crawlers, link previews ni LLMs. El fetch devuelve HTML vacío. Al menos prerenderizar (y meta tags OG/Twitter estáticos en el HTML inicial para que las previews de links funcionen).
+
+Alto (credibilidad para mercado US/remoto)
+3. Inglés con errores — "psycologist", "made 'by hand'", descripciones con typos. Una pasada de 30 minutos lo arregla.
+4. Inconsistencia de dominios — los meta tags apuntan a vittoriop.dev pero el deploy está en .netlify.app. Unificar.
+Contenido / narrativa
+5. Historia de los 15k usuarios (extensión SoundCloud) — contarla en términos de lo que aprendiste (distribución en Chrome Web Store, jobs en background con pause/resume, virtualización para miles de items) más que del caso de uso. Cuidado con el tema de ToS de SoundCloud.
+6. GPTherapist "under maintenance" de 2023 — mostrar un proyecto AI de hace 3 años envejece mal en un perfil que se vende como actualizado. Renovar o reemplazar.
+Los puntos 5 y 6 son de contenido/decisión tuya (el agente no los puede resolver solo), así que el super prompt se enfoca en 1–4, que son técnicos y accionables, y deja 5 y 6 como tareas asistidas.
+Super prompt para el agente
+CONTEXTO
+Estás trabajando en mi portfolio personal. Es una SPA con React + Vite,
+deployada en Netlify. Dominio de deploy: vittoriodev.netlify.app.
+Los meta tags actuales apuntan a vittoriop.dev (inconsistencia a resolver).
+El sitio es 100% client-side rendered, así que el HTML inicial va casi vacío:
+crawlers, link previews y LLMs no ven contenido. Además /about devuelve 404
+al pedir la URL directa.
+
+OBJETIVO
+Dejar el portfolio legible para crawlers/link-previews/LLMs, arreglar el 404
+de rutas directas, unificar el dominio y limpiar los typos de inglés, SIN
+migrar de framework: seguimos en React + Vite.
+
+TAREAS (con criterios de aceptación)
+
+1. Fix del 404 en rutas directas (SPA rewrite en Netlify)
+   - Agregar la regla de rewrite de SPA para que cualquier ruta directa
+     (ej: /about) sirva index.html con status 200.
+   - Implementar con archivo `_redirects` (contenido: `/* /index.html 200`)
+     en la carpeta que Netlify publica (public/ o el output dir), o con
+     `netlify.toml` equivalente. Elegí una sola forma, no las dos.
+   - Criterio: pedir directamente /about (URL directa, sin pasar por el router)
+     devuelve 200 y carga la página, no 404.
+
+2. Hacer el sitio legible para crawlers / link previews / LLMs
+   - Baseline inmediato: poner meta tags Open Graph y Twitter Card completos
+     y correctos en index.html (og:title, og:description, og:image, og:url,
+     twitter:card, etc.), para que al menos la home tenga preview de link.
+   - Prerendering real: agregar prerendering de las rutas del portfolio en el
+     build de Vite para que cada ruta tenga HTML con contenido y meta tags
+     propios en la respuesta inicial. Evaluá las opciones que mejor encajen
+     con el router actual (por ejemplo vite-react-ssg si uso react-router, o
+     un prerender post-build tipo puppeteer/vike) y elegí la más simple que
+     no rompa el router del cliente. Justificá brevemente la elección.
+   - Criterio: `curl` a la URL de la home y de cada ruta principal (incluida
+     /about) devuelve HTML con el contenido y los meta tags visibles, no un
+     body vacío.
+
+3. Unificar dominio
+   - Detectar todos los lugares donde aparece el dominio (meta tags og:url,
+     canonical, sitemap, robots, links internos, config). Hoy hay mezcla entre
+     vittoriop.dev y vittoriodev.netlify.app.
+   - Dejar un solo dominio canónico de forma consistente en todo el proyecto.
+     Antes de cambiar en masa, listame los lugares donde aparece cada dominio
+     y preguntame cuál es el canónico definitivo.
+   - Criterio: un solo dominio en todo el código; sin referencias cruzadas.
+
+4. Limpiar inglés / typos
+   - Corregir errores de inglés en todo el contenido visible del portfolio.
+     Casos confirmados: "psycologist" (→ "psychologist") y el texto
+     "made 'by hand'" (redactar en inglés natural). Revisar además todas las
+     descripciones de proyectos y secciones en busca de typos y frases con
+     errores gramaticales.
+   - No inventes contenido nuevo: corregí ortografía/gramática manteniendo el
+     significado. Si una frase es ambigua, marcámela en vez de reescribirla.
+   - Criterio: pasada completa de inglés, sin typos, con una lista de los
+     cambios hechos.
+
+5. (Asistida) Reescritura de la extensión de SoundCloud
+   - En la descripción del proyecto de la extensión (15k+ usuarios), reencuadrar
+     el texto hacia lo aprendido a nivel ingeniería y producto: distribución en
+     Chrome Web Store, jobs en background con pause/resume, y virtualización para
+     miles de items. Bajar el foco en el caso de uso de descargar tracks.
+   - No publiques nada aún: proponeme 2 versiones de la descripción y las reviso.
+
+6. (Asistida) GPTherapist
+   - El proyecto figura como "under maintenance" de 2023. Proponeme opciones:
+     (a) quitarlo, (b) reetiquetarlo como archived/legacy, o (c) un placeholder
+     para reemplazarlo por un proyecto AI más reciente. No decidas por mí.
+
+RESTRICCIONES
+- Seguimos en React + Vite. No migrar a Next/Astro.
+- No romper el client-side routing existente.
+- Cambios chicos y revisables; explicá qué tocaste en cada archivo.
+- Donde haya que decidir (dominio canónico, textos), preguntame antes de aplicar.
+
+ENTREGABLE
+- Los fixes 1–4 implementados.
+- Propuestas para 5 y 6 para que yo apruebe.
+- Un resumen de los cambios por archivo y cómo verificar cada criterio.
+
+CONVERSACION INICIAL PARA CONTEXT Y QUE TE SIRVA PARA HACER MEJOR MIS PROYECTOS:
+
+Como ser un buen ingeniero , programador y problem solver como product eng. con 4yoe en frontend tecnico. un titulo terciario UTN tecnicatura programacion de 2y (para que sepas que el conocimiento de fundamentos basicos de ing lo tengo) y ser actualizado con AI y  con proyectos? actualmente estoy trabajando en https://mycampushub.com/ buscaloDesglosó carrera técnica, experiencia frontend y necesidad de actualización con IADesglosó carrera técnica, experiencia frontend y necesidad de actualización con IAClaude's response was interrupted.tambien me olvide menciarte: scrapea mi web [https://vittoriodev.netlify.app/about  ](https://vittoriodev.netlify.app/about)en el about me esta mi informacionDiagnosticó error de acceso y formuló retroalimentación constructivaDiagnosticó error de acceso y formuló retroalimentación constructivaAntes de la respuesta, dos observaciones honestas de lo que encontré al intentar scrapear:
+
+Tu portfolio devuelve 404 en /about. Intenté https://vittoriodev.netlify.app/about y el servidor respondió 404. Esto suele pasar en SPAs deployadas en Netlify sin regla de rewrite: la ruta existe en el router del cliente pero no al pedir la URL directa. Se arregla con un archivo _redirects (/* /index.html 200) o netlify.toml. Es un detalle chico pero es exactamente el tipo de cosa que un recruiter o un bot ve antes que vos.
+CampusHub devuelve HTML casi vacío al fetch: solo el title y la meta description ("ecosystem for U.S. college students..."). Todo se renderiza client-side, así que crawlers, previews de links y LLMs no ven nada. Si tenés influencia ahí, SSR/prerendering de las páginas públicas es una mejora de producto real (SEO, link previews, discoverability) — y de paso, un proyecto perfecto para tu narrativa de "product engineer".
+
+Ahora sí, a tu pregunta. Con 4 años de frontend técnico y la tecnicatura de UTN, ya no estás en fase de "aprender fundamentos". Tu problema es otro: pasar de ejecutor técnico a ingeniero de producto. Son tres músculos distintos:
+1. El músculo de producto (el que más te falta desarrollar, probablemente)
+Un product engineer no pregunta "¿cómo implemento esto?" sino "¿por qué estamos construyendo esto y cómo sabremos si funcionó?". Concretamente:
+
+En cada ticket, antes de codear, forzate a responder: ¿qué métrica mueve esto? ¿quién lo pidió y por qué? Si no sabés, preguntá. Esa pregunta te diferencia del 80% de los devs.
+Aprendé a leer datos de producto: instrumentá eventos (PostHog, Amplitude, Mixpanel), mirá funnels, proponé experimentos. En CampusHub, siendo una app de estudiantes con comercio y comunidad, hay métricas obvias: activación, retención semanal, GMV. Meterte ahí vale más que cualquier curso.
+Achicá el loop: prototipá rápido, mostrá antes de pulir, matá features que no funcionan sin apego emocional.
+
+2. El músculo de ingeniería (profundizar, no ampliar)
+Con 4 YOE frontend, el salto de nivel no viene de aprender el framework número 12, sino de:
+
+Dominar el navegador de verdad: rendering, performance (Core Web Vitals, profiling real), red, caching. Poca gente lo domina y se nota inmediatamente en entrevistas y en producción.
+Cruzar la frontera del backend lo suficiente: diseñar una API, entender bases de datos, deploy, observabilidad. No hace falta ser fullstack senior, pero un product engineer que se frena en el borde del fetch es medio product engineer.
+Sistemas y trade-offs: por qué elegís X sobre Y, costos, complejidad accidental. Esto se entrena escribiendo design docs cortos, incluso para cosas chicas.
+
+3. El músculo de AI (donde tenés ventaja de timing)
+Acá el consejo es incómodo pero real: en 2026, "saber usar AI" ya no es diferencial; lo diferencial es construir con AI y trabajar bien con agentes:
+
+Usá herramientas agénticas (Claude Code, Cursor) en tu trabajo diario y aprendé a dirigirlas bien: descomponer tareas, escribir specs claras, revisar output con criterio. El dev que multiplica su throughput con agentes y mantiene calidad es el perfil más buscado ahora mismo.
+Construí al menos un feature real con LLMs en producción: RAG sobre datos del producto, un asistente, clasificación, lo que sea. Entender tokens, latencia, costos, evals y prompt engineering en producción (no en demos) te pone en un percentil alto.
+CampusHub es un lugar ideal para esto: búsqueda semántica del marketplace, moderación de contenido de comunidad, onboarding asistido. Proponelo.
+
+Sobre proyectos personales
+Menos cantidad, más profundidad. Un proyecto con usuarios reales (aunque sean 30) vale más que diez repos de tutoriales. La regla: cada proyecto debería demostrar algo que tu laburo actual no demuestra. Y arreglá el portfolio primero — el 404 te está jugando en contra hoy.
+Sobre el título
+La tecnicatura de 2 años te da los fundamentos; nadie con 4 YOE y buen track record queda afuera por no tener ingeniería completa, salvo en corporaciones muy tradicionales o algunas visas. Si algún día querés completarla, que sea por interés, no por miedo.
+Si querés, te armo un plan concreto de 6-12 meses con hitos medibles, o te doy feedback más detallado del portfolio cuando arregles el redirect y pueda verlo entero. ¿Cuál te sirve más?a mi web entras por aca https://vittoriodev.netlify.app/
+y https://www.mycampushub.com/home te deja navegar sin problema. scrapealas y volve a contestarmeAnalizó perfil técnico y formuló consejos personalizadosAnalizó perfil técnico y formuló consejos personalizadosAhora sí — tu portfolio y CampusHub son 100% client-side rendered así que el fetch devuelve HTML vacío, pero encontré tu GitHub y leí el código fuente del portfolio directo del repo (new-port), incluyendo tu experiencia, proyectos y hasta tu lista de modelos favoritos. Con contexto real, la respuesta cambia bastante:
+Primero: ya sos product engineer, dejá de preguntar cómo serlo
+Tu situación real es mejor que la que describiste. Estás en Luno/Wollen Labs desde nov 2025 construyendo CampusHub en un monorepo con Next.js 16, React Native/Expo, Tamagui, React 19 y un backend Hono + tRPC, más el back-office interno. Eso ya te cruza la frontera del frontend puro. Y tenés algo que el 95% de los devs con 4 YOE no tiene: un producto propio con 15.000+ usuarios (la extensión de SoundCloud). La pregunta correcta no es "cómo ser product engineer" sino "cómo ser excelente en el rol que ya tengo". Tres frentes:
+1. Explotá que sos early en una startup de producto
+Estar en una startup chica construyendo un marketplace es la mejor escuela posible, pero solo si te metés donde duele:
+
+Adueñate de las métricas, no solo del código. ¿CampusHub instrumenta activación, retención semanal, conversión de listing a venta? Si nadie lo hace bien, hacelo vos. El eng que puede decir "este feature movió X" en una startup se vuelve irreemplazable.
+Tu extensión ya te enseñó distribución; aplicá eso al laburo. Con 15k usuarios aprendiste (aunque sea intuitivamente) sobre onboarding, reviews, churn. Nombralo explícitamente en cómo pensás features de CampusHub.
+Profundizá el backend que ya tocás. Hono + tRPC es tu puerta de entrada: metete en el diseño de la base de datos, en los índices, en por qué una query es lenta, en observabilidad (logs, traces, alertas). El techo de un product engineer lo define cuánto puede resolver solo de punta a punta.
+
+2. Cosas concretas que vi y que te están restando
+Siendo tu portfolio tu carta de presentación para mercado internacional, hay detalles que contradicen el nivel que tenés:
+
+CSR total en tu portfolio Y en CampusHub. Ninguno de los dos es legible para crawlers, link previews ni LLMs. Para tu portfolio: migralo a Next/Astro con SSG, o al menos prerenderizá. Para CampusHub: si las páginas públicas (landings de campus, listings) no tienen SSR, ahí tenés una iniciativa de producto real para proponer — SEO orgánico es distribución gratis para un marketplace estudiantil. Es raro además porque usan Next.js 16: si todo está client-side es una decisión (o un descuido) que vale la pena cuestionar internamente.
+El 404 de /about que te mencioné antes sigue ahí — falta la regla de rewrite de SPA en Netlify.
+Inglés con errores en el portfolio: "psycologist", "made 'by hand'", descripciones con typos. Para aplicar a mercado US/remoto, esto pesa más de lo que parece. Una pasada de 30 minutos lo arregla.
+Inconsistencia de dominios: tus meta tags apuntan a vittoriop.dev pero me pasaste el .netlify.app. Unificá.
+Un punto honesto sobre la extensión de SoundCloud: 15k usuarios es un logro genuino de producto y distribución, pero descargar tracks va contra los ToS de SoundCloud. Como pieza central de portfolio para empresas serias, contá la historia en términos de lo que aprendiste (distribución en Chrome Web Store, jobs en background con pause/resume, virtualización para miles de items) más que del caso de uso en sí.
+
+3. AI: pasar de power user a builder
+Tu portfolio muestra que seguís los modelos de cerca (la sección de favoritos está actualizada a 2026) y decís que el AI-heavy workflow te redujo el time-per-feature. Bien, pero eso ya es la vara mínima en 2026. El siguiente escalón:
+
+Shippear features de AI en CampusHub: búsqueda semántica del marketplace, moderación de contenido de comunidad, pricing sugerido de listings, resúmenes. Un marketplace universitario tiene casos de uso obvios y vos ya tenés GPTherapist (2023) como antecedente — pero un chatbot de 2023 y un feature de AI en producción con evals, costos controlados y latencia medida en 2026 son mundos distintos.
+Aprendé evals y observabilidad de LLMs (cómo medir si tu feature de AI funciona), porque es la habilidad escasa; prompt engineering ya no lo es.
+Renovar GPTherapist o reemplazarlo con un proyecto AI de 2026 en tu portfolio: mostrar un proyecto de AI "under maintenance" de hace 3 años envejece mal en un perfil que se vende como actualizado.
+
+El plan resumido para los próximos 12 meses
+Consolidarte en Luno con ownership de métricas y de al menos un feature de AI en producción; profundizar backend/datos/observabilidad usando el stack que ya tenés enfrente; y pulir tu presencia pública (portfolio con SSR, inglés impecable, la historia de los 15k usuarios bien contada). La tecnicatura UTN que terminaste en 2026 más ese combo te posiciona para roles senior de product engineering, incluso remotos en USD, en 1-2 años.
+¿Querés que te arme el pitch interno para proponer SSR/SEO en CampusHub como iniciativa de producto, o preferís que revisemos juntos cómo reescribir las descripciones del portfolio en inglés?
