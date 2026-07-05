@@ -1,6 +1,7 @@
 import {ProfileGlass} from "../components/Profile/ProfileGlass";
 import {Projects} from "../components/Projects/Projects";
 import {MoreProjects} from "../components/MiniProjects/MoreProjects";
+import {AgentsShowcase} from "../components/AgentsShowcase/AgentsShowcase";
 import {Carrousel} from "../components/Carrousel/Carrousel";
 import {Button} from "../components/Shared/Button";
 import {useEffect} from "react";
@@ -20,6 +21,8 @@ export const MainPage = ({ planetSelectorOpen, onTogglePlanets, mobileFull, onTo
 
       <Projects />
 
+      <AgentsShowcase />
+
       <div className="carousels-stack">
         <Carrousel 
           title="Technologies I use"
@@ -30,14 +33,14 @@ export const MainPage = ({ planetSelectorOpen, onTogglePlanets, mobileFull, onTo
           placeholderDesc="Hover a tech to see a description..."
         />
 
-        <Carrousel
+        {/* <Carrousel
           title="Favorite models"
           items={favoriteModels}
           iconClass="fa-solid fa-brain"
           logoFolder="./model-logos/"
           placeholderDesc="Hover a model to see why I like it..."
           className="carousel--models"
-        />
+        /> */}
       </div>
 
       <MoreProjects />

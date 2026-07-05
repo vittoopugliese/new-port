@@ -77,6 +77,29 @@ export const moreProjects = [
   },
 ];
 
+export const agentsShowcase = [
+  {
+    uri: "./agents_usage.jpeg",
+    alt: "Cursor with Claude Code CLI and an AI plan panel",
+    caption: "Every feature starts in plan mode: Claude Code explores the codebase and drafts a step-by-step plan before a single line changes.",
+  },
+  {
+    uri: "./agents_usage.jpeg",
+    alt: "Terminal agents implementing while staying in the editor",
+    caption: "Terminal agents run the implementation while I stay in the editor — Cursor and the Claude Code CLI working the same repo side by side.",
+  },
+  {
+    uri: "./agents_usage.jpeg",
+    alt: "Reviewing and approving agent plans",
+    caption: "Plans are reviewed in a dedicated panel: I approve, edit or reject steps before the agent executes them.",
+  },
+  {
+    uri: "./agents_usage.jpeg",
+    alt: "Review agents scanning the final diff",
+    caption: "After the diff lands, review agents scan the changes for correctness and style before I commit.",
+  },
+];
+
 export const favoriteModels = [
   {name: "GPT-5.5 (xhigh)", logo: "openai", desc: "My heavy-lift mode: xhigh reasoning for ambiguous, multi-step work, it plans ahead, chains tools, and keeps going until the task is actually done."},
   {name: "Claude Fable 5", logo: "anthropic", desc: "Anthropic's most capable widely released model. First pick for long-horizon agentic work and the hardest reasoning problems."},

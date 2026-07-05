@@ -5,6 +5,7 @@ import "./image-viewer.css";
 export interface ImageSource {
   uri: string;
   alt?: string;
+  caption?: string;
 }
 
 interface ImageViewerProps {
@@ -143,6 +144,10 @@ export function ImageViewer({
           >
             <i className="fa-solid fa-chevron-right" />
           </button>
+        )}
+
+        {currentImage.caption && (
+          <p className="image-viewer-caption">{currentImage.caption}</p>
         )}
 
         {showCounter && images.length > 1 && (
