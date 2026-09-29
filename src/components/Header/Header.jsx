@@ -23,8 +23,8 @@ export const Header = () => {
   }, []);
 
   return (
-    <header className={scrolled ? "scrolled" : undefined} style={{height: isMobile ? "70px" : "64px"}}>
-      {isMobile ? <NavSmall /> : <NavLarge />}
+    <header className={`site-header${scrolled ? " scrolled" : ""}`} style={{height: isMobile ? "70px" : "64px"}}>
+      {isMobile ? <NavSmall key={location.pathname} /> : <NavLarge />}
 
       {!isMobile && isHome && (
         <>

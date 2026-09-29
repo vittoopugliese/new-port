@@ -2,10 +2,7 @@ import { SPACE_EFFECTS } from "../../utils/constants";
 
 export default function EffectsPanel({ open, activeEffects, onToggle }) {
   return (
-    <div className={`effects-selector ${open ? "open" : ""}`}>
-      <div className="glass-distortion" />
-      <div className="glass-tint" />
-      <div className="glass-shine" />
+    <div className={`effects-selector ${open ? "open" : ""}`} role="group" aria-label="Space effects">
       {SPACE_EFFECTS.map(({ id, label, icon }) => (
         <button
           key={id}

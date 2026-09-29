@@ -6,7 +6,7 @@ const PlanetButton = ({texture, system, onClick, isActive}) => {
       className={isActive ? "active" : ""}
       aria-pressed={isActive}
       aria-label={`Select ${system} planetary system`}>
-      <img src={texture} alt="" className="texture-thumb" aria-hidden="true" />
+      <img src={texture} alt="" width="40" height="40" decoding="async" className="texture-thumb" aria-hidden="true" />
       <span>{system}</span>
     </button>
   );

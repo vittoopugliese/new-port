@@ -6,7 +6,7 @@ import Socials from "../components/About/Socials";
 import {Experiences} from "./../components/About/Experiences";
 
 export const AboutPage = () => {
-  useEffect(() => window.scroll(0, 0), []);
+  useEffect(() => { window.scroll(0, 0); }, []);
 
   return (
     <section className="about-section-container">

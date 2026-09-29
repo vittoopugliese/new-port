@@ -1,4 +1,4 @@
-header {
+.site-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -15,7 +15,7 @@ header {
 }
 
 /* Glass bar — fades in once the page is scrolled */
-header::before {
+.site-header::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -32,11 +32,11 @@ header::before {
   pointer-events: none;
 }
 
-header.scrolled::before {
+.site-header.scrolled::before {
   opacity: 1;
 }
 
-nav {
+.site-header nav {
   display: flex;
   justify-content: center;
   align-items: center;

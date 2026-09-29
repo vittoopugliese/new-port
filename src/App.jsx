@@ -13,9 +13,6 @@ import {useMedia} from "./hooks/useMedia";
 const Planets = lazy(() =>
   import("./components/Planets/Planets").then((m) => ({default: m.Planets})),
 );
-const PlanetsMobile = lazy(() =>
-  import("./components/Planets/PlanetsMobile").then((m) => ({default: m.PlanetsMobile})),
-);
 
 function AppContent() {
   const location = useLocation();
@@ -27,33 +24,33 @@ function AppContent() {
   const togglePlanetSelector = () => setPlanetSelectorOpen((open) => !open);
   const closePlanetSelector = () => setPlanetSelectorOpen(false);
   const toggleMobileFull = () => {
-    setMobileFull((open) => {
-      if (open) setPlanetSelectorOpen(false);
-      return !open;
-    });
+    setPlanetSelectorOpen(false);
+    setMobileFull((open) => !open);
   };
 
   useEffect(() => {
+    setPlanetSelectorOpen(false);
     if (!isMobile) setMobileFull(false);
   }, [isMobile]);
+
+  useEffect(() => {
+    setPlanetSelectorOpen(false);
+  }, [location.pathname]);
 
   return (
     <>
       <GlassSvgDefs />
       {isMainPage && (
         <Suspense fallback={null}>
-          {isMobile && !mobileFull ? (
-            <PlanetsMobile />
-          ) : (
-            <Planets
-              selectorOpen={planetSelectorOpen}
-              closeSelector={closePlanetSelector}
-            />
-          )}
+          <Planets
+            compact={isMobile && !mobileFull}
+            selectorOpen={planetSelectorOpen}
+            closeSelector={closePlanetSelector}
+          />
         </Suspense>
       )}
-      <div className="appContainer" data-aos="fade-up">
-        <Header data-aos="fade-down" />
+      <div className="appContainer">
+        <Header />
         <Routes>
           <Route
             path="/"

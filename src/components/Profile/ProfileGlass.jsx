@@ -211,16 +211,6 @@ export const ProfileGlass = ({planetSelectorOpen, onTogglePlanets, mobileFull, o
 
   return (
     <div className="profile-container">
-      {planetSelectorOpen && (
-        <button
-          type="button"
-          className="profile-restore-pill"
-          onClick={onTogglePlanets}
-          aria-label="Close planet selector and show profile">
-          <i className="fa-solid fa-xmark" aria-hidden="true" />
-        </button>
-      )}
-
       <div
         className={["glass-card", "profile-data", isMobile && "mobile-static", isIntroActive && "intro-active", isMinimized && "minimized", isAnimating && "is-animating", planetSelectorOpen && "planets-hidden"].filter(Boolean).join(" ")}
         ref={cardRef} onWheel={handleWheel} onClick={isMinimized ? handleRestore : undefined}
@@ -261,7 +251,7 @@ export const ProfileGlass = ({planetSelectorOpen, onTogglePlanets, mobileFull, o
             <span>Vittorio</span>
           </div>
 
-          <div className="profile-expanded" aria-hidden={isMinimized} inert={isMinimized || undefined}>
+          <div className="profile-expanded" aria-hidden={isMinimized || planetSelectorOpen} inert={isMinimized || planetSelectorOpen ? "" : undefined}>
             <div className="profile-header">
               <h1>Vittorio...</h1>
               <button type="button" className={`profile-role ${isSwapping ? "is-swapping" : ""}`} onClick={handleRoleSwap} title="Click to shuffle"
@@ -292,6 +282,8 @@ export const ProfileGlass = ({planetSelectorOpen, onTogglePlanets, mobileFull, o
                   iconClass="fa-solid fa-globe"
                   text={planetSelectorOpen ? "Close" : "Planets"}
                   onClick={onTogglePlanets}
+                  aria-expanded={planetSelectorOpen}
+                  aria-controls="planet-selector"
                 />
               )}
               {isMobile && mobileFull ? (
