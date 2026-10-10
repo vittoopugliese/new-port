@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { gsap } from "gsap";
+import {createComet} from "./observatoryEffects";
 
 function createRadialTexture(stops, size = 256) {
   const canvas = document.createElement("canvas");
@@ -882,7 +883,7 @@ function gaussianRandom() {
   return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
 }
 
-export function createGalaxyArm() {
+export function createGalaxyArm({mobile = false} = {}) {
   const group = new THREE.Group();
   // Banda horizontal cruzando el cielo de fondo, como la Vía Láctea vista desde adentro.
   group.position.set(0, 28, -300);
@@ -892,7 +893,7 @@ export function createGalaxyArm() {
 
   // ESTRELLAS de la banda: densidad gaussiana alrededor del plano galáctico,
   // con bulbo central más ancho y cálido.
-  const particleCount = 9000;
+  const particleCount = mobile ? 2200 : 5000;
   const geometry = new THREE.BufferGeometry();
   const positions = new Float32Array(particleCount * 3);
   const colors = new Float32Array(particleCount * 3);
@@ -1017,7 +1018,7 @@ export function createGalaxyArm() {
   const fade = { value: 0 };
   const gsapTweens = [
     gsap.to(fade, { value: 1, duration: 3, ease: "power2.out" }),
-    gsap.to(starMaterial, { opacity: 0.85, duration: 2.5, ease: "power2.out" }),
+    gsap.to(starMaterial, { opacity: 0.55, duration: 2.5, ease: "power2.out" }),
     ...nebulaMaterials.map(({ material, target }) =>
       gsap.to(material, { opacity: target, duration: 3, ease: "power2.out" }),
     ),
@@ -1041,6 +1042,7 @@ export function createGalaxyArm() {
 }
 
 export const EFFECT_CREATORS = {
+  comet: createComet,
   meteors: createMeteorShower,
   sun: createDistantSun,
   blackHole: createBlackHole,

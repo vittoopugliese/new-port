@@ -1,11 +1,21 @@
 import * as THREE from "three";
 
-/** PBR surface with a subtle metallic sheen on the lit side. */
+/** Soft, bright surfaces with restrained color and a broad highlight. */
 export function createPlanetSurfaceMaterial(map) {
   map.colorSpace = THREE.SRGBColorSpace;
-  return new THREE.MeshStandardMaterial({
+  const material = new THREE.MeshStandardMaterial({
     map,
-    roughness: 0.64,
-    metalness: 0.54,
+    roughness: 0.78,
+    metalness: 0.14,
   });
+  // Grade only the surface in linear space, without a fullscreen post-process.
+  material.onBeforeCompile = shader => {
+    shader.fragmentShader = shader.fragmentShader.replace(
+      "#include <map_fragment>",
+      `#include <map_fragment>
+       float luminance = dot(diffuseColor.rgb, vec3(0.2126, 0.7152, 0.0722));
+       diffuseColor.rgb = mix(vec3(luminance), diffuseColor.rgb, 0.78);`,
+    );
+  };
+  return material;
 }

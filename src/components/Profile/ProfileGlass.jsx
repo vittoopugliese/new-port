@@ -43,7 +43,7 @@ const pickDifferentIndex = (current, length) => {
 export const ProfileGlass = ({planetSelectorOpen, onTogglePlanets, mobileFull, onToggleMobileFull}) => {
   const prefersReducedMotion = usePrefersReducedMotion();
   const {isMobile} = useMedia();
-  const [isIntroActive, setIsIntroActive] = useState(() => !prefersReducedMotion && !isMobile);
+  const [isIntroActive, setIsIntroActive] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [roleIndex, setRoleIndex] = useState(0);
@@ -210,7 +210,7 @@ export const ProfileGlass = ({planetSelectorOpen, onTogglePlanets, mobileFull, o
   const showMaximize = !isMobile && !isIntroActive && !isMinimized && !planetSelectorOpen;
 
   return (
-    <div className="profile-container">
+    <div className={`profile-container${mobileFull ? " profile-space-full" : ""}`}>
       <div
         className={["glass-card", "profile-data", isMobile && "mobile-static", isIntroActive && "intro-active", isMinimized && "minimized", isAnimating && "is-animating", planetSelectorOpen && "planets-hidden"].filter(Boolean).join(" ")}
         ref={cardRef} onWheel={handleWheel} onClick={isMinimized ? handleRestore : undefined}

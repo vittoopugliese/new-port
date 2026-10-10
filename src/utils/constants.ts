@@ -306,15 +306,15 @@ export function getPlanetData(systemName) {
       texturePath: "/pluto.webp",
       geometrySize: 1.2,        // Plutón (diámetro ~2,377 km)
       moonTexturePath: "/charon.webp",
-      moonGeometrySize: 0.009,  // Caronte es casi la mitad del tamaño de Plutón
-      orbitRadius: 0.5,         // Órbita muy cercana
+      moonGeometrySize: 0.22,   // Artistic scale: keep the moons visible outside the surface.
+      orbitRadius: 2.6,
       orbitSpeed: 0.15,
       orbitDirection: 1,
-      initialPosition: [0.5, 0, 0],
+      initialPosition: [2.6, 0, 0],
       hasRings: false,
       extraMoons: [
-        { name: "Nix", size: 0.006, orbitRadius: 0.35, orbitSpeed: 0.3, orbitDirection: 1, phase: 0.8, color: 0xbbbbcc },
-        { name: "Hydra", size: 0.005, orbitRadius: 0.42, orbitSpeed: 0.22, orbitDirection: 1, phase: 2.2, color: 0x999aaa },
+        { name: "Nix", size: 0.06, orbitRadius: 3.4, orbitSpeed: 0.3, orbitDirection: 1, phase: 0.8, color: 0xbbbbcc },
+        { name: "Hydra", size: 0.05, orbitRadius: 4.1, orbitSpeed: 0.22, orbitDirection: 1, phase: 2.2, color: 0x999aaa },
       ],
     },
     sun: {
@@ -349,6 +349,7 @@ export const SPACE_EFFECTS = [
   { id: "neutronStar", label: "Neutron Star", icon: "fa-solid fa-atom" },
   { id: "distantStar", label: "Star", icon: "fa-solid fa-star" },
   { id: "galaxy", label: "Galaxy", icon: "fa-solid fa-hurricane" },
+  { id: "comet", label: "Comet", icon: "fa-solid fa-shuttle-space" },
 ] as const;
 
 export type SpaceEffectId = (typeof SPACE_EFFECTS)[number]["id"];

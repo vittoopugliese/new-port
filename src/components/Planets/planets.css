@@ -143,3 +143,81 @@
 @media (prefers-reduced-motion: reduce) {
   .planet-panels, .webgl { animation: none; transition: none; }
 }
+
+/* Leave the center of the canvas open for exploration. */
+.observatory { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+.observatory button { font: inherit; cursor: pointer; }
+.observatory button:disabled { opacity: 0.4; cursor: default; }
+.observatory button:focus-visible, .observatory summary:focus-visible, .moon-marker:focus-visible { outline: 2px solid var(--primary); outline-offset: 5px; }
+.observatory-info { position: absolute; left: 4vw; top: 116px; width: 260px; pointer-events: auto; }
+.observatory-kicker { display: flex; align-items: center; gap: 9px; font: 9px/1.5 monospace; letter-spacing: 0.15em; color: #a8b1bc; }
+.observatory-kicker > span:first-child, .observatory-live-dot { display: inline-block; width: 5px; height: 5px; background: var(--planet-accent); border-radius: 50%; box-shadow: 0 0 12px var(--planet-accent); }
+.observatory-index { margin-left: auto; color: #848d99; letter-spacing: 0; }
+.observatory-eyebrow { margin-top: 34px; color: var(--planet-accent); font-size: 11px; letter-spacing: 0.08em; }
+.observatory-info h2 { font-size: clamp(40px, 4.8vw, 70px); font-weight: 400; letter-spacing: -0.055em; line-height: 1.15; text-transform: capitalize; margin: 5px 0 16px; color: #f5f2ed; }
+.observatory-description { max-width: 25ch; font-size: 12px; line-height: 1.8; color: #aab0b9; }
+.observatory-controls { display: flex; gap: 5px; margin-top: 24px; }
+.observatory-controls button { display: flex; align-items: center; gap: 7px; padding: 10px; border: 1px solid rgb(255 255 255 / 13%); border-radius: 8px; background: rgb(15 20 28 / 65%); color: #b9c1cd; font-size: 10px; backdrop-filter: blur(12px); }
+.observatory-controls button:hover, .observatory-controls button[aria-pressed="true"] { border-color: var(--planet-accent); color: var(--planet-accent); background: rgb(255 255 255 / 7%); }
+.observatory-moons { margin-top: 22px; border-top: 1px solid rgb(255 255 255 / 12%); }
+.observatory-moons summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; padding: 15px 0; color: #a8b1bc; font-size: 11px; }
+.observatory-moons summary::-webkit-details-marker { display: none; }
+.observatory-moons[open] summary span { transform: rotate(45deg); }
+.moon-list { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding-bottom: 12px; }
+.moon-list button { display: flex; justify-content: space-between; padding: 9px 10px; border: 1px solid rgb(255 255 255 / 10%); border-radius: 6px; background: #10151be6; color: #c1c8cf; text-transform: capitalize; font-size: 11px; }
+.moon-list button:hover, .moon-list button[aria-pressed="true"] { color: var(--planet-accent); border-color: var(--planet-accent); }
+.moon-discovery { padding: 16px; border: 1px solid rgb(255 255 255 / 14%); border-left: 2px solid var(--planet-accent); background: #0b101be6; border-radius: 0 10px 10px 0; backdrop-filter: blur(12px); }
+.moon-discovery > span { color: var(--planet-accent); font: 9px monospace; letter-spacing: 0.15em; }
+.moon-discovery strong { display: block; text-transform: capitalize; font-size: 24px; font-weight: 400; margin: 7px 0; }
+.moon-discovery p { font-size: 11px; color: #a8b1bc; }
+.moon-discovery button { background: transparent; border: 0; color: var(--planet-accent); font-size: 11px; margin-top: 14px; padding: 5px 0; }
+.observatory-footnote { position: absolute; bottom: 34px; left: 4vw; color: #a0a8b4; font: 8px/2 monospace; letter-spacing: 0.13em; }
+.observatory-footnote .observatory-live-dot { margin-right: 7px; width: 4px; height: 4px; }
+.observatory-scale { display: block; margin-left: 14px; color: #777e89; letter-spacing: 0; }
+.observatory-hint { position: absolute; bottom: 166px; left: 50%; transform: translateX(-50%); color: #8a929f; font-size: 10px; white-space: nowrap; pointer-events: none; }
+.observatory-hint span { padding: 0 9px; color: #d3b78d; }
+.moon-markers { position: absolute; inset: 0; pointer-events: none; z-index: 2; }
+.moon-marker { position: absolute; left: 0; top: 0; width: 36px; height: 36px; margin: -18px 0 0 -18px; display: flex; align-items: center; justify-content: center; border: 0; padding: 0; background: transparent; color: #b9c9df; visibility: hidden; cursor: pointer; pointer-events: auto; }
+.moon-marker-ring { width: 26px; height: 26px; border: 1px solid #aac5ed55; border-radius: 50%; transition: border-color 150ms, scale 150ms; }
+.moon-marker-label { position: absolute; left: 36px; font: 9px monospace; text-transform: capitalize; white-space: nowrap; letter-spacing: 0.08em; text-shadow: 0 1px 6px #000; }
+.moon-marker:hover .moon-marker-ring, .moon-marker[aria-pressed="true"] .moon-marker-ring { border-color: #ffe095; scale: 1.2; }
+.moon-marker:hover, .moon-marker[aria-pressed="true"] { color: #ffe095; }
+.scene-full .planet-loader { top: 80px; left: 50%; transform: translateX(-50%) scale(0.45); }
+.scene-full .planet-fallback { top: 76px; z-index: 5; }
+@media (max-width: 1100px) and (min-width: 889px) {
+  .observatory-info { width: 215px; left: 3vw; }
+  .observatory-kicker { font-size: 8px; }
+  .observatory-footnote { bottom: 165px; }
+}
+@media (max-width: 888px) {
+  .observatory-info { left: 20px; top: 86px; width: 228px; }
+  .observatory-kicker { font-size: 8px; }
+  .observatory-eyebrow { margin-top: 14px; font-size: 10px; }
+  .observatory-info h2 { font-size: 38px; margin: 2px 0 8px; }
+  .observatory-description, .observatory-footnote, .observatory-hint { display: none; }
+  .observatory-controls { margin-top: 12px; }
+  .observatory-controls button { min-height: 40px; }
+  .observatory-moons { margin-top: 10px; max-width: 210px; }
+  .observatory-moons[open], .moon-discovery { position: relative; z-index: 1; background: #10151bf5; }
+  .moon-discovery { max-width: 210px; padding: 10px; }
+  .moon-discovery strong { font-size: 20px; }
+  .moon-marker-label { font-size: 8px; }
+}
+@media (max-height: 680px) and (min-width: 889px) {
+  .observatory-info { top: 85px; }
+  .observatory-eyebrow { margin-top: 14px; }
+  .observatory-info h2 { font-size: 40px; }
+  .observatory-description { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .observatory *, .moon-marker * { transition: none !important; }
+}
+
+@media (max-height: 700px) and (max-width: 888px) {
+  .observatory-info { top: 76px; }
+  .observatory-eyebrow { display: none; }
+  .observatory-info h2 { margin-top: 8px; font-size: 30px; }
+  .observatory-controls { margin-top: 8px; }
+  .observatory-controls button { min-height: 36px; }
+  .observatory-moons summary { padding: 10px 0; }
+}

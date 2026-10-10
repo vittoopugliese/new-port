@@ -541,4 +541,21 @@
   .profile-window-controls {
     display: none;
   }
+
+  .profile-space-full .glass-card.profile-data.mobile-static,
+  .profile-space-full .glass-card.profile-data.mobile-static:not(.minimized):not(.intro-active):hover {
+    top: auto;
+    bottom: 20px;
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@media (max-width: 360px) {
+  .glass-card.profile-data.mobile-static { width: calc(100vw - 32px); padding: 14px; }
+  .glass-card.profile-data .profile-header { width: 100%; }
+  .glass-card.profile-data h1 { font-size: 1.2em; }
+  .glass-card.profile-data .profile-role { font-size: 0.95em; flex-shrink: 1; min-width: 0; }
+  .glass-card.profile-data .profile-role-label { left: 0; max-width: 100%; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom; }
+  .glass-card.profile-data .profile-buttons { gap: 5px; }
+  .glass-card.profile-data .button { padding: 7px 9px; font-size: 0.67rem; }
 }

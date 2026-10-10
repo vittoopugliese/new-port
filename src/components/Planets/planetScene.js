@@ -4,6 +4,8 @@ import {gsap} from "gsap";
 import {getPlanetData, PLANET_AMBIENT_LIGHT_COLOR, PLANET_AMBIENT_LIGHT_INTENSITY, PLANET_DIRECTIONAL_LIGHT_INTENSITY, PLANET_LIGHT_POSITION} from "../../utils/constants";
 import {createPlanetSurfaceMaterial} from "./planetMaterial";
 import {EFFECT_CREATORS, createPlanetRings, setupExtraMoons} from "./spaceEffects";
+import {createStarfield, createAtmosphere, createOrbit} from "./observatoryEffects";
+import {destinations} from "./observatoryData";
 
 function disposeTree(root) {
   const resources = new Set();
@@ -20,7 +22,7 @@ function disposeTree(root) {
 }
 
 // The scene owns GPU resources and scheduling. React only selects content.
-export function createPlanetScene({canvas, container, compact, onStatus}) {
+export function createPlanetScene({canvas, container, compact, onStatus, onFocus, markers}) {
   const mobile = window.matchMedia("(max-width: 888px)").matches;
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const renderer = new THREE.WebGLRenderer({canvas, alpha: false, antialias: !mobile, powerPreference: "low-power"});
@@ -43,21 +45,8 @@ export function createPlanetScene({canvas, container, compact, onStatus}) {
   light.position.copy(lightDirection).multiplyScalar(20);
   scene.add(light);
 
-  let stars;
-  if (!compact) {
-    const vertices = [];
-    while (vertices.length < (mobile ? 1500 : 3000) * 3) {
-      const x = (Math.random() - 0.5) * 2000;
-      const y = (Math.random() - 0.5) * 2000;
-      const z = (Math.random() - 0.5) * 2000;
-      if (x * x + y * y + z * z < 150 * 150) continue;
-      vertices.push(x, y, z);
-    }
-    const geometry = new THREE.BufferGeometry();
-    geometry.setAttribute("position", new THREE.Float32BufferAttribute(vertices, 3));
-    stars = new THREE.Points(geometry, new THREE.PointsMaterial({color: 0xffffff, size: 0.1, depthWrite: false}));
-    scene.add(stars);
-  }
+  const stars = compact ? null : createStarfield(mobile);
+  if (stars) scene.add(stars.object);
 
   let disposed = false;
   let visible = true;
@@ -66,8 +55,45 @@ export function createPlanetScene({canvas, container, compact, onStatus}) {
   let previousTime = null;
   let elapsed = 0;
   let system = null;
+  let paused = false;
+  let showOrbits = false;
+  let focused = null;
+  let flight = null;
+  const projected = new THREE.Vector3();
+  const followDelta = new THREE.Vector3();
+  const moonPosition = new THREE.Vector3();
+  const markerRay = new THREE.Ray();
+  const planetBounds = new THREE.Sphere();
+  const occlusionHit = new THREE.Vector3();
+  let viewportWidth = 1;
+  let viewportHeight = 1;
   const effects = new Map();
-  const frameInterval = 1000 / (mobile ? 30 : 60);
+  const frameInterval = 1000 / (mobile || compact ? 30 : 60);
+  const moving = () => !paused && !reducedMotion.matches;
+
+  function updateMarkers() {
+    if (!system || !markers?.size) return;
+    // Matrices must include this frame's orbit and entrance animation.
+    system.group.updateMatrixWorld(true);
+    planetBounds.copy(system.planet.geometry.boundingSphere).applyMatrix4(system.planet.matrixWorld);
+    markerRay.origin.copy(camera.position);
+    for (const moon of system.moons) {
+      const element = markers.get(moon.name);
+      if (!element) continue;
+      moonPosition.setFromMatrixPosition(moon.mesh.matrixWorld);
+      projected.copy(moonPosition).project(camera);
+      let visible = projected.z > -1 && projected.z < 1 && Math.abs(projected.x) < 0.92 && Math.abs(projected.y) < 0.8;
+      if (visible) {
+        // A sphere intersection replaces a scan through every surface triangle.
+        markerRay.direction.copy(moonPosition).sub(camera.position).normalize();
+        const blocked = markerRay.intersectSphere(planetBounds, occlusionHit);
+        visible = !blocked || camera.position.distanceToSquared(occlusionHit) > camera.position.distanceToSquared(moonPosition);
+      }
+      const visibility = visible ? "visible" : "hidden";
+      if (element.style.visibility !== visibility) element.style.visibility = visibility;
+      if (visible) element.style.transform = `translate(${(projected.x + 1) * viewportWidth / 2}px, ${(1 - projected.y) * viewportHeight / 2}px)`;
+    }
+  }
 
   function requestFrame() {
     if (!disposed && !contextLost && visible && !document.hidden && frame === null) frame = requestAnimationFrame(draw);
@@ -82,7 +108,7 @@ export function createPlanetScene({canvas, container, compact, onStatus}) {
     }
     const delta = previousTime === null ? 0 : Math.min((time - previousTime) / 1000, 0.05);
     previousTime = time;
-    if (!reducedMotion.matches) elapsed += delta;
+    if (moving()) elapsed += delta;
     if (system) {
       system.planet.rotation.y = elapsed * 0.1;
       const {moon, config} = system;
@@ -91,15 +117,19 @@ export function createPlanetScene({canvas, container, compact, onStatus}) {
         moon.position.set(Math.cos(angle) * config.orbitRadius, 0, Math.sin(angle) * config.orbitRadius);
       }
       system.extraMoons?.update(elapsed);
+      if (focused && !flight?.isActive()) {
+        followDelta.copy(focused.mesh.position).sub(controls.target);
+        camera.position.add(followDelta);
+        controls.target.copy(focused.mesh.position);
+      }
     }
-    if (stars) {
-      stars.rotation.y = elapsed * 0.02;
-      stars.rotation.x = elapsed * 0.01;
-    }
-    effects.forEach(effect => effect.update(elapsed, reducedMotion.matches ? 0 : delta));
+    stars?.update(elapsed);
+    effects.forEach(effect => effect.update(elapsed, moving() ? delta : 0));
     controls.update(delta);
+    camera.updateMatrixWorld();
+    updateMarkers();
     renderer.render(scene, camera);
-    if (!reducedMotion.matches) requestFrame();
+    if (moving()) requestFrame();
   }
 
   function pause() {
@@ -109,32 +139,35 @@ export function createPlanetScene({canvas, container, compact, onStatus}) {
   }
 
   function updateVisibility() {
-    if (visible && !document.hidden) {
-      if (!reducedMotion.matches) system?.timeline.resume();
-      if (!reducedMotion.matches) effects.forEach(effect => effect.animations.forEach(animation => animation.resume()));
+    if (visible && !document.hidden && !contextLost) {
+      if (moving()) system?.timeline.resume();
+      if (moving()) effects.forEach(effect => effect.animations.forEach(animation => animation.resume()));
+      flight?.resume();
       requestFrame();
     } else {
       pause();
       system?.timeline.pause();
       effects.forEach(effect => effect.animations.forEach(animation => animation.pause()));
+      flight?.pause();
     }
   }
 
   function updateMotion() {
-    controls.autoRotate = !reducedMotion.matches;
-    controls.enableDamping = !reducedMotion.matches;
-    if (reducedMotion.matches) system?.timeline.progress(1).pause();
-    if (reducedMotion.matches) effects.forEach(effect => effect.animations.forEach(animation => animation.progress(1).pause()));
+    controls.autoRotate = moving() && !focused && !flight?.isActive();
+    controls.enableDamping = moving();
+    if (!moving()) system?.timeline.progress(1).pause();
+    if (!moving()) effects.forEach(effect => effect.animations.forEach(animation => animation.progress(1).pause()));
+    if (reducedMotion.matches) flight?.progress(1);
     pause();
-    requestFrame();
+    updateVisibility();
   }
 
   function resize() {
-    const width = Math.max(1, container.clientWidth);
-    const height = Math.max(1, container.clientHeight);
-    camera.aspect = width / height;
+    viewportWidth = Math.max(1, container.clientWidth);
+    viewportHeight = Math.max(1, container.clientHeight);
+    camera.aspect = viewportWidth / viewportHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize(width, height, false);
+    renderer.setSize(viewportWidth, viewportHeight, false);
     requestFrame();
   }
 
@@ -142,18 +175,64 @@ export function createPlanetScene({canvas, container, compact, onStatus}) {
     if (!system) return;
     system.disposed = true;
     system.timeline.kill();
+    system.extraMoons?.dispose();
     disposeTree(system.group);
     system = null;
   }
 
-  function setPlanet({texture, system: name}) {
+  function flyTo(target, position) {
+    flight?.kill();
+    controls.autoRotate = false;
+    const startPosition = camera.position.clone();
+    const startTarget = controls.target.clone();
+    const offset = position.clone().sub(target);
+    const endpoint = new THREE.Vector3();
+    const progress = {value: 0};
+    flight = gsap.timeline({onUpdate: () => {
+      endpoint.copy(target).add(offset);
+      camera.position.lerpVectors(startPosition, endpoint, progress.value);
+      controls.target.lerpVectors(startTarget, target, progress.value);
+      requestFrame();
+    }, onComplete: () => { controls.autoRotate = moving() && !focused; requestFrame(); }});
+    const duration = reducedMotion.matches ? 0 : 1.6;
+    flight.to(progress, {value: 1, duration, ease: "power3.inOut"});
+    updateVisibility();
+  }
+
+  function resetView() {
+    if (!system || compact) return;
+    focused = null;
+    onFocus?.(null);
+    controls.minDistance = system.config.geometrySize * 1.35;
+    const radius = system.config.geometrySize;
+    const distance = Math.max(radius * (system.config.ringConfig ? 7 : 5.4), 5) * (mobile ? 1.25 : 1);
+    flyTo(new THREE.Vector3(), new THREE.Vector3(distance * 0.18, distance * 0.25, distance));
+  }
+
+  function focusMoon(name) {
+    const moon = system?.moons.find(item => item.name === name);
+    if (!moon || disposed) return;
+    focused = moon;
+    onFocus?.(name);
+    controls.minDistance = moon.size * 2;
+    const direction = moon.mesh.position.clone().normalize();
+    if (direction.lengthSq() === 0) direction.set(0, 0, 1);
+    direction.y += 0.6;
+    direction.normalize().multiplyScalar(Math.max(moon.size * 9, 0.6));
+    flyTo(moon.mesh.position, moon.mesh.position.clone().add(direction));
+  }
+
+  function setPlanet({texture, system: name, moonName}) {
     if (disposed || system?.name === name) return;
+    flight?.kill();
+    focused = null;
+    onFocus?.(null);
     disposeSystem();
     onStatus("loading");
     const config = getPlanetData(name);
     const group = new THREE.Group();
     const timeline = gsap.timeline();
-    const next = {name, group, timeline, config, disposed: false};
+    const next = {name, group, timeline, config, disposed: false, moons: [], orbits: new THREE.Group()};
     system = next;
     scene.add(group);
     let failed = false;
@@ -176,6 +255,7 @@ export function createPlanetScene({canvas, container, compact, onStatus}) {
     }};
     const segments = mobile ? 32 : 48;
     next.planet = new THREE.Mesh(new THREE.SphereGeometry(config.geometrySize, segments, segments), createPlanetSurfaceMaterial(textureLoader.load(texture)));
+    next.planet.geometry.computeBoundingSphere();
     group.add(next.planet);
     controls.minDistance = config.geometrySize * 1.35;
     const offset = camera.position.clone().sub(controls.target);
@@ -185,11 +265,20 @@ export function createPlanetScene({canvas, container, compact, onStatus}) {
         next.moon = new THREE.Mesh(new THREE.SphereGeometry(config.moonGeometrySize, 20, 20), createPlanetSurfaceMaterial(textureLoader.load(config.moonTexturePath)));
         next.moon.position.set(...config.initialPosition);
         group.add(next.moon);
+        next.moons.push({name: moonName, mesh: next.moon, size: config.moonGeometrySize});
       }
       if (config.ringConfig) group.add(createPlanetRings(config).mesh);
       next.extraMoons = setupExtraMoons(config, textureLoader, group, timeline);
+      next.moons.push(...next.extraMoons.moonMeshes);
+      const color = destinations[name].color;
+      if (name !== "pluto") group.add(createAtmosphere(config.geometrySize, color));
+      if (config.moonTexturePath) next.orbits.add(createOrbit(config.orbitRadius, color));
+      config.extraMoons?.forEach(moon => next.orbits.add(createOrbit(moon.orbitRadius, color)));
+      next.orbits.visible = showOrbits;
+      group.add(next.orbits);
+      resetView();
     }
-    if (reducedMotion.matches) timeline.progress(1).pause();
+    if (!moving()) timeline.progress(1).pause();
     else timeline.fromTo(next.planet.scale, {x: 0.85, y: 0.85, z: 0.85}, {x: 1, y: 1, z: 1, duration: 0.5}, 0);
     updateVisibility();
     requestFrame();
@@ -200,9 +289,9 @@ export function createPlanetScene({canvas, container, compact, onStatus}) {
     Object.entries(EFFECT_CREATORS).forEach(([id, create]) => {
       if (active[id] && !effects.has(id)) {
         let effect;
-        const context = gsap.context(() => { effect = create({scene, camera, renderer, lightDirection}); });
+        const context = gsap.context(() => { effect = create({scene, camera, renderer, lightDirection, mobile}); });
         effect.animations = context.getTweens();
-        if (reducedMotion.matches) effect.animations.forEach(animation => animation.progress(1).pause());
+        if (!moving()) effect.animations.forEach(animation => animation.progress(1).pause());
         effects.set(id, effect);
         scene.add(effect.object);
       } else if (!active[id] && effects.has(id)) {
@@ -216,12 +305,18 @@ export function createPlanetScene({canvas, container, compact, onStatus}) {
     requestFrame();
   }
 
-  const onMove = () => window.dispatchEvent(new CustomEvent("portfolio-scene-move"));
+  const onMove = () => {
+    flight?.kill();
+    controls.autoRotate = moving() && !focused;
+    window.dispatchEvent(new CustomEvent("portfolio-scene-move"));
+  };
   const onContextLost = event => {
     event.preventDefault();
     contextLost = true;
     pause();
     system?.timeline.pause();
+    flight?.pause();
+    effects.forEach(effect => effect.animations.forEach(animation => animation.pause()));
     onStatus("unavailable");
   };
   controls.addEventListener("start", onMove);
@@ -242,6 +337,10 @@ export function createPlanetScene({canvas, container, compact, onStatus}) {
   return {
     setPlanet,
     setEffects,
+    focusMoon,
+    resetView,
+    setPaused(value) { paused = value; updateMotion(); },
+    setOrbits(value) { showOrbits = value; if (system) system.orbits.visible = value; requestFrame(); },
     dispose() {
       if (disposed) return;
       disposed = true;
@@ -254,7 +353,9 @@ export function createPlanetScene({canvas, container, compact, onStatus}) {
       controls.removeEventListener("start", onMove);
       controls.removeEventListener("change", requestFrame);
       controls.dispose();
+      flight?.kill();
       disposeSystem();
+      if (stars) { scene.remove(stars.object); stars.dispose(); }
       effects.forEach(effect => { scene.remove(effect.object); effect.dispose(); });
       effects.clear();
       disposeTree(scene);

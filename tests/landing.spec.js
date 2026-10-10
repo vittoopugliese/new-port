@@ -159,3 +159,79 @@ test("failed textures stop loading and can be retried", async ({page}) => {
   await page.getByRole("button", {name: "Retry 3D"}).click();
   await sceneReady(page);
 });
+
+test("observatory pauses rendering, focuses a moon, and keeps orbit controls across destinations", async ({page}) => {
+  const errors = [];
+  page.on("pageerror", error => errors.push(error.message));
+  await monitorGPU(page);
+  await page.goto("/");
+  await sceneReady(page);
+  await page.waitForTimeout(1800); // Finish the initial camera journey.
+  const contexts = await page.evaluate(() => window.gpu.contexts);
+  await page.getByRole("button", {name: "Pause space motion"}).click();
+  await page.waitForTimeout(200);
+  const paused = await page.evaluate(() => window.gpu.draws);
+  await page.waitForTimeout(200);
+  expect(await page.evaluate(() => window.gpu.draws)).toBe(paused);
+  await page.getByRole("button", {name: "Orbits", exact: true}).click();
+  await expect.poll(() => page.evaluate(() => window.gpu.draws)).toBeGreaterThan(paused);
+  await page.locator(".observatory-moons summary").click();
+  await page.locator(".moon-list").getByRole("button", {name: "europa"}).click();
+  await expect(page.locator(".moon-discovery strong")).toHaveText("europa");
+  // Verify that the selected moon actually reaches the center of the camera.
+  await expect.poll(async () => {
+    const moon = await page.getByRole("button", {name: "Observe europa", exact: true}).boundingBox();
+    return moon ? Math.abs(moon.x + moon.width / 2 - 640) + Math.abs(moon.y + moon.height / 2 - 400) : 999;
+  }).toBeLessThan(8);
+  await expect(page.getByRole("navigation", {name: "Space destinations"})).toHaveCount(0);
+  await page.getByRole("button", {name: "Planets", exact: true}).click();
+  await page.getByRole("button", {name: "Select saturn planetary system"}).click();
+  await page.keyboard.press("Escape");
+  await sceneReady(page);
+  await expect(page.locator(".observatory-info h2")).toHaveText("saturn");
+  await expect(page.locator(".moon-discovery")).toHaveCount(0);
+  await expect(page.getByRole("button", {name: "Orbits", exact: true})).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByRole("button", {name: "Resume space motion"})).toHaveAttribute("aria-pressed", "true");
+  await page.getByRole("button", {name: "Resume space motion"}).click();
+  expect(await page.evaluate(() => window.gpu.contexts)).toBe(contexts);
+  expect(errors).toEqual([]);
+});
+
+test("moon exploration works with reduced motion and rapid destination changes", async ({page}) => {
+  await page.emulateMedia({reducedMotion: "reduce"});
+  await monitorGPU(page);
+  await page.goto("/");
+  await sceneReady(page);
+  await page.getByRole("button", {name: "Planets", exact: true}).click();
+  for (const name of ["mars", "pluto", "saturn", "jupiter"]) {
+    await page.getByRole("button", {name: `Select ${name} planetary system`}).click();
+  }
+  await sceneReady(page);
+  await page.keyboard.press("Escape");
+  await page.locator(".observatory-moons summary").click();
+  await page.locator(".moon-list").getByRole("button", {name: "Ganymede"}).click();
+  await expect(page.locator(".moon-discovery strong")).toHaveText("Ganymede");
+  await page.getByRole("button", {name: "Recenter", exact: true}).click();
+  await expect(page.locator(".moon-discovery")).toHaveCount(0);
+  await page.waitForTimeout(200);
+  const still = await page.evaluate(() => window.gpu.draws);
+  await page.waitForTimeout(250);
+  expect(await page.evaluate(() => window.gpu.draws)).toBe(still);
+});
+
+test("agent workflow supports keyboard navigation and opening the real workspace", async ({page}) => {
+  await page.goto("/");
+  const context = page.getByRole("tab", {name: /Context/});
+  await context.click();
+  await page.keyboard.press("ArrowRight");
+  await expect(page.getByRole("tab", {name: /Plan/})).toBeFocused();
+  await expect(page.getByRole("tabpanel")).toContainText("Agree on the route before building.");
+  await page.keyboard.press("End");
+  await expect(page.getByRole("tabpanel")).toContainText("The final decision stays with me.");
+  await page.getByRole("button", {name: "Back to context"}).click();
+  await expect(context).toHaveAttribute("aria-selected", "true");
+  await page.getByRole("button", {name: "View agent workspace fullscreen"}).click();
+  await expect(page.getByRole("dialog")).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+});

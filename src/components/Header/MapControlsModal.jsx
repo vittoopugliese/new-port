@@ -23,15 +23,25 @@ const CONTROLS = [
 const FEATURES = [
   {
     icon: "fa-solid fa-globe",
-    title: "Planet selector",
+    title: "Choose a destination",
     detail:
-      'Click "Planets" on the profile card to swap the planetary system — each one changes the scene texture, moons, and rings.',
+      'Choose a world from the destination dock to travel there. "Planets" opens the full collection of systems and effects.',
   },
   {
     icon: "fa-solid fa-wand-magic-sparkles",
     title: "Space events",
     detail:
-      "When the planet selector is open, toggle cosmic effects like meteors, a sun, black holes, neutron stars, and galaxies.",
+      "Open Planets to toggle the comet, galactic background, meteors, and other cosmic effects.",
+  },
+  {
+    icon: "fa-solid fa-crosshairs",
+    title: "Discover the moons",
+    detail: 'Select a moon marker or open "Explore moons" to follow a satellite. Recenter returns you to the planet.',
+  },
+  {
+    icon: "fa-solid fa-circle-notch",
+    title: "Set your own pace",
+    detail: "Pause the motion to take a closer look, or turn on Orbits to reveal the paths around each world. Camera controls remain available while paused.",
   },
 ];
 
